@@ -1,0 +1,35 @@
+trigger: none
+pr:
+  - main
+
+pool:
+  name: AppTest Debian
+  demands: Agent.OS -equals Linux
+
+resources:
+  repositories:
+    - repository: azul-bedrock
+      type: git
+      ref: refs/heads/main
+      name: azul-bedrock
+      trigger: none
+    - repository: PipelineTemplates
+      type: git
+      name: CyberLab-Services/pipeline-templates
+      ref: refs/heads/main
+      trigger: none
+    # update container image reference
+    - repository: azul-app-azure
+      type: git
+      name: Azul/azul-app-azure
+      ref: refs/heads/main
+      trigger: none
+
+extends:
+  template: v2/stages/test-build-publish.yaml@PipelineTemplates
+  parameters:
+    is_python: true
+    is_python_package: true
+    python_integration: true
+    is_dev: true
+    is_golang: true
