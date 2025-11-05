@@ -1,0 +1,761 @@
+# this file is symlinked between the golang and python projects in azul-bedrock.
+# note that only the golang code is used in azul-dispatcher in production
+# rules identify a file type and are processed in order
+# once a file is identified, no further magic rules are checked
+#
+# version of this rules file
+# if rules are changed, this must be incremented!
+# if other metadata attributes calculated for a stream are changed, you'll also need to increment this number!
+# i.e. new hash type or removal of old hash type
+version: 2
+
+id_mappings:
+  - id: android/apk
+    legacy: Android
+    extension: apk
+  - id: application/chrome/extension
+    legacy: Data
+    extension: ""
+  - id: application/mozilla/extension
+    legacy: Data
+    extension: ""
+  - id: application/torrent
+    legacy: Data
+    extension: torrent
+  - id: archive/7-zip
+    legacy: 7ZIP
+    extension: 7zip
+  - id: archive/ace
+    legacy: ACE
+    extension: ace
+  - id: archive/ar
+    legacy: AR
+    extension: ar
+  - id: archive/arc
+    legacy: Data
+    extension: ""
+  - id: archive/arj
+    legacy: ARJ
+    extension: arj
+  - id: archive/bzip2
+    legacy: BZIP
+    extension: bzip
+  - id: archive/cabinet
+    legacy: CAB
+    extension: cab
+  - id: archive/chm
+    legacy: Compiled HTML Help
+    extension: chm
+  - id: archive/cart
+    legacy: CART
+    extension: cart
+  - id: archive/cpio
+    legacy: CPIO
+    extension: cpio
+  - id: archive/deb
+    legacy: Debian package
+    extension: deb
+  - id: archive/gzip
+    legacy: GZIP
+    extension: gzip
+  - id: archive/iso
+    legacy: ISO
+    extension: iso
+  - id: archive/lzh
+    legacy: Data
+    extension: ""
+  - id: archive/lzip
+    legacy: Data
+    extension: ""
+  - id: archive/lzma
+    legacy: LZMA
+    extension: lzma
+  - id: archive/rar
+    legacy: RAR
+    extension: rar
+  - id: archive/rpm
+    legacy: Linux RPM package
+    extension: rpm
+  - id: archive/szdd
+    legacy: Data
+    extension: ""
+  - id: archive/tar
+    legacy: TAR
+    extension: tar
+  - id: archive/tnef
+    legacy: TNEF
+    extension: tnef
+  - id: archive/vhd
+    legacy: Data
+    extension: vhd
+  - id: archive/xz
+    legacy: XZ
+    extension: xz
+  - id: archive/zip
+    legacy: ZIP
+    extension: zip
+  - id: archive/zlib
+    legacy: Data
+    extension: ""
+  - id: archive/zstd
+    legacy: Data
+    extension: ""
+  - id: audio/midi
+    legacy: Data
+    extension: ""
+  - id: audio/mp2
+    legacy: Data
+    extension: mp2
+  - id: audio/mp3
+    legacy: Data
+    extension: mp3
+  - id: audio/mp4
+    legacy: Data
+    extension: mp4
+  - id: audio/ogg
+    legacy: Data
+    extension: ogg
+  - id: audio/s3m
+    legacy: Data
+    extension: ""
+  - id: audio/wav
+    legacy: Data
+    extension: wav
+  - id: audiovisual/flash
+    legacy: Flash
+    extension: swf
+  - id: code/autorun
+    legacy: Data
+    extension: inf
+  - id: code/batch
+    legacy: Batch
+    extension: bat
+  - id: code/class
+    legacy: Java Bytecode
+    extension: class
+  - id: code/html
+    legacy: HTML
+    extension: html
+  - id: code/javascript
+    legacy: Text
+    extension: js
+  - id: code/perl
+    legacy: Perl Code
+    extension: pl
+  - id: code/php
+    legacy: PHP
+    extension: php
+  - id: code/python
+    legacy: Python Code
+    extension: py
+  - id: python/bytecode
+    legacy: Data
+    extension: pyc
+  - id: code/sgml
+    legacy: SGML
+    extension: sgml
+  - id: code/shell
+    legacy: Shell Code
+    extension: sh
+  - id: code/vbs
+    legacy: Text
+    extension: txt
+  - id: code/xml
+    legacy: XML
+    extension: xml
+  - id: db/dbf
+    legacy: Data
+    extension: db
+  - id: db/odt
+    legacy: Data
+    extension: ""
+  - id: db/sqlite
+    legacy: Data
+    extension: sqlite
+  - id: document/email
+    legacy: Email
+    extension: eml
+  - id: document/installer/windows
+    legacy: Windows Installer
+    extension: msi
+  - id: document/lotus/spreadsheet
+    legacy: Data
+    extension: ""
+  - id: document/odt/chart
+    legacy: Data
+    extension: ""
+  - id: document/odt/formula
+    legacy: Data
+    extension: ""
+  - id: document/odt/graphics
+    legacy: Data
+    extension: ""
+  - id: document/odt/presentation
+    legacy: Data
+    extension: ""
+  - id: document/odt/spreadsheet
+    legacy: Data
+    extension: ""
+  - id: document/odt/text
+    legacy: Data
+    extension: ""
+  - id: document/odt/web
+    legacy: Data
+    extension: ""
+  - id: document/office/email
+    legacy: Email
+    extension: eml
+  - id: document/office/excel
+    legacy: MS Excel Spreadsheet
+    extension: xls
+  - id: document/office/hwp
+    legacy: Data
+    extension: hwp
+  - id: document/office/ole
+    legacy: OLE
+    extension: ""
+  - id: document/office/passwordprotected
+    legacy: MS Encrypted Document
+    extension: doc
+  - id: document/office/powerpoint
+    legacy: MS PowerPoint Presentation
+    extension: ppt
+  - id: document/office/rtf
+    legacy: Rich Text Format
+    extension: rtf
+  - id: document/office/sylk
+    legacy: SYLK
+    extension: slk
+  - id: document/office/unknown
+    legacy: MS Office
+    extension: ""
+  - id: document/office/unknown
+    legacy: Office Open XML Document
+    extension: ""
+  - id: document/office/unknown
+    legacy: Office Unknown
+    extension: ""
+  - id: document/office/visio
+    legacy: MS Visio Diagram
+    extension: vsd
+  - id: document/office/word
+    legacy: MS Word Document
+    extension: doc
+  - id: document/pdf
+    legacy: PDF
+    extension: pdf
+  - id: document/pdf/portfolio
+    legacy: PDF
+    extension: pdf
+  - id: document/pdf/passwordprotected
+    legacy: PDF
+    extension: pdf
+  - id: document/ps
+    legacy: Data
+    extension: ps
+  - id: document/xml
+    legacy: XML
+    extension: xml
+  - id: executable/dll32
+    legacy: Win32 DLL
+    extension: dll
+  - id: executable/linux/elf32
+    legacy: ELF
+    extension: ""
+  - id: executable/linux/elf64
+    legacy: ELF
+    extension: ""
+  - id: executable/linux/so32
+    legacy: ELF
+    extension: ""
+  - id: executable/linux/so64
+    legacy: ELF
+    extension: ""
+  - id: executable/mach-o
+    legacy: Mach-O
+    extension: ""
+  - id: executable/pe32
+    legacy: Win32 EXE
+    extension: exe
+  - id: executable/windows/com
+    legacy: DOS COM
+    extension: com
+  - id: executable/windows/dll32
+    legacy: Win32 DLL
+    extension: dll
+  - id: executable/windows/dll64
+    legacy: Win32 DLL
+    extension: dll
+  - id: executable/windows/dos
+    legacy: DOS EXE
+    extension: exe
+  - id: executable/windows/pe
+    legacy: Win32 EXE
+    extension: exe
+  - id: executable/windows/pe32
+    legacy: Win32 EXE
+    extension: exe
+  - id: executable/windows/pe64
+    legacy: Win32 EXE
+    extension: exe
+  - id: image/bmp
+    legacy: BMP
+    extension: bmp
+  - id: image/cursor
+    legacy: Data
+    extension: ""
+  - id: image/gif
+    legacy: GIF
+    extension: gif
+  - id: image/icon
+    legacy: ICO
+    extension: ico
+  - id: image/jpg
+    legacy: JPG
+    extension: jpg
+  - id: image/png
+    legacy: PNG
+    extension: png
+  - id: image/svg
+    legacy: Data
+    extension: svg
+  - id: image/tga
+    legacy: Data
+    extension: tga
+  - id: image/tiff
+    legacy: TIFF
+    extension: tiff
+  - id: image/webp
+    legacy: Data
+    extension: webp
+  - id: image/wmf
+    legacy: Data
+    extension: wmf
+  - id: installer/windows
+    legacy: Windows Installer
+    extension: msi
+  - id: ios/ipa
+    legacy: Data
+    extension: ipa
+  - id: java/class
+    legacy: "Java Bytecode"
+    extension: class
+  - id: java/jar
+    legacy: JAR
+    extension: jar
+  - id: java/java
+    legacy: JAR
+    extension: jaca
+  - id: meta/memory/biopsy
+    legacy: "HBS Sectus Biopsy"
+    extension: ""
+  - id: meta/shortcut/windows
+    legacy: Windows shortcut
+    extension: lnk
+  - id: metadata/iccprofile
+    legacy: Data
+    extension: ""
+  - id: metadata/sysmon
+    legacy: Sysmon
+    extension: ""
+  - id: network/tcpdump
+    legacy: Network capture
+    extension: pcap
+  - id: resource/font/opentype
+    legacy: Data
+    extension: ""
+  - id: resource/font/x11
+    legacy: Data
+    extension: ""
+  - id: resource/mo
+    legacy: Data
+    extension: ""
+  - id: sff
+    legacy: SFF
+    extension: sff
+  - id: text/calendar
+    legacy: Text
+    extension: ""
+  - id: text/ini
+    legacy: Text
+    extension: ini
+  - id: text/json
+    legacy: Text
+    extension: json
+  - id: text/plain
+    legacy: Text
+    extension: txt
+  - id: text/troff
+    legacy: Text
+    extension: txt
+  - id: text/windows/registry
+    legacy: Text
+    extension: reg
+  - id: unknown
+    legacy: Data
+    extension: ""
+  - id: video/asf
+    legacy: Data
+    extension: ""
+  - id: video/avi
+    legacy: Data
+    extension: avif
+  - id: video/divx
+    legacy: Data
+    extension: divx
+  - id: video/mp4
+    legacy: Data
+    extension: mp4
+  - id: video/quicktime
+    legacy: Data
+    extension: ""
+  - id: archive/udf
+    legacy: Text
+    extension: txt
+  - id: code/a3x
+    legacy: Text
+    extension: txt
+  - id: code/au3
+    legacy: Text
+    extension: txt
+  - id: code/c
+    legacy: Text
+    extension: txt
+  - id: code/clickonce
+    legacy: Text
+    extension: txt
+  - id: code/csharp
+    legacy: Text
+    extension: txt
+  - id: code/css
+    legacy: Text
+    extension: txt
+  - id: code/ducky
+    legacy: Text
+    extension: txt
+  - id: code/glsl
+    legacy: Text
+    extension: txt
+  - id: code/go
+    legacy: Text
+    extension: txt
+  - id: code/h
+    legacy: Text
+    extension: txt
+  - id: code/hta
+    legacy: Text
+    extension: txt
+  - id: code/html/component
+    legacy: HTML
+    extension: html
+  - id: code/idl
+    legacy: Text
+    extension: txt
+  - id: code/java
+    legacy: Text
+    extension: txt
+  - id: code/jscript
+    legacy: Text
+    extension: txt
+  - id: code/jsp
+    legacy: Text
+    extension: txt
+  - id: code/lisp
+    legacy: Text
+    extension: txt
+  - id: code/markdown
+    legacy: Text
+    extension: txt
+  - id: code/protobuf
+    legacy: Text
+    extension: txt
+  - id: code/ps1
+    legacy: Text
+    extension: txt
+  - id: code/ruby
+    legacy: Text
+    extension: txt
+  - id: code/rust
+    legacy: Text
+    extension: txt
+  - id: code/sql
+    legacy: Text
+    extension: txt
+  - id: code/wsc
+    legacy: Text
+    extension: txt
+  - id: code/wsf
+    legacy: Text
+    extension: txt
+  - id: code/xfa
+    legacy: Text
+    extension: txt
+  - id: log/vipermonkey
+    legacy: Text
+    extension: txt
+
+# as we iterate over all magic strings for a file
+# you must ensure that rules that would apply to a secondary magic are lower down in the rules list than the primary magic matcher
+rules:
+  - id: archive/tnef
+    magic: "Transport Neutral Encapsulation Format"
+  - id: archive/chm
+    magic: "MS Windows HtmlHelp Data"
+  - id: executable/windows/dll64
+    magic: '^pe32\+ .*dll.*x86\-64'
+  - id: executable/windows/pe64
+    magic: '^pe32\+ .*x86\-64.*windows'
+  - id: executable/windows/dll32
+    magic: "^pe32 .*dll"
+  - id: executable/windows/pe32
+    magic: "^pe32 .*windows"
+  # DLLs contain (DLL) after the PE32+ start
+  - id: executable/windows/dll64
+    magic: '^pe32\+.*MS windows.*\(DLL\).*'
+  # Another form of windows executable magic.
+  - id: executable/windows/pe64
+    magic: '^pe32\+.*MS windows.*'
+  - id: executable/windows/pe
+    magic: "^pe unknown.*windows"
+  # Note these are dotnet mono files (can be linux or windows exe/dll's)
+  - id: executable/dll32
+    magic: '^pe32\+ executable \(dll\).*'
+  - id: executable/pe32
+    magic: '^pe32\+ executable.*'
+  - id: executable/windows/dos
+    magic: "^(ms-)?dos executable"
+  - id: executable/windows/com
+    magic: "^com executable"
+  - id: executable/windows/dos
+    magic: "^8086 relocatable"
+  - id: executable/linux/elf32
+    magic: "^elf 32-bit .*executable"
+  - id: executable/linux/elf64
+    magic: "^elf 64-bit .*executable"
+  - id: executable/linux/so32
+    magic: "^elf 32-bit .*shared object"
+  - id: executable/linux/so64
+    magic: "^elf 64-bit .*shared object"
+  # Catch-all for things like dumps e.g mime type ELF 32-bit LSB core file, ARM, version 1
+  - id: executable/linux/elf32
+    magic: "^elf 32-bit lsb.*"
+  - id: executable/linux/elf64
+    magic: "^elf 64-bit lsb.*"
+  - id: executable/mach-o
+    magic: "^Mach-O"
+  - id: archive/7-zip
+    magic: "^7-zip archive data"
+  - id: archive/ace
+    magic: "^ACE archive data"
+  - id: archive/arj
+    magic: "^ARJ archive data"
+  - id: archive/bzip2
+    magic: "^bzip2 compressed data"
+  - id: archive/cabinet
+    magic: "^installshield cab"
+  - id: archive/cabinet
+    magic: "^microsoft cabinet archive data"
+  - id: archive/cpio
+    magic: "cpio archive"
+  - id: archive/gzip
+    magic: "^gzip compressed data"
+  - id: archive/iso
+    magic: "ISO 9660"
+  - id: archive/lzma
+    magic: "^LZMA compressed data"
+  - id: archive/rar
+    magic: "^rar archive data"
+  - id: archive/tar
+    magic: "^(GNU|POSIX) tar archive"
+  - id: archive/xz
+    magic: "^XZ compressed data"
+  - id: archive/zip
+    magic: "^zip archive data"
+  - id: network/tcpdump
+    magic: "^(tcpdump|pcap)"
+  - id: document/pdf
+    magic: "^pdf document"
+  - id: image/bmp
+    magic: "^pc bitmap"
+  - id: image/bmp
+    magic: "^device independent bitmap graphic"
+  - id: image/gif
+    magic: "^gif image data"
+  - id: image/jpg
+    magic: "^jpeg image data"
+  - id: image/png
+    magic: "^png image data"
+  - id: image/icon
+    magic: "^MS Windows icon resource"
+  - id: image/tiff
+    magic: "^TIFF image"
+  - id: installer/windows
+    magic: "(Installation Database|Windows Installer|Advanced Installer)"
+  - id: document/office/excel
+    magic: "Microsoft.*Excel"
+  - id: document/office/powerpoint
+    magic: "Microsoft.*PowerPoint"
+  - id: document/office/word
+    magic: "Microsoft.*Word"
+  - id: document/office/visio
+    magic: "Microsoft.*Visio"
+  - id: document/office/rtf
+    magic: "Rich Text Format"
+  - id: document/office/sylk
+    magic: "^spreadsheet interchange document"
+  - id: document/office/passwordprotected
+    magic: "^CDFV2 Encrypted"
+  - id: document/office/ole
+    magic: "OLE 2"
+  - id: document/office/unknown
+    legacy: MS Office
+    magic: "Composite Document File|CDFV2"
+  - id: document/office/unknown
+    legacy: Office Open XML Document
+    magic: "Microsoft.*(OOXML|Document)"
+  - id: document/office/unknown
+    legacy: Office Unknown
+    magic: "Number of (Characters|Pages|Words)"
+  - id: audiovisual/flash
+    magic: "Macromedia Flash"
+  - id: archive/rpm
+    magic: "^RPM "
+  - id: archive/deb
+    magic: "^Debian binary package"
+  - id: archive/ar
+    magic: "ar archive"
+  - id: code/autorun
+    magic: "microsoft windows autorun"
+  - id: code/batch
+    magic: "dos batch file"
+  # Place this above JAR because some APKs will have the word JAR in their magic.
+  - id: android/apk
+    magic: '(^Dalvik dex)|(Android package \(APK\))'
+  - id: java/jar
+    magic: "[ (]Jar[) ]"
+  - id: java/java
+    magic: "java program"
+  - id: code/class
+    magic: "java class data"
+  - id: code/perl
+    magic: "perl .*script"
+  - id: code/php
+    magic: "php script"
+  - id: code/python
+    magic: "python .*(script|byte)"
+  - id: code/shell
+    magic: "(shell|sh) script"
+  - id: code/xml
+    magic: "OpenGIS KML"
+  - id: sff
+    magic: "Frame Format"
+  - id: meta/shortcut/windows
+    magic: "^MS Windows shortcut"
+  - id: document/email
+    magic: "Mime entity text"
+  - id: document/email
+    magic: "^SMTP mail"
+  - id: document/email
+    magic: "^RFC 822 mail"
+  - id: document/email
+    magic: "^news or mail,"
+  - id: metadata/sysmon
+    magic: "MS Windows Vista Event Log"
+    # The hits are pretty broad so shift them down the bottom
+  - id: code/html
+    magic: "html"
+  - id: code/sgml
+    magic: "sgml"
+  - id: document/xml
+    magic: "xml"
+  - id: text/plain
+    magic: "^ASCII text"
+  - id: text/plain
+    magic: "^Unicode .*text"
+  - id: text/plain
+    magic: "^ISO-8859 text"
+  - id: text/plain
+    mime: "text/.*"
+    # Catch all
+  - id: unknown
+    magic: "."
+
+# Refine rules are run on types where magic is known to be wrong often.
+# The rules link to other functionality like extracting a zip and checking it's content.
+refine_rules:
+  - function_name: zip_ident
+    trigger_on:
+      - document/office/unknown
+      - archive/zip
+      - java/jar
+      # Helps identify zip files when the zip file is very large (1GB+)
+      - unknown
+  - function_name: cart_ident
+    trigger_on:
+      - unknown
+    run_on_func_output: true
+  - function_name: dos_ident
+    trigger_on:
+      - executable/windows/dos
+  # FUTURE identify encrypted office docs
+  # - function_name: office_ident
+  #   trigger_on:
+  #     - document/office/word
+  #     - document/office/excel
+  #     - document/office/powerpoint
+  #     - document/office/unknown
+  #   run_on_func_output: true
+  - function_name: pdf_ident
+    trigger_on:
+      - document/pdf
+    run_on_func_output: true
+  - function_name: yara_ident
+    trigger_on:
+      - unknown
+      - text/plain
+    run_on_func_output: true
+
+# indicators are used to refine rules based on content of the files
+# must match trigger_on via rules to run the inspection
+# slower but more flexible
+# strongest matches win
+indicators:
+  - id: document/email
+    trigger_on:
+      - unknown
+    re_strong:
+      - '^\xd0\xcf\x11.*\x00x\x00c\x00h\x00a\x00n\x00g\x00e'
+      - '^\xd0\xcf\x11.*_\x00_\x00r\x00e\x00c\x00i\x00p\x00_\x00v\x00e\x00r\x00s\x00i\x00o\x00n\x001'
+      - '^\xd0\xcf\x11.*_\x00_\x00a\x00t\x00t\x00a\x00c\x00h\x00_\x00v\x00e\x00r\x00s\x00i\x00o\x00n\x001'
+      - '^\xd0\xcf\x11.*x\x00-\x00m\x00s\x00-\x00t\x00n\x00e\x00f'
+      - '^\xd0\xcf\x11.*S\x00M\x00T\x00P'
+      - '^\xd0\xcf\x11.*I\x00P\x00M\x00.\x00N\x00o\x00t\x00e'
+      - '[^\n]From: '
+      - '[^\n]Mime-Version: 1.'
+      - '[^\n]MIME-Version: 1.'
+      - '[^\n]Subject: '
+      - '[^\n]To: '
+  - id: document/office/rtf
+    trigger_on:
+      - text/plain
+      - unknown
+    re_strong:
+      - '^{\\\s*rt'
+    re_weak:
+      - '\\lsdpriority'
+      - '\\lsdlocked'
+      - '\\lsdqformat'
+      - '\\lsdsemihidden'
+      - '{\\revtim'
+      - '{\\creatim'
+      - '{\\leveltext'
+      - '\\leveltemplateid'
+      - '\\listlevel'
+      - '{\\object'
+      - '\\theme'
+      - '\\wrapdefault'
+  - id: meta/memory/biopsy
+    trigger_on:
+      - unknown
+    re_strong:
+      - "^HBS_SECTUS_BIOPSY:"

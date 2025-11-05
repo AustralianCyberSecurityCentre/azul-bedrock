@@ -1,0 +1,1 @@
+../gosrc/identify/yara_rules.yar

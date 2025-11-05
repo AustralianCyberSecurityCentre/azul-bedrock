@@ -1,0 +1,21 @@
+{
+  "model_version": 5,
+  "author": {
+    "name": "person",
+    "version": "1",
+    "category": "user"
+  },
+  "action": "author",
+  "entity": {
+    "reason": "don't like the author!",
+    "author": {
+      "track_author": "plugin.myplugin.1",
+      "timestamp": "2021-03-29T00:24:08.54928Z"
+    },
+    "ids": {},
+    "link": {},
+    "submission": {}
+  },
+  "timestamp": "2021-03-29T03:24:08.54928Z",
+  "kafka_key": "ab3808f6d20b3c01513f89186becdcde"
+}

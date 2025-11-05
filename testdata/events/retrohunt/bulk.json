@@ -1,0 +1,81 @@
+{
+  "model_version": 5,
+  "events": [
+    {
+      "model_version": 5,
+      "author": {
+        "name": "retrohunt",
+        "version": "0.27",
+        "category": "plugin"
+      },
+      "entity": {
+        "name": "myplugin",
+        "version": "99.9.9",
+        "category": "plugin",
+        "contact": "azul@asd.gov.au",
+        "description": "this is a plugin",
+        "features": [
+          {
+            "name": "afeature",
+            "type": "string",
+            "desc": "a feature",
+            "tags": ["mytag"]
+          }
+        ],
+        "config": {
+          "assume_streams_available": "true",
+          "content_meta_cache_limit": "0",
+          "cur_mem_file_path": "/sys/fs/cgroup/memory.current",
+          "deployment_key": "adeploymentkey"
+        },
+        "security": "very secure"
+      },
+      "timestamp": "2021-03-29T03:24:08.54928Z",
+      "kafka_key": "ab3808f6d20b3c01513f89186becdcde",
+      "action": "completed",
+      "source": {
+        "timestamp": "2021-03-29T03:24:08.54928Z",
+        "security": "very secure",
+        "submitter": "bob"
+      }
+    },
+    {
+      "model_version": 5,
+      "author": {
+        "name": "retrohunt",
+        "version": "0.27",
+        "category": "plugin"
+      },
+      "entity": {
+        "name": "myplugin",
+        "version": "99.9.9",
+        "category": "plugin",
+        "contact": "azul@asd.gov.au",
+        "description": "this is a plugin",
+        "features": [
+          {
+            "name": "afeature",
+            "type": "string",
+            "desc": "a feature",
+            "tags": ["mytag"]
+          }
+        ],
+        "config": {
+          "assume_streams_available": "true",
+          "content_meta_cache_limit": "0",
+          "cur_mem_file_path": "/sys/fs/cgroup/memory.current",
+          "deployment_key": "adeploymentkey"
+        },
+        "security": "very secure"
+      },
+      "timestamp": "2021-03-29T03:24:08.54928Z",
+      "kafka_key": "ab3808f6d20b3c01513f89186becdcde",
+      "action": "submitted",
+      "source": {
+        "timestamp": "2021-03-29T03:24:08.54928Z",
+        "security": "very secure",
+        "submitter": "bob"
+      }
+    }
+  ]
+}

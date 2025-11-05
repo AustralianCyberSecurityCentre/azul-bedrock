@@ -1,0 +1,12 @@
+with-expecter: true
+packages:
+  github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/client:
+    # place your package-specific config here
+    config:
+      inpackage: true
+      dir: "{{.InterfaceDir}}"
+    interfaces:
+      # select the interfaces you want mocked
+      ClientInterface:
+        # Modify package-level config for this specific interface (if applicable)
+        config:

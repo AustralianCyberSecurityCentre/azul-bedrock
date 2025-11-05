@@ -1,0 +1,34 @@
+{
+  "name": "DownloadEvent",
+  "type": "record",
+  "fields": [
+    { "name": "model_version", "type": "long" },
+    { "name": "kafka_key", "type": "string" },
+    {
+      "name": "timestamp",
+      "type": { "type": "long", "logicalType": "timestamp-micros" }
+    },
+    { "name": "author", "type": "EventAuthor" },
+    { "name": "source", "type": "EventSource" },
+    { "name": "action", "type": "string" },
+    {
+      "name": "entity",
+      "type": {
+        "name": "DownloadEntity",
+        "type": "record",
+        "fields": [
+          { "name": "hash", "type": "string" },
+          { "name": "direct_url", "type": "string" },
+          {
+            "name": "direct_expiry",
+            "type": { "type": "long", "logicalType": "timestamp-micros" }
+          },
+          { "name": "pcap", "type": "boolean" },
+          { "name": "category", "type": "string" },
+          { "name": "category_quota", "type": "long" },
+          { "name": "metadata", "type": "bytes" }
+        ]
+      }
+    }
+  ]
+}

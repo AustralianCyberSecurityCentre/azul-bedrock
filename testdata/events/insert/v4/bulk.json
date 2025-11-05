@@ -1,0 +1,65 @@
+{
+  "model_version": 5,
+  "events": [
+    {
+      "model_version": 5,
+      "author": {
+        "name": "vtfilemapper",
+        "version": "0.27",
+        "category": "plugin"
+      },
+      "entity": {
+        "original_source": "tasking",
+        "parent_sha256": "1111111111111111111111111111",
+        "child": {
+          "sha256": "2222222222222222222222222222222222222222222222222"
+        },
+        "child_history": {
+          "author": {
+            "name": "some_enhancer",
+            "version": "111",
+            "category": "plugin"
+          },
+          "action": "binary_enhanced",
+          "sha256": "2222222222222222222222222222222222222222222222222",
+          "filename": "org.eclipse.mylyn.commons.xmlrpc.nl_da_4.10.0.v20190713081526.jar",
+          "size": 1469,
+          "file_format_legacy": "JAR",
+          "timestamp": "2021-03-29T03:24:08.54928Z"
+        }
+      },
+      "timestamp": "2021-03-29T03:24:08.54928Z",
+      "kafka_key": "ab3808f6d20b3c01513f89186becdcde"
+    },
+    {
+      "model_version": 5,
+      "author": {
+        "name": "vtfilemapper",
+        "version": "0.27",
+        "category": "plugin"
+      },
+      "entity": {
+        "original_source": "tasking",
+        "parent_sha256": "1111111111111111111111111111",
+        "child": {
+          "sha256": "2222222222222222222222222222222222222222222222222"
+        },
+        "child_history": {
+          "author": {
+            "name": "some_enhancer",
+            "version": "111",
+            "category": "plugin"
+          },
+          "action": "binary_enhanced",
+          "sha256": "2222222222222222222222222222222222222222222222222",
+          "filename": "org.eclipse.mylyn.commons.xmlrpc.nl_da_4.10.0.v20190713081526.jar",
+          "size": 1469,
+          "file_format_legacy": "JAR",
+          "timestamp": "2021-03-29T03:24:08.54928Z"
+        }
+      },
+      "timestamp": "2021-03-29T03:24:08.54928Z",
+      "kafka_key": "ab3808f6d20b3c01513f89186becdcde"
+    }
+  ]
+}

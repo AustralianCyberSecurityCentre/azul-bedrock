@@ -1,0 +1,21 @@
+{
+  "model_version": 5,
+  "author": {
+    "name": "person",
+    "version": "1",
+    "category": "user"
+  },
+  "action": "submission",
+  "entity": {
+    "reason": "was a bad file",
+    "submission": {
+      "track_source_references": "test.123912658fg78d679",
+      "timestamp": "2021-03-29T00:24:08.54928Z"
+    },
+    "ids": {},
+    "author": {},
+    "link": {}
+  },
+  "timestamp": "2021-03-29T03:24:08.54928Z",
+  "kafka_key": "ab3808f6d20b3c01513f89186becdcde"
+}

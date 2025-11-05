@@ -1,0 +1,60 @@
+[
+  {
+    "name": "BulkBinaryEvent",
+    "type": "record",
+    "fields": [
+      { "name": "events", "type": { "type": "array", "items": "BinaryEvent" } }
+    ]
+  },
+  {
+    "name": "BulkDeleteEvent",
+    "type": "record",
+    "fields": [
+      { "name": "events", "type": { "type": "array", "items": "DeleteEvent" } }
+    ]
+  },
+  {
+    "name": "BulkRetrohuntEvent",
+    "type": "record",
+    "fields": [
+      {
+        "name": "events",
+        "type": { "type": "array", "items": "RetrohuntEvent" }
+      }
+    ]
+  },
+  {
+    "name": "BulkDownloadEvent",
+    "type": "record",
+    "fields": [
+      {
+        "name": "events",
+        "type": { "type": "array", "items": "DownloadEvent" }
+      }
+    ]
+  },
+  {
+    "name": "BulkInsertEvent",
+    "type": "record",
+    "fields": [
+      { "name": "events", "type": { "type": "array", "items": "InsertEvent" } }
+    ]
+  },
+  {
+    "name": "BulkPluginEvent",
+    "type": "record",
+    "fields": [
+      {
+        "name": "events",
+        "type": { "type": "array", "items": "PluginEvent" }
+      }
+    ]
+  },
+  {
+    "name": "BulkStatusEvent",
+    "type": "record",
+    "fields": [
+      { "name": "events", "type": { "type": "array", "items": "StatusEvent" } }
+    ]
+  }
+]

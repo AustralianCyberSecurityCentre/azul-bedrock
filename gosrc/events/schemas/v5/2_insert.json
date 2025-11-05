@@ -1,0 +1,34 @@
+{
+  "name": "InsertEvent",
+  "type": "record",
+  "fields": [
+    { "name": "model_version", "type": "long" },
+    { "name": "kafka_key", "type": "string" },
+    {
+      "name": "timestamp",
+      "type": { "type": "long", "logicalType": "timestamp-micros" }
+    },
+    { "name": "author", "type": "EventAuthor" },
+    {
+      "name": "entity",
+      "type": {
+        "name": "InsertEntity",
+        "type": "record",
+        "fields": [
+          { "name": "original_source", "type": "string" },
+          { "name": "parent_sha256", "type": "string" },
+          {
+            "name": "child",
+            "type": "BinaryEntity"
+          },
+          {
+            "name": "child_history",
+            "type": "EventSourcePathNode"
+          }
+        ]
+      }
+    },
+    { "name": "track_link", "type": "string" },
+    { "name": "track_author", "type": "string" }
+  ]
+}

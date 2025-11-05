@@ -1,0 +1,163 @@
+{
+  "name": "BinaryEvent",
+  "type": "record",
+  "fields": [
+    { "name": "model_version", "type": "long" },
+    { "name": "kafka_key", "type": "string" },
+    {
+      "name": "timestamp",
+      "type": { "type": "long", "logicalType": "timestamp-micros" }
+    },
+    {
+      "name": "author",
+      "type": "EventAuthor"
+    },
+    {
+      "name": "source",
+      "type": "EventSource"
+    },
+    {
+      "name": "entity",
+      "type": {
+        "name": "BinaryEntity",
+        "type": "record",
+        "fields": [
+          { "name": "sha256", "type": "string" },
+          { "name": "sha512", "type": "string" },
+          { "name": "sha1", "type": "string" },
+          { "name": "md5", "type": "string" },
+          { "name": "ssdeep", "type": "string" },
+          { "name": "tlsh", "type": "string" },
+          {
+            "name": "size",
+            "type": {
+              "name": "entity_size",
+              "type": "fixed",
+              "size": 8
+            }
+          },
+          { "name": "mime", "type": "string" },
+          { "name": "magic", "type": "string" },
+          {
+            "name": "file_format_legacy",
+            "type": "string"
+          },
+          { "name": "file_format", "type": "string" },
+          { "name": "file_extension", "type": "string" },
+          { "name": "info", "type": "bytes" },
+          {
+            "name": "features",
+            "type": {
+              "type": "array",
+              "items": {
+                "name": "BinaryEntityFeature",
+                "type": "record",
+                "fields": [
+                  { "name": "name", "type": "string" },
+                  { "name": "value", "type": "string" },
+                  { "name": "type", "type": "string" },
+                  { "name": "label", "type": "string" },
+                  {
+                    "name": "size",
+                    "type": {
+                      "name": "feature_size",
+                      "type": "fixed",
+                      "size": 8
+                    }
+                  },
+                  {
+                    "name": "offset",
+                    "type": {
+                      "name": "datastream_offset",
+                      "type": "fixed",
+                      "size": 8
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "datastreams",
+            "type": {
+              "type": "array",
+              "items": {
+                "name": "BinaryEntityDatastream",
+                "type": "record",
+                "fields": [
+                  {
+                    "name": "identify_version",
+                    "type": "long"
+                  },
+                  { "name": "label", "type": "string" },
+                  {
+                    "name": "size",
+                    "type": {
+                      "name": "datastream_size",
+                      "type": "fixed",
+                      "size": 8
+                    }
+                  },
+                  { "name": "sha512", "type": "string" },
+                  { "name": "sha256", "type": "string" },
+                  { "name": "sha1", "type": "string" },
+                  { "name": "md5", "type": "string" },
+                  {
+                    "name": "ssdeep",
+                    "type": "string"
+                  },
+                  { "name": "tlsh", "type": "string" },
+                  { "name": "mime", "type": "string" },
+                  { "name": "magic", "type": "string" },
+                  {
+                    "name": "file_format_legacy",
+                    "type": "string"
+                  },
+                  {
+                    "name": "file_format",
+                    "type": "string"
+                  },
+                  {
+                    "name": "file_extension",
+                    "type": "string"
+                  },
+                  {
+                    "name": "language",
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    { "name": "action", "type": "string" },
+    { "name": "dequeued", "type": "string" },
+    { "name": "retries", "type": "long" },
+    {
+      "name": "flags",
+      "type": {
+        "name": "BinaryFlags",
+        "type": "record",
+        "fields": [
+          { "name": "bypass_cache", "type": "boolean" },
+          { "name": "expedite", "type": "boolean" },
+          { "name": "retry", "type": "boolean" }
+        ]
+      }
+    },
+    {
+      "name": "track_source_references",
+      "type": "string"
+    },
+    {
+      "name": "track_links",
+      "type": { "type": "array", "items": "string" }
+    },
+    {
+      "name": "track_authors",
+      "type": { "type": "array", "items": "string" }
+    }
+  ]
+}

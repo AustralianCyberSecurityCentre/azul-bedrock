@@ -1,0 +1,3 @@
+sources:
+  testing:
+    expire_events_after: "7  days"

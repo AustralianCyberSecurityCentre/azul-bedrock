@@ -1,0 +1,32 @@
+{
+  "author": {
+    "name": "restapi-test",
+    "version": "1",
+    "category": "plugin"
+  },
+  "action": "plugin_started",
+  "timestamp": "2023-12-11T21:32:13.23638012Z",
+  "source": {
+    "name": "azul",
+    "path": [
+      {
+        "author": {
+          "name": "restapi-test",
+          "version": "1",
+          "category": "plugin"
+        },
+        "action": "plugin_started",
+        "sha256": "restapi-test-1",
+        "timestamp": "2023-12-11T21:32:13.23638012Z"
+      }
+    ],
+    "timestamp": "2023-12-11T21:32:13.23638012Z"
+  },
+  "entity": {
+    "name": "restapi-test",
+    "version": "1",
+    "category": "plugin"
+  },
+  "kafka_key": "b76bbb2bf5a5cd78c1f85adf551bb90e",
+  "model_version": 1
+}

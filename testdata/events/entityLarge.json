@@ -1,0 +1,256 @@
+{
+  "author": {
+    "name": "vtfilemapper",
+    "version": "0.27",
+    "category": "plugin"
+  },
+  "action": "mapped",
+  "source": {
+    "name": "virustotal",
+    "references": {
+      "interface": "api",
+      "submitter_country": "US",
+      "submitter_id": "ffc28588"
+    },
+    "path": [
+      {
+        "author": {
+          "name": "vtfileloader",
+          "version": "1.1",
+          "category": "loader"
+        },
+        "action": "file_scanned",
+        "sha256": "2951778f1ccce50e76e1dd71e1c257b51a61cea425cf1c5bedf4eb12c50392ff-1564891149",
+        "filename": "org.eclipse.mylyn.commons.xmlrpc.nl_da_4.10.0.v20190713081526.jar",
+        "size": 1469,
+        "type": "JAR",
+        "timestamp": "2021-03-29T14:23:48+11:00"
+      },
+      {
+        "author": {
+          "name": "vtfilemapper",
+          "version": "0.27",
+          "category": "plugin"
+        },
+        "action": "mapped",
+        "sha256": "2951778f1ccce50e76e1dd71e1c257b51a61cea425cf1c5bedf4eb12c50392ff",
+        "filename": "org.eclipse.mylyn.commons.xmlrpc.nl_da_4.10.0.v20190713081526.jar",
+        "size": 1469,
+        "type": "JAR",
+        "timestamp": "2021-03-29T14:24:08.54928032+11:00"
+      }
+    ],
+    "timestamp": "2019-08-04T03:59:09Z"
+  },
+  "entity": {
+    "kafka_key": "2951778f1ccce50e76e1dd71e1c257b51a61cea425cf1c5bedf4eb12c50392ff",
+    "sha256": "2951778f1ccce50e76e1dd71e1c257b51a61cea425cf1c5bedf4eb12c50392ff",
+    "sha1": "c72ec27e19a853c517f1b603f943e27a6e540192",
+    "md5": "2c1c509459046dbe17ea389c4ce7c590",
+    "size": 1469,
+    "type": "JAR",
+    "features": [
+      {
+        "name": "vt_first_seen",
+        "value": "2019-08-04T03:59:09Z",
+        "type": "datetime",
+        "author": "virustotal"
+      },
+      {
+        "name": "vt_vhash",
+        "value": "725c2a7d2bffd3e144ff6fb9512d3a97",
+        "type": "string",
+        "author": "virustotal"
+      },
+      {
+        "name": "vt_submitter_id",
+        "value": "ffc28588",
+        "type": "string",
+        "author": "virustotal"
+      },
+      {
+        "name": "vt_submitter_country",
+        "value": "US",
+        "type": "string",
+        "author": "virustotal"
+      },
+      {
+        "name": "filename",
+        "value": "/technology/babel/update-site/RC2/2018-12/plugins/org.eclipse.mylyn.commons.xmlrpc.nl_da_4.10.0.v20190713081526.jar",
+        "type": "filepath",
+        "author": "virustotal"
+      },
+      {
+        "name": "tag",
+        "value": "jar",
+        "type": "string",
+        "author": "virustotal"
+      },
+      {
+        "name": "magic",
+        "value": "Zip archive data, at least v1.0 to extract",
+        "type": "string",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "application/zip",
+        "type": "string",
+        "label": "MIMEType",
+        "author": "virustotal"
+      },
+      {
+        "name": "mime",
+        "value": "application/zip",
+        "type": "string",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "10",
+        "type": "string",
+        "label": "ZipRequiredVersion",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "0x00000000",
+        "type": "string",
+        "label": "ZipCRC",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "ZIP",
+        "type": "string",
+        "label": "FileType",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "None",
+        "type": "string",
+        "label": "ZipCompression",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "0",
+        "type": "string",
+        "label": "ZipUncompressedSize",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "0",
+        "type": "string",
+        "label": "ZipCompressedSize",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "[minor] Use the Duplicates option to extract tags for all 4 files",
+        "type": "string",
+        "label": "Warning",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "zip",
+        "type": "string",
+        "label": "FileTypeExtension",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "META-INF/",
+        "type": "string",
+        "label": "ZipFileName",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "0x0800",
+        "type": "string",
+        "label": "ZipBitFlag",
+        "author": "virustotal"
+      },
+      {
+        "name": "exif_metadata",
+        "value": "2019:07:13 08:34:28",
+        "type": "string",
+        "label": "ZipModifyDate",
+        "author": "virustotal"
+      },
+      {
+        "name": "box_count",
+        "value": 4,
+        "type": "integer",
+        "author": "virustotal"
+      },
+      {
+        "name": "box_type",
+        "value": "jar",
+        "type": "string",
+        "author": "virustotal"
+      },
+      {
+        "name": "box_filepath",
+        "value": "META-INF/MANIFEST.MF",
+        "type": "filepath",
+        "author": "virustotal"
+      },
+      {
+        "name": "box_insertdate",
+        "value": "2019-07-13T08:34:28Z",
+        "type": "datetime",
+        "label": "META-INF/MANIFEST.MF",
+        "author": "virustotal"
+      },
+      {
+        "name": "box_filepath",
+        "value": "plugin_da.properties",
+        "type": "filepath",
+        "author": "virustotal"
+      },
+      {
+        "name": "box_insertdate",
+        "value": "2019-07-13T08:34:28Z",
+        "type": "datetime",
+        "label": "plugin_da.properties",
+        "author": "virustotal"
+      },
+      {
+        "name": "box_filepath",
+        "value": "META-INF/",
+        "type": "filepath",
+        "author": "virustotal"
+      },
+      {
+        "name": "box_insertdate",
+        "value": "2019-07-13T08:34:28Z",
+        "type": "datetime",
+        "label": "META-INF/",
+        "author": "virustotal"
+      },
+      {
+        "name": "box_filepath",
+        "value": "about.html",
+        "type": "filepath",
+        "author": "virustotal"
+      },
+      {
+        "name": "box_insertdate",
+        "value": "2019-07-13T08:34:28Z",
+        "type": "datetime",
+        "label": "about.html",
+        "author": "virustotal"
+      }
+    ],
+    "info": {
+      "ssdeep": "24:8KHnptB5Hk3TgoXbmpwVFqq7sRdIUsaQr+h+nnvTruAwup0e5E:PnptB51oX7XsnIUsaQG+v/ppj5E"
+    }
+  },
+  "timestamp": "2021-03-29T14:24:08.54928032+11:00",
+  "kafka_key": "ab3808f6d20b3c01513f89186becdcde"
+}

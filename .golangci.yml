@@ -1,0 +1,32 @@
+version: "2"
+run:
+  tests: false
+linters:
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+    rules:
+      # Ignore forcing switch statements everywhere there is an if else statement
+      - linters:
+          - staticcheck
+        text: "QF1003:"
+formatters:
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+  enable:
+    # - gci
+    - gofmt
+    # - gofumpt
+    - goimports

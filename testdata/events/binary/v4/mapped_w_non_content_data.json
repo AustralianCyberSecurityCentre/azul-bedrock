@@ -1,0 +1,64 @@
+{
+  "model_version": 3,
+  "kafka_key": "reportfeed-placeholder",
+  "timestamp": "2025-04-10T04:08:51.654618+00:00",
+  "author": {
+    "category": "plugin",
+    "name": "ReportFeeds",
+    "version": "2024.04.29"
+  },
+  "entity": {
+    "sha256": "8290b324f5cdb5c3ea17fa48a74bc11c856f0da0b049d07d9316d161f71f26a5",
+    "features": [
+      {
+        "name": "report_found",
+        "type": "string",
+        "value": "https://www.crysys.hu"
+      }
+    ],
+    "datastreams": [
+      {
+        "sha256": "f87d5c7a53b0da09533390d7a390f6cd62b9d25856b2ed2b172ac7bb40841e31",
+        "sha512": "3f41033f9bdbf22d7f592219fc96606b7521a18a0d7b4910c55ace5f6eda6d5a48855dc0a5035c22b4201a243608e3f643c965a20d1af1cc97454bc034ae5417",
+        "sha1": "5dffabe1c785022afe8e63f6597626475087925a",
+        "md5": "27e79480a9de6681bef0fa1f4195eda7",
+        "ssdeep": "24576:pBlulOQJK7WSvIC95Joyjk9w0kgzLT1F1P0:v8GWS5vk9w0kWfq",
+        "tlsh": "T11955f1b9e6691c88ecc2c1a58a35f04e42ef7153aedb31963935c3d1f900da4e6057fa",
+        "size": 1293857,
+        "file_format_legacy": "PDF",
+        "file_format": "document/pdf",
+        "file_extension": "pdf",
+        "mime": "application/pdf",
+        "magic": "PDF document, version 1.4, 7 page(s)",
+        "identify_version": 2,
+        "label": "report"
+      }
+    ]
+  },
+  "action": "mapped",
+  "source": {
+    "name": "reporting",
+    "path": [
+      {
+        "sha256": "8290b324f5cdb5c3ea17fa48a74bc11c856f0da0b049d07d9316d161f71f26a5",
+        "action": "mapped",
+        "timestamp": "2025-04-10T04:08:51.654618+00:00",
+        "author": {
+          "category": "plugin",
+          "name": "ReportFeeds",
+          "version": "2024.04.29"
+        }
+      }
+    ],
+    "timestamp": "2025-04-10T04:08:51.654618+00:00",
+    "security": "OFFICIAL",
+    "references": {
+      "publisher": "CrySys",
+      "distribution": "public",
+      "site": "https://www.crysys.hu",
+      "url": "https://blog.crysys.hu/2014/07/miniduke-2-cosmicduke/",
+      "slug": "miniduke-2-cosmicduke",
+      "title": "miniduke-2-cosmicduke"
+    }
+  }
+}

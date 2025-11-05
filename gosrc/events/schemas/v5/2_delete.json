@@ -1,0 +1,82 @@
+{
+  "name": "DeleteEvent",
+  "type": "record",
+  "fields": [
+    { "name": "model_version", "type": "long" },
+    { "name": "kafka_key", "type": "string" },
+    {
+      "name": "timestamp",
+      "type": { "type": "long", "logicalType": "timestamp-micros" }
+    },
+    { "name": "author", "type": "EventAuthor" },
+    {
+      "name": "entity",
+      "type": {
+        "name": "DeleteEntity",
+        "type": "record",
+        "fields": [
+          { "name": "reason", "type": "string" },
+          {
+            "name": "submission",
+            "type": {
+              "name": "DeleteEntitySubmission",
+              "type": "record",
+              "fields": [
+                {
+                  "name": "track_source_references",
+                  "type": "string"
+                },
+                {
+                  "name": "timestamp",
+                  "type": {
+                    "type": "long",
+                    "logicalType": "timestamp-micros"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "author",
+            "type": {
+              "name": "DeleteEntityAuthor",
+              "type": "record",
+              "fields": [
+                { "name": "track_author", "type": "string" },
+                {
+                  "name": "timestamp",
+                  "type": {
+                    "type": "long",
+                    "logicalType": "timestamp-micros"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "link",
+            "type": {
+              "name": "DeleteEntityLink",
+              "type": "record",
+              "fields": [{ "name": "track_link", "type": "string" }]
+            }
+          },
+          {
+            "name": "ids",
+            "type": {
+              "name": "DeleteEntityIDs",
+              "type": "record",
+              "fields": [
+                {
+                  "name": "ids",
+                  "type": { "type": "array", "items": "string" }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    { "name": "action", "type": "string" }
+  ]
+}

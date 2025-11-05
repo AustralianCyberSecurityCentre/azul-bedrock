@@ -1,0 +1,98 @@
+[
+  {
+    "name": "EventAuthor",
+    "type": "record",
+    "fields": [
+      { "name": "name", "type": "string" },
+      { "name": "version", "type": "string" },
+      { "name": "category", "type": "string" },
+      { "name": "security", "type": "string" }
+    ]
+  },
+  {
+    "name": "EventSource",
+    "type": "record",
+    "fields": [
+      { "name": "name", "type": "string" },
+      {
+        "name": "references",
+        "type": { "type": "map", "values": "string" }
+      },
+      { "name": "security", "type": "string" },
+      {
+        "name": "path",
+        "type": {
+          "type": "array",
+          "items": {
+            "name": "EventSourcePathNode",
+            "type": "record",
+            "fields": [
+              { "name": "author", "type": "EventAuthor" },
+              { "name": "action", "type": "string" },
+              { "name": "sha256", "type": "string" },
+              {
+                "name": "relationship",
+                "type": { "type": "map", "values": "string" }
+              },
+              {
+                "name": "timestamp",
+                "type": {
+                  "type": "long",
+                  "logicalType": "timestamp-micros"
+                }
+              },
+              {
+                "name": "file_format_legacy",
+                "type": "string"
+              },
+              {
+                "name": "file_format",
+                "type": "string"
+              },
+              {
+                "name": "size",
+                "type": {
+                  "name": "source_size",
+                  "type": "fixed",
+                  "size": 8
+                }
+              },
+              {
+                "name": "filename",
+                "type": "string"
+              },
+              { "name": "language", "type": "string" }
+            ]
+          }
+        }
+      },
+      {
+        "name": "timestamp",
+        "type": {
+          "type": "long",
+          "logicalType": "timestamp-micros"
+        }
+      },
+      {
+        "name": "settings",
+        "type": { "type": "map", "values": "string" },
+        "default": {}
+      }
+    ]
+  },
+  {
+    "name": "RetrohuntSource",
+    "type": "record",
+    "fields": [
+      { "name": "submitter", "type": "string" },
+      { "name": "security", "type": "string" },
+      {
+        "name": "timestamp",
+        "type": {
+          "type": "long",
+          "logicalType": "timestamp-micros"
+        }
+      }
+    ]
+  }
+]

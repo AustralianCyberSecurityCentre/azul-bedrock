@@ -1,0 +1,10 @@
+cachetools
+fastapi
+httpx
+multipart
+pendulum
+pydantic
+python-magic>=0.4.15
+pyyaml
+starlette
+yara-python

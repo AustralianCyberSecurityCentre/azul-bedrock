@@ -1,0 +1,69 @@
+{
+  "model_version": 5,
+  "events": [
+    {
+      "kafka_key": "8c0aa5935f953ddfc19a65fb1830ac59",
+      "action": "extracted",
+      "timestamp": "2023-11-30T05:51:55.077799+00:00",
+      "source": {
+        "name": "tasking",
+        "timestamp": "2023-11-30T05:42:00+00:00",
+        "security": "OFFICIAL",
+        "references": {
+          "task_id": "test",
+          "description": "test",
+          "user": "me"
+        }
+      },
+      "author": {
+        "category": "plugin",
+        "name": "LiefPE",
+        "version": "2023.10.24"
+      },
+      "entity": {
+        "kafka_key": "cd4cf407a50b78f07901b05c18a390c777c51a2fb43af6cdb066679473cc74ef",
+        "size": 2216,
+        "sha256": "cd4cf407a50b78f07901b05c18a390c777c51a2fb43af6cdb066679473cc74ef",
+        "mime": "image/x-ms-bmp",
+        "magic": "Device independent bitmap graphic, 32 x 64 x 8, image size 1024, 256 important colors",
+        "type": "BMP",
+        "file_format_legacy": "BMP",
+        "file_format": "image/bmp",
+        "file_extension": "bmp"
+      },
+      "dequeued": "230ed064072a326e9679f489b2c0be4e-entropy-binary-1.3.2"
+    },
+    {
+      "kafka_key": "8c0aa5935f953ddfc19a65fb1830ac59",
+      "action": "extracted",
+      "timestamp": "2023-11-30T05:51:55.077799+00:00",
+      "source": {
+        "name": "tasking",
+        "timestamp": "2023-11-30T05:42:00+00:00",
+        "security": "OFFICIAL",
+        "references": {
+          "task_id": "test",
+          "description": "test",
+          "user": "me"
+        }
+      },
+      "author": {
+        "category": "plugin",
+        "name": "LiefPE",
+        "version": "2023.10.24"
+      },
+      "entity": {
+        "kafka_key": "cd4cf407a50b78f07901b05c18a390c777c51a2fb43af6cdb066679473cc74ef",
+        "size": 2216,
+        "sha256": "cd4cf407a50b78f07901b05c18a390c777c51a2fb43af6cdb066679473cc74ef",
+        "mime": "image/x-ms-bmp",
+        "magic": "Device independent bitmap graphic, 32 x 64 x 8, image size 1024, 256 important colors",
+        "type": "BMP",
+        "file_format_legacy": "BMP",
+        "file_format": "image/bmp",
+        "file_extension": "bmp"
+      },
+      "dequeued": "230ed064072a326e9679f489b2c0be4e-entropy-binary-1.3.2"
+    }
+  ]
+}

@@ -1,0 +1,197 @@
+{
+  "kafka_key": "test",
+  "model_version": 5,
+  "author": {
+    "name": "MimeDecoder",
+    "version": "2021.02.14",
+    "category": "plugin"
+  },
+  "entity": {
+    "status": "completed",
+    "input": {
+      "model_version": 5,
+      "kafka_key": "test",
+      "dequeued": "8c5e67a7ad83fd5cd19fffb7d94941af-MimeDecoder-2021.02.14",
+      "flags": {},
+      "timestamp": "2077-02-14T12:12:21.426232Z",
+      "author": {
+        "name": "bob",
+        "category": "user"
+      },
+      "action": "sourced",
+      "source": {
+        "name": "testing",
+        "timestamp": "2018-02-06T16:43:23Z",
+        "path": [
+          {
+            "sha256": "b9debe8afbdc6d0f552ca4d41fc8a5760778f2724d1560f6b4b0fc28bd837a82",
+            "timestamp": "2021-02-07T10:40:33.075142Z",
+            "author": {
+              "name": "bob",
+              "category": "user"
+            },
+            "action": "sourced",
+
+            "size": 343964,
+            "file_format_legacy": "Email"
+          }
+        ],
+        "references": {
+          "user": "bob",
+          "foo": "bar"
+        }
+      },
+      "entity": {
+        "file_format_legacy": "Email",
+        "datastreams": [
+          {
+            "identify_version": 1,
+            "file_format_legacy": "Email",
+            "magic": "Something Something",
+            "md5": "a1",
+            "size": 343964,
+            "sha256": "b9debe8afbdc6d0f552ca4d41fc8a5760778f2724d1560f6b4b0fc28bd837a82",
+            "label": "content",
+            "sha512": "b2",
+            "mime": "mail/rfc2822",
+            "sha1": "c3"
+          }
+        ],
+        "md5": "a1",
+        "size": 343964,
+        "features": [
+          {
+            "type": "filepath",
+            "name": "filename",
+            "value": "malicious.eml"
+          },
+          {
+            "type": "string",
+            "name": "file_format_legacy",
+            "value": "Email"
+          }
+        ],
+        "info": { "thing": [666, 666, 777] },
+        "sha256": "b9debe8afbdc6d0f552ca4d41fc8a5760778f2724d1560f6b4b0fc28bd837a82",
+        "sha512": "c3",
+        "sha1": "b2"
+      }
+    },
+    "results": [
+      {
+        "model_version": 5,
+        "kafka_key": "test",
+        "flags": {},
+        "timestamp": "2021-01-10T10:00:00Z",
+        "author": {
+          "name": "MimeDecoder",
+          "version": "2021.02.14",
+          "category": "plugin"
+        },
+        "action": "extracted",
+        "source": {
+          "name": "testing",
+          "timestamp": "2018-02-06T16:43:23Z",
+          "path": [
+            {
+              "sha256": "b9debe8afbdc6d0f552ca4d41fc8a5760778f2724d1560f6b4b0fc28bd837a82",
+              "timestamp": "2021-02-07T10:40:33.075142Z",
+              "author": {
+                "name": "bob",
+                "category": "user"
+              },
+              "action": "sourced",
+
+              "size": 343964,
+              "file_format_legacy": "Email"
+            },
+            {
+              "sha256": "ee303d3c6d7cfa24d42e6348bdd1103a26de77a887e9dbee3dd1fe6304414f69",
+              "timestamp": "2021-01-10T10:00:00Z",
+              "author": {
+                "name": "MimeDecoder",
+                "version": "2021.02.14",
+                "category": "plugin"
+              },
+              "action": "extracted",
+              "relationship": {
+                "action": "extracted",
+                "encoding": "base64"
+              },
+
+              "file_format_legacy": "GIF",
+              "size": 35054,
+              "filename": "ukr_kh1.gif"
+            }
+          ],
+          "references": {
+            "user": "bob",
+            "foo": "bar"
+          }
+        },
+        "entity": {
+          "file_format_legacy": "GIF",
+          "datastreams": [
+            {
+              "identify_version": 1,
+              "file_format_legacy": "GIF",
+              "magic": "GIF image data, version 89a, 80 x 35",
+              "md5": "9e4638d508c003f83f44f5d07748f33a",
+              "size": 35054,
+              "sha256": "ee303d3c6d7cfa24d42e6348bdd1103a26de77a887e9dbee3dd1fe6304414f69",
+              "label": "content",
+              "sha512": "0e61e710aa6737129b6b42b4e5e18c0c66f2febe4277c9e1f85faaed155de966fd7cdbcc8a7b5dff7936acfbeeec9073e594137dcb3f1c30544148e753ef0314",
+              "mime": "image/gif",
+              "sha1": "05ea1ec1fd241a09713d43cd70e51f934de94b34"
+            }
+          ],
+          "md5": "9e4638d508c003f83f44f5d07748f33a",
+          "size": 35054,
+          "info": { "items": [555, 666, 777] },
+          "features": [
+            {
+              "type": "filepath",
+              "name": "filename",
+              "value": "ukr_kh1.gif"
+            },
+            {
+              "type": "string",
+              "name": "mime_content_encoding",
+              "value": "base64"
+            },
+            {
+              "type": "uri",
+              "name": "mime_content_location",
+              "value": "http://hatanm.org.ua/images/banners/ukr_kh1.gif"
+            },
+            {
+              "type": "string",
+              "name": "mime_content_type",
+              "value": "application/octet-stream"
+            },
+            {
+              "type": "string",
+              "name": "mime",
+              "value": "image/gif"
+            },
+            {
+              "type": "string",
+              "name": "magic",
+              "value": "GIF image data, version 89a, 80 x 35"
+            },
+            {
+              "type": "string",
+              "name": "file_format_legacy",
+              "value": "GIF"
+            }
+          ],
+          "sha256": "ee303d3c6d7cfa24d42e6348bdd1103a26de77a887e9dbee3dd1fe6304414f69",
+          "sha512": "0e61e710aa6737129b6b42b4e5e18c0c66f2febe4277c9e1f85faaed155de966fd7cdbcc8a7b5dff7936acfbeeec9073e594137dcb3f1c30544148e753ef0314",
+          "sha1": "05ea1ec1fd241a09713d43cd70e51f934de94b34"
+        }
+      }
+    ],
+    "runtime": 1.234
+  },
+  "timestamp": "2021-01-10T10:00:00Z"
+}

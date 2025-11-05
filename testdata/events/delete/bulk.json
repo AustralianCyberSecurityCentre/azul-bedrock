@@ -1,0 +1,45 @@
+{
+  "model_version": 5,
+  "events": [
+    {
+      "model_version": 5,
+      "author": {
+        "name": "person",
+        "version": "1",
+        "category": "user"
+      },
+      "action": "link",
+      "entity": {
+        "reason": "was a bad file",
+        "link": {
+          "track_link": "parentid.childid.authorinfo"
+        },
+        "author": {},
+        "ids": {},
+        "submission": {}
+      },
+      "timestamp": "2021-03-29T03:24:08.54928Z",
+      "kafka_key": "ab3808f6d20b3c01513f89186becdcde"
+    },
+    {
+      "model_version": 5,
+      "author": {
+        "name": "person",
+        "version": "1",
+        "category": "user"
+      },
+      "action": "link",
+      "entity": {
+        "reason": "was a bad file",
+        "link": {
+          "track_link": "parentid.childid.authorinfo"
+        },
+        "author": {},
+        "ids": {},
+        "submission": {}
+      },
+      "timestamp": "2021-03-29T03:24:08.54928Z",
+      "kafka_key": "ab3808f6d20b3c01513f89186becdcde"
+    }
+  ]
+}
