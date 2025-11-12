@@ -22,7 +22,7 @@ resources:
     - repository: azul-app-azure
       endpoint: AustralianCyberSecurityCentre
       type: github
-      name: Azul/azul-app-azure
+      name: AustralianCyberSecurityCentre/azul-app-azure
       ref: refs/heads/main
       trigger: none
 
