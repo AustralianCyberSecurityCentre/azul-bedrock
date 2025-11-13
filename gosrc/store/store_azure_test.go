@@ -1,4 +1,4 @@
-// //go:build integration_azure
+//go:build integration_azure
 
 package store
 
