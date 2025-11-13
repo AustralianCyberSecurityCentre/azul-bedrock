@@ -20,8 +20,9 @@ resources:
       trigger: none
     # update container image reference
     - repository: azul-app-azure
-      type: git
-      name: Azul/azul-app-azure
+      endpoint: AustralianCyberSecurityCentre
+      type: github
+      name: AustralianCyberSecurityCentre/azul-app-azure
       ref: refs/heads/main
       trigger: none
 
