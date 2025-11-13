@@ -2,9 +2,9 @@
 package identify
 
 import (
-	"log"
 	"strings"
 
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/settings"
 	"github.com/rakyll/magicmime"
 )
 
@@ -38,7 +38,7 @@ func (mw *MagicWrap) regen() {
 		}
 		mw.mime = mime
 	} else {
-		log.Print("failed to create a replacement mime.")
+		st.Logger.Warn().Msg("identify failed to create a replacement mime.")
 	}
 	magic, err := magicmime.NewDecoder(DefaultMimeMagicFlags)
 	if err == nil {
@@ -47,7 +47,7 @@ func (mw *MagicWrap) regen() {
 		}
 		mw.magic = magic
 	} else {
-		log.Print("failed to create a replacement magic.")
+		st.Logger.Warn().Msg("identify failed to create a replacement magic.")
 	}
 }
 
