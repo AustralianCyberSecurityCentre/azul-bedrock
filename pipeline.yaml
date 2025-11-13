@@ -34,3 +34,4 @@ extends:
     python_integration: true
     is_dev: true
     is_golang: true
+    golang_integration: true
