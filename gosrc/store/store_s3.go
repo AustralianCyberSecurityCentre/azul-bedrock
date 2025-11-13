@@ -90,7 +90,7 @@ func (s *StoreS3) Put(source, label, id string, data io.ReadCloser, fileSize int
 	defer func() {
 		reportStreamsOpMetric(s.promStreamsOperationDuration, startTime, "put", err)
 	}()
-	id = createIdPath(id, source, label)
+	key := createIdPath(source, label, id)
 	bufRead := bufio.NewReaderSize(data, MAX_BUFFERED_READER_BYTES)
 
 	options := minio.PutObjectOptions{ContentType: "binary/octet-stream"}
@@ -103,7 +103,7 @@ func (s *StoreS3) Put(source, label, id string, data io.ReadCloser, fileSize int
 	_, err = s.client.PutObject(
 		context.Background(),
 		s.bucket,
-		id,
+		key,
 		bufRead,
 		fileSize, // set to -1 unless size is known
 		options,
@@ -120,9 +120,9 @@ func (s *StoreS3) Fetch(source, label, id string, opts ...FileStorageFetchOption
 	defer func() {
 		reportStreamsOpMetric(s.promStreamsOperationDuration, startTime, "fetch", err)
 	}()
-	id = createIdPath(id, source, label)
+	key := createIdPath(source, label, id)
 	empty := NewDataSlice()
-	reader, err := s.client.GetObject(context.Background(), s.bucket, id, minio.GetObjectOptions{})
+	reader, err := s.client.GetObject(context.Background(), s.bucket, key, minio.GetObjectOptions{})
 	if err != nil {
 		resp := minio.ToErrorResponse(err)
 		code := resp.Code
@@ -193,8 +193,8 @@ func (s *StoreS3) Exists(source, label, id string) (bool, error) {
 	defer func() {
 		reportStreamsOpMetric(s.promStreamsOperationDuration, startTime, "exists", err)
 	}()
-	id = createIdPath(id, source, label)
-	_, err = s.client.StatObject(context.Background(), s.bucket, id, minio.StatObjectOptions{})
+	key := createIdPath(source, label, id)
+	_, err = s.client.StatObject(context.Background(), s.bucket, key, minio.StatObjectOptions{})
 	if err == nil {
 		return true, nil
 	}
@@ -226,17 +226,17 @@ func (s *StoreS3) Copy(sourceOld, labelOld, idOld, sourceNew, labelNew, idNew st
 	}
 
 	if existsUnderSource {
-		srcObj = createIdPath(idOld, sourceOld, labelOld)
+		srcObj = createIdPath(sourceOld, labelOld, idOld)
 	} else if existsAtRoot {
 		// the object being copied does not exist at source/label/ as expected, copy from root
-		srcObj = createIdPath(idOld, "", "")
+		srcObj = createIdPath("", "", idOld)
 	} else {
 		// silently fail copy as we could not find the source file under root or source/label
 		st.Logger.Debug().Msgf("Object %s not found for copy operation", idOld)
 		return nil
 	}
 
-	idNew = createIdPath(idNew, sourceNew, labelNew)
+	idNew = createIdPath(sourceNew, labelNew, idNew)
 	src := minio.CopySrcOptions{
 		Bucket: s.bucket,
 		Object: srcObj,
@@ -263,9 +263,9 @@ func (s *StoreS3) Delete(source, label, id string, opts ...FileStorageDeleteOpti
 	}()
 	// a timing issue exists here as the read and delete are not atomic operations
 	// we could enable versioning to fix this, but probably not worth it
-	id = createIdPath(id, source, label)
+	key := createIdPath(source, label, id)
 
-	obj, err := s.client.StatObject(context.Background(), s.bucket, id, minio.StatObjectOptions{})
+	obj, err := s.client.StatObject(context.Background(), s.bucket, key, minio.StatObjectOptions{})
 	if err != nil {
 		resp := minio.ToErrorResponse(err)
 		code := resp.Code
@@ -281,7 +281,7 @@ func (s *StoreS3) Delete(source, label, id string, opts ...FileStorageDeleteOpti
 		// don't delete if object is newer than the required timestamp
 		return false, nil
 	}
-	err = s.client.RemoveObject(context.Background(), s.bucket, id, minio.RemoveObjectOptions{})
+	err = s.client.RemoveObject(context.Background(), s.bucket, key, minio.RemoveObjectOptions{})
 	if err != nil {
 		resp := minio.ToErrorResponse(err)
 		code := resp.Code
@@ -294,7 +294,7 @@ func (s *StoreS3) Delete(source, label, id string, opts ...FileStorageDeleteOpti
 
 }
 
-func (s *StoreS3) List(ctx context.Context, prefix string) <-chan FileStorageObjectListInfo {
+func (s *StoreS3) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
 	// minio.ListObjectsOptions{Prefix: prefix, Recursive: false}
 
 	// TODO

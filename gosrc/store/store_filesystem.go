@@ -193,7 +193,7 @@ func splitPathToSourceLabelId(path string) (string, string, string) {
 	return source, label, id
 }
 
-func (s *StoreFilesystem) List(ctx context.Context, prefix string) <-chan FileStorageObjectListInfo {
+func (s *StoreFilesystem) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
 	fileStorageObjects := make(chan FileStorageObjectListInfo)
 	go func() {
 		err := filepath.WalkDir(filepath.Join(s.root, prefix), func(path string, d fs.DirEntry, err error) error {

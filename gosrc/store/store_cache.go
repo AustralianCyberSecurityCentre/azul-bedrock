@@ -177,6 +177,6 @@ func (c *StoreCache) Delete(source, label, id string, opts ...FileStorageDeleteO
 	return c.store.Delete(source, label, id, opts...)
 }
 
-func (c *StoreCache) List(ctx context.Context, prefix string) <-chan FileStorageObjectListInfo {
-	return c.store.List(ctx, prefix)
+func (c *StoreCache) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
+	return c.store.List(ctx, prefix, startAfter)
 }

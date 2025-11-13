@@ -227,6 +227,6 @@ func (s *StoreXOR) Delete(source, label, id string, opts ...FileStorageDeleteOpt
 	return didDelete, nil
 }
 
-func (s *StoreXOR) List(ctx context.Context, prefix string) <-chan FileStorageObjectListInfo {
-	return s.Backend.List(ctx, prefix)
+func (s *StoreXOR) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
+	return s.Backend.List(ctx, prefix, startAfter)
 }

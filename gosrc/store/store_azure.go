@@ -194,7 +194,7 @@ func (s *StoreAzure) Fetch(source, label, id string, opts ...FileStorageFetchOpt
 	defer func() {
 		reportStreamsOpMetric(s.promStreamsOperationDuration, startTime, "fetch", err)
 	}()
-	id = createIdPath(id, source, label)
+	id = createIdPath(source, label, id)
 	empty := NewDataSlice()
 	c := s.client.ServiceClient().NewContainerClient(s.containerName).NewBlobClient(id)
 	// Custom logic to ensure all implementations of the storage interface handle offset and size
@@ -258,7 +258,7 @@ func (s *StoreAzure) Exists(source, label, id string) (bool, error) {
 	defer func() {
 		reportStreamsOpMetric(s.promStreamsOperationDuration, startTime, "exists", err)
 	}()
-	id = createIdPath(id, source, label)
+	id = createIdPath(source, label, id)
 
 	c := s.client.ServiceClient().NewContainerClient(s.containerName).NewBlobClient(id)
 	_, err = c.GetProperties(s.ctx, &blob.GetPropertiesOptions{})
@@ -293,7 +293,7 @@ func (s *StoreAzure) Delete(source, label, id string, opts ...FileStorageDeleteO
 	defer func() {
 		reportStreamsOpMetric(s.promStreamsOperationDuration, startTime, "delete", err)
 	}()
-	id = createIdPath(id, source, label)
+	id = createIdPath(source, label, id)
 	inDeleteOpt := NewFileStorageDeleteOptions(opts...)
 	deleteOptions := &azblob.DeleteBlobOptions{}
 	if inDeleteOpt.IfOlderThan > 0 {
@@ -343,17 +343,17 @@ func (s *StoreAzure) Copy(sourceOld, labelOld, idOld, sourceNew, labelNew, idNew
 	}
 
 	if existsUnderSource {
-		srcObj = createIdPath(idOld, sourceOld, labelOld)
+		srcObj = createIdPath(sourceOld, labelOld, idOld)
 	} else if existsAtRoot {
 		// the object being copied does not exist at source/label/ as expected, copy from root
-		srcObj = createIdPath(idOld, "", "")
+		srcObj = createIdPath("", "", idOld)
 	} else {
 		// silently fail copy as we could not find the source file under root or source/label
 		st.Logger.Debug().Msgf("Object %s not found for copy operation", idOld)
 		return nil
 	}
 
-	idNew = createIdPath(idNew, sourceNew, labelNew)
+	idNew = createIdPath(sourceNew, labelNew, idNew)
 	srcBlob := s.client.ServiceClient().NewContainerClient(s.containerName).NewBlobClient(srcObj)
 	dstBlob := s.client.ServiceClient().NewContainerClient(s.containerName).NewBlockBlobClient(idNew)
 
@@ -383,7 +383,7 @@ func (s *StoreAzure) Copy(sourceOld, labelOld, idOld, sourceNew, labelNew, idNew
 }
 
 // List with the provided context, context must be cancelled when list is no longer needed.
-func (s *StoreAzure) List(ctx context.Context, prefix string) <-chan FileStorageObjectListInfo {
+func (s *StoreAzure) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
 	// azblob.ListBlobsFlatOptions{Prefix: prefix}
 	// s.client.NewListBlobsFlatPager()
 	// s.client.NewListBlobsFlatPager()

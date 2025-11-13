@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"slices"
 	"strings"
 	"time"
 
@@ -112,7 +113,7 @@ type FileStorage interface {
 	// Copy within the S3 store from old to new location
 	Copy(sourceOld, labelOld, idOld, sourceNew, labelNew, idNew string) error
 	// List all objects in the S3 store, the provided context must be cancelled when list is no longer needed.
-	List(ctx context.Context, prefix string) <-chan FileStorageObjectListInfo
+	List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo
 }
 
 type OffsetAfterEnd struct {
@@ -146,8 +147,26 @@ func (e *ReadError) Error() string {
 }
 
 // updateIdPath prefixes source and label path to id if source and label are non-empty
-func createIdPath(id, source, label string) string {
+func createIdPath(source, label, id string) string {
 	return strings.Join([]string{source, label, id}, "/")
+}
+
+// Split an S3 path into it's original components source, label, id
+func splitIdPath(key string) (string, string, string) {
+	splitString := strings.Split(key, "/")
+	slices.Reverse(splitString)
+	source, label, id := "", "", ""
+	for i := range splitString {
+		if id == "" {
+			id = splitString[i]
+		} else if label == "" {
+			label = splitString[i]
+		} else if source == "" {
+			source = splitString[i]
+			return source, label, id
+		}
+	}
+	return source, label, id
 }
 
 // reportStreamsOpMetric report a streams method duration for prometheus
