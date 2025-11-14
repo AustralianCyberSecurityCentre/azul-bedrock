@@ -189,7 +189,7 @@ func splitPathToSourceLabelId(path string) (string, string, string) {
 	if path == "" {
 		return "", label, id
 	}
-	path, source := filepath.Split(path)
+	_, source := filepath.Split(path)
 	return source, label, id
 }
 
@@ -207,6 +207,7 @@ func (s *StoreFilesystem) List(ctx context.Context, prefix string, startAfter st
 				case <-ctx.Done():
 					return nil
 				case fileStorageObjects <- FileStorageObjectListInfo{
+					Key:    path,
 					Source: source,
 					Label:  label,
 					Id:     id,

@@ -277,17 +277,17 @@ func (_c *MockFileStorage_Fetch_Call) RunAndReturn(run func(string, string, stri
 	return _c
 }
 
-// List provides a mock function with given fields: ctx, prefix
+// List provides a mock function with given fields: ctx, prefix, startAfter
 func (_m *MockFileStorage) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
-	ret := _m.Called(ctx, prefix)
+	ret := _m.Called(ctx, prefix, startAfter)
 
 	if len(ret) == 0 {
 		panic("no return value specified for List")
 	}
 
 	var r0 <-chan FileStorageObjectListInfo
-	if rf, ok := ret.Get(0).(func(context.Context, string) <-chan FileStorageObjectListInfo); ok {
-		r0 = rf(ctx, prefix)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) <-chan FileStorageObjectListInfo); ok {
+		r0 = rf(ctx, prefix, startAfter)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(<-chan FileStorageObjectListInfo)
@@ -305,13 +305,14 @@ type MockFileStorage_List_Call struct {
 // List is a helper method to define mock.On call
 //   - ctx context.Context
 //   - prefix string
-func (_e *MockFileStorage_Expecter) List(ctx interface{}, prefix interface{}) *MockFileStorage_List_Call {
-	return &MockFileStorage_List_Call{Call: _e.mock.On("List", ctx, prefix)}
+//   - startAfter string
+func (_e *MockFileStorage_Expecter) List(ctx interface{}, prefix interface{}, startAfter interface{}) *MockFileStorage_List_Call {
+	return &MockFileStorage_List_Call{Call: _e.mock.On("List", ctx, prefix, startAfter)}
 }
 
-func (_c *MockFileStorage_List_Call) Run(run func(ctx context.Context, prefix string)) *MockFileStorage_List_Call {
+func (_c *MockFileStorage_List_Call) Run(run func(ctx context.Context, prefix string, startAfter string)) *MockFileStorage_List_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(string))
+		run(args[0].(context.Context), args[1].(string), args[2].(string))
 	})
 	return _c
 }
@@ -321,7 +322,7 @@ func (_c *MockFileStorage_List_Call) Return(_a0 <-chan FileStorageObjectListInfo
 	return _c
 }
 
-func (_c *MockFileStorage_List_Call) RunAndReturn(run func(context.Context, string) <-chan FileStorageObjectListInfo) *MockFileStorage_List_Call {
+func (_c *MockFileStorage_List_Call) RunAndReturn(run func(context.Context, string, string) <-chan FileStorageObjectListInfo) *MockFileStorage_List_Call {
 	_c.Call.Return(run)
 	return _c
 }

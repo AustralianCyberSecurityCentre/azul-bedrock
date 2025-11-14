@@ -5,8 +5,11 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net"
+	"net/http"
 	"time"
 
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/models"
 	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/settings"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -20,14 +23,69 @@ type StoreS3 struct {
 	promStreamsOperationDuration *prometheus.HistogramVec // For collection of metrics on storage options
 }
 
+// TODO - Add testing for automatic ageoff settings being set.
+type AutomaticAgeOffSettings struct {
+	// Create ageoff rules in S3 that removes data older than the age-off of a source (based on last modified dates).
+	EnableAutomaticAgeOff bool
+	// Remove any rules that were created by the automatic ageoff policies.
+	EnableCleanupAutoAgeOff bool
+	// Configuration of Azul sources used to determine what ageoff should be set to.
+	SourceConf *models.SourcesConf
+}
+
+func getS3DefaultTransport() *http.Transport {
+	// default transport with response header timeout set to a minute (which doesn't appear to be default?)
+	// from https://github.com/minio/minio-go/blob/master/transport.go
+	return &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+		}).DialContext,
+		MaxIdleConns:          256,
+		MaxIdleConnsPerHost:   16,
+		ResponseHeaderTimeout: time.Minute,
+		IdleConnTimeout:       time.Minute,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ExpectContinueTimeout: 10 * time.Second,
+		// Set this value so that the underlying transport round-tripper
+		// doesn't try to auto decode the body of objects with
+		// content-encoding set to `gzip`.
+		//
+		// Refer:
+		//    https://golang.org/src/net/http/transport.go?h=roundTrip#L1843
+		DisableCompression: true,
+	}
+}
+
+func handleAutoAgeoff(client *minio.Client, bucket string, autoAgeoffSettings AutomaticAgeOffSettings) error {
+	var err error
+	err = nil
+	if autoAgeoffSettings.SourceConf == nil {
+		return err
+	}
+
+	if autoAgeoffSettings.EnableAutomaticAgeOff {
+		err = setLifecycleForBucket(client, bucket, autoAgeoffSettings.SourceConf)
+	} else if autoAgeoffSettings.EnableCleanupAutoAgeOff {
+		err = removeLifeCycleForBucket(client, bucket, autoAgeoffSettings.SourceConf)
+		if err != nil {
+			st.Logger.Warn().Err(err).Msg("Unable to remove old lifecycle policy if there was any.")
+		}
+	}
+
+	return err
+}
+
 /** Creates a new S3 store with static credentials. */
-func NewS3Store(endpoint string, accessKey string, secretKey string, secure bool, bucket string, region string, promStreamsOperationDuration *prometheus.HistogramVec) (FileStorage, error) {
+func NewS3Store(endpoint string, accessKey string, secretKey string, secure bool, bucket string, region string, promStreamsOperationDuration *prometheus.HistogramVec, autoAgeoffSettings AutomaticAgeOffSettings) (FileStorage, error) {
 	var client *minio.Client
 	var err error
 	opts := minio.Options{
-		Secure: secure,
-		Region: region,
-		Creds:  credentials.NewStaticV4(accessKey, secretKey, ""),
+		Secure:    secure,
+		Region:    region,
+		Creds:     credentials.NewStaticV4(accessKey, secretKey, ""),
+		Transport: getS3DefaultTransport(),
 	}
 	// accessKey, secretKey
 	client, err = minio.New(endpoint, &opts)
@@ -45,6 +103,11 @@ func NewS3Store(endpoint string, accessKey string, secretKey string, secure bool
 		return nil, err
 	}
 
+	err = handleAutoAgeoff(client, bucket, autoAgeoffSettings)
+	if err != nil {
+		return nil, err
+	}
+
 	return &StoreS3{
 		client,
 		bucket,
@@ -53,13 +116,14 @@ func NewS3Store(endpoint string, accessKey string, secretKey string, secure bool
 }
 
 /** Creates a new S3 store using IAM credentials. */
-func NewS3StoreIAM(endpoint string, secure bool, bucket string, region string, promStreamsOperationDuration *prometheus.HistogramVec) (FileStorage, error) {
+func NewS3StoreIAM(endpoint string, secure bool, bucket string, region string, promStreamsOperationDuration *prometheus.HistogramVec, autoAgeoffSettings AutomaticAgeOffSettings) (FileStorage, error) {
 	var client *minio.Client
 	var err error
 	opts := minio.Options{
-		Secure: secure,
-		Region: region,
-		Creds:  credentials.NewIAM(""),
+		Secure:    secure,
+		Region:    region,
+		Creds:     credentials.NewIAM(""),
+		Transport: getS3DefaultTransport(),
 	}
 
 	client, err = minio.New(endpoint, &opts)
@@ -73,6 +137,11 @@ func NewS3StoreIAM(endpoint string, secure bool, bucket string, region string, p
 	if !b {
 		err = client.MakeBucket(context.Background(), bucket, minio.MakeBucketOptions{})
 	}
+	if err != nil {
+		return nil, err
+	}
+
+	err = handleAutoAgeoff(client, bucket, autoAgeoffSettings)
 	if err != nil {
 		return nil, err
 	}
@@ -295,8 +364,43 @@ func (s *StoreS3) Delete(source, label, id string, opts ...FileStorageDeleteOpti
 }
 
 func (s *StoreS3) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
-	// minio.ListObjectsOptions{Prefix: prefix, Recursive: false}
+	minioOptions := minio.ListObjectsOptions{Prefix: prefix, Recursive: true, WithMetadata: false, WithVersions: false}
+	if startAfter != "" {
+		minioOptions.StartAfter = startAfter
+	}
+	storageObjects := make(chan FileStorageObjectListInfo)
+	go func() {
+		sourceChan := s.client.ListObjects(ctx, s.bucket, minioOptions)
+		defer func() { close(storageObjects) }() // Close the channel when all files are processed
 
-	// TODO
-	return make(<-chan FileStorageObjectListInfo)
+		for {
+			dataFromMinio := minio.ObjectInfo{}
+			var ok bool
+			select {
+			case <-ctx.Done():
+				return
+			case dataFromMinio, ok = <-sourceChan:
+				// The source channel is closed so exit.
+				if !ok {
+					return
+				}
+			}
+			// Forward data from the minio channel to the next channel.
+			// Split the key into source label and id.
+			source, label, id := splitIdPath(dataFromMinio.Key)
+			select {
+			case <-ctx.Done():
+				return
+			case storageObjects <- FileStorageObjectListInfo{
+				Key:    dataFromMinio.Key,
+				Source: source,
+				Label:  label,
+				Id:     id,
+			}:
+				continue
+			}
+		}
+	}()
+
+	return storageObjects
 }

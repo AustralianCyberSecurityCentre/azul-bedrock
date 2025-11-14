@@ -50,8 +50,7 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 	}{
 		{"EmptyFile", []byte("")},
 		{"SimpleFile", []byte("This is a really boring sentence.")},
-		// TODO
-		// {"MediumSizeFile", loadFileBytes(t, "store/random-long-text-file.txt")},
+		{"MediumSizeFile", loadFileBytes(t, "store/random-long-text-file.txt")},
 	}
 	largeFileTestDoneOnce := false
 	// run the tests over each "file"
@@ -59,8 +58,14 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 		t.Run(test.name, func(t *testing.T) {
 			assert := assert.New(t)
 
-			inBinSha256 := fmt.Sprintf("%x", sha256Hasher.Sum(test.input))
-			inBinSha512 := fmt.Sprintf("%x", sha512Hasher.Sum(test.input))
+			sha256Hasher.Reset()
+			sha512Hasher.Reset()
+			_, err := sha256Hasher.Write(test.input)
+			require.Nil(t, err)
+			_, err = sha512Hasher.Write(test.input)
+			require.Nil(t, err)
+			inBinSha256 := fmt.Sprintf("%x", sha256Hasher.Sum(nil))
+			inBinSha512 := fmt.Sprintf("%x", sha512Hasher.Sum(nil))
 			inBinSize := len(test.input)
 
 			// Check for non-existent file
@@ -192,10 +197,11 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 			assert.False(exists, "Data returned for non-existent file")
 		})
 	}
-	// TODO
-	// require.True(t, largeFileTestDoneOnce, "Large file test did not run ensure at least one of the test files is large enough.")
+	require.True(t, largeFileTestDoneOnce, "Large file test did not run ensure at least one of the test files is large enough.")
 	t.Logf("aaa %v", largeFileTestDoneOnce)
 }
+
+// TODO add List related tests to the above test suite.
 
 func benchmarkWriteStoreWithSize(b *testing.B, fs FileStorage, size int) {
 	randomData := make([]byte, size)

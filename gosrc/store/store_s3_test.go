@@ -19,6 +19,7 @@ func TestStoreS3(t *testing.T) {
 		st.TestSettings.Streams.S3.Bucket,
 		st.TestSettings.Streams.S3.Region,
 		nil,
+		AutomaticAgeOffSettings{EnableAutomaticAgeOff: false},
 	)
 	require.NoError(t, err)
 
@@ -34,6 +35,7 @@ func TestStoreS3WithCache(t *testing.T) {
 		st.TestSettings.Streams.S3.Bucket,
 		st.TestSettings.Streams.S3.Region,
 		nil,
+		AutomaticAgeOffSettings{EnableAutomaticAgeOff: false},
 	)
 	require.NoError(t, err)
 	// Ensure max file size stored is 2kb.

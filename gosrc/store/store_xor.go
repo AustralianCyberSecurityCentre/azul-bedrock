@@ -100,7 +100,10 @@ func (s *StoreXOR) Put(source, label, id string, data io.ReadCloser, fileSize in
 			break
 		}
 	}
-	tmpFile.Seek(0, 0)
+	_, err = tmpFile.Seek(0, 0)
+	if err != nil {
+		return fmt.Errorf("failed to seek tempfile in xor back to zero with error: %s", err)
+	}
 
 	return s.Backend.Put(source, label, id+XOR_FILE_EXT, tmpFile, fileSize)
 }

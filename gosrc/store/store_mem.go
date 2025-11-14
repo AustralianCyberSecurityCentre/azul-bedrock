@@ -63,7 +63,6 @@ func (s *StoreMem) Fetch(source, label, id string, opts ...FileStorageFetchOptio
 		return empty, &OffsetAfterEnd{msg: fmt.Sprintf("offset after EOF: %d", actualSize)}
 	}
 	// requested more than available
-	// should we error or be lenient?
 	if fetchOpt.Offset+fetchOpt.Size > actualSize {
 		fetchOpt.Size = actualSize - fetchOpt.Offset
 	}
@@ -142,13 +141,8 @@ func (s *StoreMem) List(ctx context.Context, prefix string, startAfter string) <
 		if len(prefix) > 0 && !strings.HasPrefix(key, prefix) {
 			continue
 		}
-		// data := s.Data[key] TODO - remove
-		// out <- FileStorageObjectListInfo{
-		// 	Key:  key,
-		// 	Size: int64(len(data)),
-		// }
 		source, label, id := splitIdPath(key)
-		out <- FileStorageObjectListInfo{Source: source, Label: label, Id: id}
+		out <- FileStorageObjectListInfo{Key: key, Source: source, Label: label, Id: id}
 	}
 
 	close(out)

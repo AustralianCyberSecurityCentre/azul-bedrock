@@ -40,7 +40,8 @@ func NewDataSlice() DataSlice {
 }
 
 type FileStorageObjectListInfo struct {
-	// Expected form of the key is: 'Source/Label/Id'
+	Key string
+	// Expected form of the key is: 'Source/Label/Id' (if it isn't use the key directly.)
 	// Source section of the object
 	Source string
 	// Label section of the object
