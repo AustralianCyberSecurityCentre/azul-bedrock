@@ -384,9 +384,36 @@ func (s *StoreAzure) Copy(sourceOld, labelOld, idOld, sourceNew, labelNew, idNew
 
 // List with the provided context, context must be cancelled when list is no longer needed.
 func (s *StoreAzure) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
-	// azblob.ListBlobsFlatOptions{Prefix: prefix}
-	// s.client.NewListBlobsFlatPager()
-	// s.client.NewListBlobsFlatPager()
-	// TODO
-	return make(<-chan FileStorageObjectListInfo)
+	flatPager := s.client.NewListBlobsFlatPager(s.containerName, &azblob.ListBlobsFlatOptions{
+		Prefix: &prefix,
+	})
+	storageObjects := make(chan FileStorageObjectListInfo)
+
+	go func() {
+		defer func() { close(storageObjects) }()
+		for flatPager.More() {
+			resp, err := flatPager.NextPage(ctx)
+			if err != nil {
+				st.Logger.Error().Err(err).Msg("Error within azure flat pager during listing!")
+				panic("Error within flat pager!")
+			}
+			for _, blob := range resp.Segment.BlobItems {
+				blobKey := *blob.Name
+				source, label, id := splitIdPath(blobKey)
+				select {
+				case <-ctx.Done():
+					return
+				case storageObjects <- FileStorageObjectListInfo{
+					Key:    blobKey,
+					Source: source,
+					Label:  label,
+					Id:     id,
+				}:
+					st.Logger.Info().Msgf("BLOB NAME IS: %s", blobKey)
+				}
+			}
+		}
+
+	}()
+	return storageObjects
 }

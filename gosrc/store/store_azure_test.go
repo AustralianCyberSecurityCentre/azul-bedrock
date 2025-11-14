@@ -5,9 +5,8 @@ package store
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
 	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/settings"
+	"github.com/stretchr/testify/require"
 )
 
 func TestAzureStore(t *testing.T) {

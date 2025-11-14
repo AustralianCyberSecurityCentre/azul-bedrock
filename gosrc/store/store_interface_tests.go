@@ -2,6 +2,7 @@ package store
 
 import (
 	"bytes"
+	"context"
 	"crypto/rand"
 	"crypto/sha256"
 	"crypto/sha512"
@@ -271,6 +272,49 @@ func benchmarkReadStoreWithSize(b *testing.B, fs FileStorage, size int) {
 			b.Fatalf("Failed to read data from provider: %s", err.Error())
 		}
 	}
+}
+
+// Test the list functionality of stores
+func StoreImplementationListBaseTests(t *testing.T, fs FileStorage) {
+	// TODO - TODO - write these tests
+	// Setup hasher
+	sha256Hasher := sha256.New()
+	// test table to run over multiple "files"
+	tests := []struct {
+		source      string
+		labelSuffix string
+	}{
+		{"source5", "label5"},
+		{"source1", "label1"},
+		{"source2", "label1"},
+		{"source3", "label3"},
+	}
+	// run the tests over each "file"
+	for _, test := range tests {
+		for i := range 5 {
+			sha256Hasher.Reset()
+			content := []byte(fmt.Sprintf("%s%s%s%d", "Dummy Content", test.source, test.labelSuffix, i))
+			_, err := sha256Hasher.Write(content)
+			require.Nil(t, err)
+			inBinSha256 := fmt.Sprintf("%x", sha256Hasher.Sum(nil))
+			inBinSize := len(content)
+
+			reader := bytes.NewReader(content)
+			readCloser := io.NopCloser(reader)
+
+			err = fs.Put(test.source, test.labelSuffix, inBinSha256, readCloser, int64(inBinSize))
+			require.Nil(t, err)
+		}
+	}
+	// TODO - implement remainder of tests.
+	ctx, cancelFunc := context.WithCancel(context.Background())
+	defer cancelFunc()
+	objChannel := fs.List(ctx, "", "")
+	resultantKeys := []string{}
+	for obj := range objChannel {
+		resultantKeys = append(resultantKeys, obj.Key)
+	}
+	require.ElementsMatch(t, []string{}, resultantKeys)
 }
 
 func BaseBenchmarkReadStore(b *testing.B, fs FileStorage) {
