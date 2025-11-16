@@ -203,15 +203,22 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 }
 
 // Iterate over channel result and get all keys
-func verifyChannelList(t *testing.T, objChannel <-chan FileStorageObjectListInfo, allKeysContain string, lenResult int) {
+func verifyChannelList(t *testing.T, objChannel <-chan FileStorageObjectListInfo, allKeysContain string, lenResult int) string {
 	resultantKeys := []string{}
+	i := 0
+	thirdKey := ""
 	for obj := range objChannel {
+		i += 1
+		if i == 3 {
+			thirdKey = obj.Key
+		}
 		resultantKeys = append(resultantKeys, obj.Key)
 	}
 	assert.Len(t, resultantKeys, lenResult)
 	for k := range resultantKeys {
 		assert.Contains(t, resultantKeys[k], allKeysContain)
 	}
+	return thirdKey
 }
 
 // Test the list functionality of stores
@@ -262,16 +269,33 @@ func StoreImplementationListBaseTests(t *testing.T, fs FileStorage) {
 	assert.GreaterOrEqual(t, len(resultantKeys), totalFilesInserted)
 	// Test listing prefix that was inserted first
 	objChannel = fs.List(ctx, "sourceListTest5/", "")
-	verifyChannelList(t, objChannel, "sourceListTest5", 10)
+	thirdKey := verifyChannelList(t, objChannel, "sourceListTest5", 10)
+	// Verify after the third key in the list returns only 7 items as expected (this also verifies ordering is consistent)
+	objChannel = fs.List(ctx, "sourceListTest5/", thirdKey)
+	thirdKey = verifyChannelList(t, objChannel, "sourceListTest5", 7)
+	objChannel = fs.List(ctx, "sourceListTest5/", thirdKey)
+	thirdKey = verifyChannelList(t, objChannel, "sourceListTest5", 4)
+	objChannel = fs.List(ctx, "sourceListTest5/", thirdKey)
+	thirdKey = verifyChannelList(t, objChannel, "sourceListTest5", 1)
+	assert.Equal(t, thirdKey, "")
 	// Test listing prefix and label that was inserted first
 	objChannel = fs.List(ctx, "sourceListTest5/label5/", "")
-	verifyChannelList(t, objChannel, "sourceListTest5/label5", 5)
+	thirdKey = verifyChannelList(t, objChannel, "sourceListTest5/label5", 5)
+	objChannel = fs.List(ctx, "sourceListTest5/label5/", thirdKey)
+	thirdKey = verifyChannelList(t, objChannel, "sourceListTest5/label5", 2)
+	assert.Equal(t, thirdKey, "")
 	// Test listing prefix that alphabetically is later and inserted later
 	objChannel = fs.List(ctx, "sourceListTest2/", "")
-	verifyChannelList(t, objChannel, "sourceListTest2/", 5)
+	thirdKey = verifyChannelList(t, objChannel, "sourceListTest2/", 5)
+	objChannel = fs.List(ctx, "sourceListTest2/", thirdKey)
+	thirdKey = verifyChannelList(t, objChannel, "sourceListTest2/", 2)
+	assert.Equal(t, thirdKey, "")
 	// Test listing prefix and label that alphabetically is later and inserted later
 	objChannel = fs.List(ctx, "sourceListTest2/label1/", "")
-	verifyChannelList(t, objChannel, "sourceListTest2/label1/", 5)
+	thirdKey = verifyChannelList(t, objChannel, "sourceListTest2/label1/", 5)
+	objChannel = fs.List(ctx, "sourceListTest2/label1/", thirdKey)
+	thirdKey = verifyChannelList(t, objChannel, "sourceListTest2/label1/", 2)
+	assert.Equal(t, thirdKey, "")
 }
 
 func benchmarkWriteStoreWithSize(b *testing.B, fs FileStorage, size int) {

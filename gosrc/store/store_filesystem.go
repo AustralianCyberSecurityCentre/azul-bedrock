@@ -196,13 +196,23 @@ func splitPathToSourceLabelId(path string) (string, string, string) {
 func (s *StoreFilesystem) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
 	fileStorageObjects := make(chan FileStorageObjectListInfo)
 	go func() {
+		hasPassedStartAfter := false
+		if startAfter == "" {
+			hasPassedStartAfter = true
+		}
 		err := filepath.WalkDir(filepath.Join(s.root, prefix), func(path string, d fs.DirEntry, err error) error {
 			if err != nil {
 				return err // Handle errors during traversal
 			}
 			if !d.IsDir() { // Only process files, not directories
+				// Check if startAfter has been processed, if it hasn't keep skipping elements in the directory until it has been.
+				if !hasPassedStartAfter {
+					if startAfter == path {
+						hasPassedStartAfter = true
+					}
+					return nil
+				}
 				source, label, id := splitPathToSourceLabelId(path)
-
 				select {
 				case <-ctx.Done():
 					return nil

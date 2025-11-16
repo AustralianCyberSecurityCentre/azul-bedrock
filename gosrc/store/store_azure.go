@@ -390,6 +390,10 @@ func (s *StoreAzure) List(ctx context.Context, prefix string, startAfter string)
 	storageObjects := make(chan FileStorageObjectListInfo)
 
 	go func() {
+		hasPassedStartAfter := false
+		if startAfter == "" {
+			hasPassedStartAfter = true
+		}
 		defer func() { close(storageObjects) }()
 		for flatPager.More() {
 			resp, err := flatPager.NextPage(ctx)
@@ -399,6 +403,13 @@ func (s *StoreAzure) List(ctx context.Context, prefix string, startAfter string)
 			}
 			for _, blob := range resp.Segment.BlobItems {
 				blobKey := *blob.Name
+				// Check if startAfter has been processed, if it hasn't keep skipping elements in the directory until it has been.
+				if !hasPassedStartAfter {
+					if startAfter == blobKey {
+						hasPassedStartAfter = true
+					}
+					continue
+				}
 				source, label, id := splitIdPath(blobKey)
 				select {
 				case <-ctx.Done():
