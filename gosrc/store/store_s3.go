@@ -23,7 +23,6 @@ type StoreS3 struct {
 	promStreamsOperationDuration *prometheus.HistogramVec // For collection of metrics on storage options
 }
 
-// TODO - Add testing for automatic ageoff settings being set.
 type AutomaticAgeOffSettings struct {
 	// Create ageoff rules in S3 that removes data older than the age-off of a source (based on last modified dates).
 	EnableAutomaticAgeOff bool
