@@ -52,6 +52,8 @@ func TestStoreS3WithCache(t *testing.T) {
 	StoreImplementationListBaseTests(t, cacheStore)
 }
 
+// Verify the automatic age off policy is created.
+// Due to timings it's impossible to verify the policy itself.
 func TestAutoAgeOff(t *testing.T) {
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	defer cancelFunc()
