@@ -24,6 +24,7 @@ func TestStoreS3(t *testing.T) {
 	require.NoError(t, err)
 
 	StoreImplementationBaseTests(t, s3Store)
+	StoreImplementationListBaseTests(t, s3Store)
 }
 
 func TestStoreS3WithCache(t *testing.T) {
@@ -43,4 +44,5 @@ func TestStoreS3WithCache(t *testing.T) {
 	require.NoError(t, err, "Error creating LocalStore Cache")
 
 	StoreImplementationBaseTests(t, cacheStore)
+	StoreImplementationListBaseTests(t, cacheStore)
 }

@@ -13,6 +13,7 @@ import (
 func TestS3MemeProviderStandardTests(t *testing.T) {
 	s3 := NewStoreMem()
 	StoreImplementationBaseTests(t, s3)
+	StoreImplementationListBaseTests(t, s3)
 }
 
 func TestS3MemProvider(t *testing.T) {

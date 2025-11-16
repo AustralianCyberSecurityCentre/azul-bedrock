@@ -33,6 +33,8 @@ func TestCacheExtended(t *testing.T) {
 	require.NoError(t, err, "Error creating LocalStore Cache")
 
 	StoreImplementationBaseTests(t, store)
+	StoreImplementationListBaseTests(t, store)
+
 }
 
 func TestCache(t *testing.T) {

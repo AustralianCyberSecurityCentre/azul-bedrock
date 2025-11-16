@@ -16,6 +16,7 @@ func TestLocalStore(t *testing.T) {
 	require.NoError(t, err, "Error creating local store", err)
 
 	StoreImplementationBaseTests(t, store)
+	StoreImplementationListBaseTests(t, store)
 }
 
 func BenchmarkLocalReadStore(b *testing.B) {

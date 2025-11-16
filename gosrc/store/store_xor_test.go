@@ -21,6 +21,7 @@ func TestXORStore(t *testing.T) {
 	xorStore := NewXORStore(store, true)
 
 	StoreImplementationBaseTests(t, xorStore)
+	StoreImplementationListBaseTests(t, xorStore)
 }
 
 func TestPlainStore(t *testing.T) {
@@ -34,6 +35,7 @@ func TestPlainStore(t *testing.T) {
 	xorStore := NewXORStore(store, false)
 
 	StoreImplementationBaseTests(t, xorStore)
+	StoreImplementationListBaseTests(t, xorStore)
 }
 
 func TestAtRest(t *testing.T) {

@@ -202,7 +202,77 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 	t.Logf("aaa %v", largeFileTestDoneOnce)
 }
 
-// TODO add List related tests to the above test suite.
+// Iterate over channel result and get all keys
+func verifyChannelList(t *testing.T, objChannel <-chan FileStorageObjectListInfo, allKeysContain string, lenResult int) {
+	resultantKeys := []string{}
+	for obj := range objChannel {
+		resultantKeys = append(resultantKeys, obj.Key)
+	}
+	assert.Len(t, resultantKeys, lenResult)
+	for k := range resultantKeys {
+		assert.Contains(t, resultantKeys[k], allKeysContain)
+	}
+}
+
+// Test the list functionality of stores
+func StoreImplementationListBaseTests(t *testing.T, fs FileStorage) {
+	// Setup hasher
+	sha256Hasher := sha256.New()
+	// test table to run over multiple "files"
+	tests := []struct {
+		source      string
+		labelSuffix string
+	}{
+		{"sourceListTest5", "label5"},
+		{"sourceListTest5", "label4"},
+		{"sourceListTest1", "label1"},
+		{"sourceListTest2", "label1"},
+		{"sourceListTest3", "label3"},
+	}
+	totalFilesInserted := 0
+	// run the tests over each "file"
+	for _, test := range tests {
+		for i := range 5 {
+			totalFilesInserted += 1
+			sha256Hasher.Reset()
+			content := []byte(fmt.Sprintf("%s%s%s%d", "Dummy Content", test.source, test.labelSuffix, i))
+			_, err := sha256Hasher.Write(content)
+			require.Nil(t, err)
+			inBinSha256 := fmt.Sprintf("%x", sha256Hasher.Sum(nil))
+			inBinSize := len(content)
+
+			reader := bytes.NewReader(content)
+			readCloser := io.NopCloser(reader)
+
+			err = fs.Put(test.source, test.labelSuffix, inBinSha256, readCloser, int64(inBinSize))
+			require.Nil(t, err)
+		}
+	}
+	ctx, cancelFunc := context.WithCancel(context.Background())
+	defer cancelFunc()
+	// At least 20 files should have been inserted into the file store.
+	require.GreaterOrEqual(t, totalFilesInserted, 25)
+	// Test listing everything:
+	objChannel := fs.List(ctx, "", "")
+	resultantKeys := []string{}
+	for obj := range objChannel {
+		resultantKeys = append(resultantKeys, obj.Key)
+	}
+	// At least all the files inserted should be listed and maybe more depending on storage setup
+	assert.GreaterOrEqual(t, len(resultantKeys), totalFilesInserted)
+	// Test listing prefix that was inserted first
+	objChannel = fs.List(ctx, "sourceListTest5/", "")
+	verifyChannelList(t, objChannel, "sourceListTest5", 10)
+	// Test listing prefix and label that was inserted first
+	objChannel = fs.List(ctx, "sourceListTest5/label5/", "")
+	verifyChannelList(t, objChannel, "sourceListTest5/label5", 5)
+	// Test listing prefix that alphabetically is later and inserted later
+	objChannel = fs.List(ctx, "sourceListTest2/", "")
+	verifyChannelList(t, objChannel, "sourceListTest2/", 5)
+	// Test listing prefix and label that alphabetically is later and inserted later
+	objChannel = fs.List(ctx, "sourceListTest2/label1/", "")
+	verifyChannelList(t, objChannel, "sourceListTest2/label1/", 5)
+}
 
 func benchmarkWriteStoreWithSize(b *testing.B, fs FileStorage, size int) {
 	randomData := make([]byte, size)
@@ -272,49 +342,6 @@ func benchmarkReadStoreWithSize(b *testing.B, fs FileStorage, size int) {
 			b.Fatalf("Failed to read data from provider: %s", err.Error())
 		}
 	}
-}
-
-// Test the list functionality of stores
-func StoreImplementationListBaseTests(t *testing.T, fs FileStorage) {
-	// TODO - TODO - write these tests
-	// Setup hasher
-	sha256Hasher := sha256.New()
-	// test table to run over multiple "files"
-	tests := []struct {
-		source      string
-		labelSuffix string
-	}{
-		{"source5", "label5"},
-		{"source1", "label1"},
-		{"source2", "label1"},
-		{"source3", "label3"},
-	}
-	// run the tests over each "file"
-	for _, test := range tests {
-		for i := range 5 {
-			sha256Hasher.Reset()
-			content := []byte(fmt.Sprintf("%s%s%s%d", "Dummy Content", test.source, test.labelSuffix, i))
-			_, err := sha256Hasher.Write(content)
-			require.Nil(t, err)
-			inBinSha256 := fmt.Sprintf("%x", sha256Hasher.Sum(nil))
-			inBinSize := len(content)
-
-			reader := bytes.NewReader(content)
-			readCloser := io.NopCloser(reader)
-
-			err = fs.Put(test.source, test.labelSuffix, inBinSha256, readCloser, int64(inBinSize))
-			require.Nil(t, err)
-		}
-	}
-	// TODO - implement remainder of tests.
-	ctx, cancelFunc := context.WithCancel(context.Background())
-	defer cancelFunc()
-	objChannel := fs.List(ctx, "", "")
-	resultantKeys := []string{}
-	for obj := range objChannel {
-		resultantKeys = append(resultantKeys, obj.Key)
-	}
-	require.ElementsMatch(t, []string{}, resultantKeys)
 }
 
 func BaseBenchmarkReadStore(b *testing.B, fs FileStorage) {

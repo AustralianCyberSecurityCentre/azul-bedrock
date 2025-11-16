@@ -14,6 +14,7 @@ func TestAzureStore(t *testing.T) {
 	require.NoError(t, err)
 
 	StoreImplementationBaseTests(t, azureStore)
+	StoreImplementationListBaseTests(t, azureStore)
 }
 
 func TestAzureStoreWithCache(t *testing.T) {
@@ -25,4 +26,5 @@ func TestAzureStoreWithCache(t *testing.T) {
 	require.NoError(t, err, "Error creating LocalStore Cache")
 
 	StoreImplementationBaseTests(t, cacheStore)
+	StoreImplementationListBaseTests(t, cacheStore)
 }
