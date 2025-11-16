@@ -390,7 +390,7 @@ func (s *StoreAzure) List(ctx context.Context, prefix string, startAfter string)
 	storageObjects := make(chan FileStorageObjectListInfo)
 
 	go func() {
-		hasPassedStartAfter := false
+		var hasPassedStartAfter bool
 		if startAfter == "" {
 			hasPassedStartAfter = true
 		}

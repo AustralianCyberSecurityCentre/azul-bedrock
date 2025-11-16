@@ -196,7 +196,7 @@ func splitPathToSourceLabelId(path string) (string, string, string) {
 func (s *StoreFilesystem) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
 	fileStorageObjects := make(chan FileStorageObjectListInfo)
 	go func() {
-		hasPassedStartAfter := false
+		var hasPassedStartAfter bool
 		if startAfter == "" {
 			hasPassedStartAfter = true
 		}
