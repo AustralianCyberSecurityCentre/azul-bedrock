@@ -72,6 +72,7 @@ var testDefaults BedTestSettings = BedTestSettings{
 
 func ResetSettings() {
 	Settings = ParseSettings(defaults, "BED", []mapstructure.DecodeHookFunc{})
+	// Uses the same prefix as dispatcher to make setting variables during testing simple
 	TestSettings = ParseSettings(testDefaults, "DP", []mapstructure.DecodeHookFunc{})
 }
 
