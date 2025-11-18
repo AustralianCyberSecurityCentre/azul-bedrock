@@ -8,7 +8,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"regexp"
 	"strings"
@@ -16,6 +15,7 @@ import (
 	"unicode"
 
 	embeded_files "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc"
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/settings"
 	"github.com/hillu/go-yara/v4"
 	"golang.org/x/exp/slices"
 	"gopkg.in/yaml.v3"
@@ -142,7 +142,7 @@ func NewIdentify() (*Identify, error) {
 	// Compile Yara
 	compiler, err := yara.NewCompiler()
 	if err != nil {
-		log.Fatalf("Couldn't build a yara compiler skipping yara identification Err: '%v'.", err)
+		st.Logger.Fatal().Err(err).Msg("Couldn't build a yara compiler skipping yara identification.")
 	}
 	_ = compiler.DefineVariable("mime", "default-mime")
 	_ = compiler.DefineVariable("magic", "default-magic")
@@ -151,18 +151,17 @@ func NewIdentify() (*Identify, error) {
 	err = compiler.AddString(string(raw_yara_rules[:]), "default")
 	if err != nil {
 		for _, errs := range compiler.Errors {
-			log.Print(errs.Rule)
-			log.Print(errs.Text)
+			st.Logger.Error().Msgf("Failed to compile yara rule '%s' with error %s", errs.Rule, errs.Text)
 		}
-		log.Fatalf("Yara compiler experienced error can't identify. identification Err: '%v'.", err)
+		st.Logger.Fatal().Err(err).Msg("Yara compiler experienced error can't identify.")
 	}
 	rules, err := compiler.GetRules()
 	if err != nil {
-		log.Fatalf("Yara compiler couldn't compile rules can't identify.")
+		st.Logger.Fatal().Err(err).Msg("Yara compiler couldn't compile rules can't identify.")
 	}
 	scanner, err := yara.NewScanner(rules)
 	if err != nil {
-		log.Fatalf("Yara Scanner - Couldn't create a scanner can't identify.")
+		st.Logger.Fatal().Err(err).Msg("Yara Scanner - Couldn't create a scanner can't identify.")
 	}
 	cfg.Yara_Scanner = scanner
 	cfg.Yara_Scanner.SetTimeout(30 * time.Second)
@@ -369,13 +368,13 @@ func zipIdent(bufStartOfFile []byte, contentPath string, magic string, mime stri
 	/// Extract filenames of a zipfile and attempt to identify a file type.
 	fileHandle, err := os.Open(contentPath)
 	if err != nil {
-		log.Print("Warning - failed to open file for zip identification.")
+		st.Logger.Warn().Msg("failed to open file for zip identification.")
 		return fallback
 	}
 	defer fileHandle.Close()
 	info, err := fileHandle.Stat()
 	if err != nil {
-		log.Print("Warning - failed to get size information for for zip identification.")
+		st.Logger.Warn().Msg("failed to get size information for for zip identification.")
 		return fallback
 	}
 	zipReader, err := zip.NewReader(fileHandle, info.Size())
@@ -545,7 +544,7 @@ func pdfIdent(bufStartOfFile []byte, contentPath string, magic string, mime stri
 	/// Determine if a pdf is password protected or a portfolio.
 	contentFile, err := os.Open(contentPath)
 	if err != nil {
-		log.Printf("Warning - Failed to open file for pdf identification.")
+		st.Logger.Warn().Msg("failed to open file for pdf identification.")
 		return fallback
 	}
 	defer contentFile.Close()
@@ -557,11 +556,11 @@ func pdfIdent(bufStartOfFile []byte, contentPath string, magic string, mime stri
 		return "document/pdf/passwordprotected"
 		// Portfolios typically contain '/Type/Catalog/Collection
 	} else if err != nil {
-		log.Print("Warning: Regex search of PDF resulted in an error check the regex '/Encrypt'.")
+		st.Logger.Warn().Msg("Regex search of PDF resulted in an error check the regex '/Encrypt'.")
 	}
 	_, err = contentFile.Seek(0, 0)
 	if err != nil {
-		log.Printf("Warning - Failed to seek file during pdf identification.")
+		st.Logger.Warn().Msg("Failed to seek file during pdf identification.")
 		return fallback
 	}
 	bufferedReaderSecond := bufio.NewReader(contentFile)
@@ -569,7 +568,7 @@ func pdfIdent(bufStartOfFile []byte, contentPath string, magic string, mime stri
 	if err == nil && match {
 		return "document/pdf/portfolio"
 	} else if err != nil {
-		log.Print("Warning: Regex search of PDF resulted in an error check the regex '/Type/Catalog/Collection'.")
+		st.Logger.Warn().Msg("Regex search of PDF resulted in an error check the regex '/Type/Catalog/Collection'.")
 	}
 	return fallback
 }
@@ -591,14 +590,14 @@ func (ysc *YaraScanCallback) RuleMatching(curCtx *yara.ScanContext, rule *yara.R
 			if ok {
 				currentScore = newCurrentScore
 			} else {
-				log.Printf("Warning: a yara rule isn't working because it's metadata.score can't be coerced into an int value: '%v'", meta.Value)
+				st.Logger.Warn().Msgf("a yara rule isn't working because it's metadata.score can't be coerced into an int value: '%v'", meta.Value)
 			}
 		case "type":
 			newCurrentType, ok := meta.Value.(string)
 			if ok {
 				currentType = newCurrentType
 			} else {
-				log.Printf("Warning: a yara rule isn't working because it's metadata.type can't be coerced into an string value: '%v'", meta.Value)
+				st.Logger.Warn().Msgf("a yara rule isn't working because it's metadata.type can't be coerced into an string value: '%v'", meta.Value)
 			}
 		}
 	}
@@ -647,17 +646,17 @@ func (cfg *Identify) yaraIdent(bufStartOfFile []byte, contentPath string, magic 
 	// Add rules from string
 	err := cfg.Yara_Scanner.DefineVariable("mime", mime)
 	if err != nil {
-		log.Printf("Couldn't compile yara rules skipping yara identification Err: '%v'.", err)
+		st.Logger.Error().Err(err).Msg("Couldn't compile yara rules (with mime var) skipping yara identification")
 		return fallback
 	}
 	err = cfg.Yara_Scanner.DefineVariable("magic", magic)
 	if err != nil {
-		log.Printf("Couldn't compile yara rules skipping yara identification Err: '%v'.", err)
+		st.Logger.Error().Err(err).Msg("Couldn't compile yara rules (with magic var) skipping yara identification")
 		return fallback
 	}
 	err = cfg.Yara_Scanner.DefineVariable("type", currentType)
 	if err != nil {
-		log.Printf("Couldn't compile yara rules skipping yara identification Err: '%v'.", err)
+		st.Logger.Error().Err(err).Msg("Couldn't compile yara rules (with type var) skipping yara identification")
 		return fallback
 	}
 
@@ -667,7 +666,7 @@ func (cfg *Identify) yaraIdent(bufStartOfFile []byte, contentPath string, magic 
 	err = cfg.Yara_Scanner.SetTimeout(time.Second * MAX_YARA_SCAN_TIME_SECONDS).ScanFile(contentPath)
 
 	if err != nil {
-		log.Print("Warning yara failed to scan a supplied file.")
+		st.Logger.Warn().Msg("yara failed to scan a supplied file.")
 	}
 
 	return yscb.hitType

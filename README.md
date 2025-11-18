@@ -130,3 +130,15 @@ Test cases for the upgrade path will needed to be added.
 
 Also if enough old versions build up the following release of Azul will need to require a kafka reprocess to be run
 and assuming that has been run the old upgrade code and previous schemas could then be cleared.
+
+## Integration tests
+
+To run the golang integration test suite the docker-compose.yaml file must first be used to stand up,
+a minio pod to act as an S3 datastore.
+
+With the command:
+
+` docker compose up`
+
+Integration tests should be run with the script `test_integration.sh` with the
+missing environment variables set to run the azure storage related tests.
