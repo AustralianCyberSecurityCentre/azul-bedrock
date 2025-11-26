@@ -66,7 +66,7 @@ func createOrGetFileManager() (*testutils.FileManager, error) {
 
 /*Create a new plugin runner.*/
 func NewPluginRunner(inPlugin Plugin) *PluginRunner {
-	heartBeatChannel := make(chan *events.BinaryEvent)
+	heartBeatChannel := make(chan *events.BinaryEvent, 10)
 	context, cancelFunc := context.WithCancel(context.Background())
 	settings := parsePluginSettings(inPlugin.GetDefaultSettings())
 	// Set default deployment key if not set.
