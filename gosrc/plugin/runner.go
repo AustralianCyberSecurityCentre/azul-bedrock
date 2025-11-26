@@ -9,7 +9,9 @@ import (
 	"io"
 	"log"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 	"testing"
 	"time"
 
@@ -47,6 +49,7 @@ type PluginRunner struct {
 	dpClient         client.ClientInterface
 	config           *PluginSettings
 	logger           *zerolog.Logger
+	sigTermChannel   chan os.Signal
 }
 
 var localFileManager *testutils.FileManager
@@ -159,8 +162,8 @@ func FormatRequireDataTypes(inputFilters map[string][]string) []string {
 	return ret
 }
 
-/*Core run loop for running against dispatcher.*/
-func (pr *PluginRunner) Run() {
+/*Core run loop for running against dispatcher (returns a exit reason as a string).*/
+func (pr *PluginRunner) Run() string {
 	err := pr.startup()
 	if err != nil {
 		log.Fatalf("Failed to startup the plugin! Error: %v", err)
@@ -168,15 +171,20 @@ func (pr *PluginRunner) Run() {
 	// Cancel if the function exits during an error.
 	defer pr.cancelFunc()
 
+	// Close context when a SIGINT or SIGTERM is received
+	signal.NotifyContext(pr.runContext, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
 	// Main run loop.
 	for {
 		select {
 		case <-pr.runContext.Done():
-			pr.logger.Info().Msg("Exiting runner after context was cancelled.")
-			break
+			reason := "Exiting runner after context was cancelled."
+			pr.logger.Info().Msg(reason)
+			return reason
+		case pr.heartBeatChannel <- nil:
+			// attempt to write nil to heartbeat, if the heartbeat reciever has closed this will skip.
 		default:
 		}
-
 		// Get Event(s)
 		inputBulkEvents, eventResponseInfo, err := pr.dpClient.GetBinaryEvents(&client.FetchEventsStruct{
 			Count:                   1,
@@ -218,10 +226,9 @@ func (pr *PluginRunner) Run() {
 			// Done this way to guarantee the job always closes.
 			err = pr.runInner(event)
 			if err != nil {
-				return
+				return err.Error()
 			}
 		}
-		pr.heartBeatChannel <- nil
 	}
 }
 

@@ -88,11 +88,22 @@ func TestRun(t *testing.T) {
 		},
 	)
 	pr.dpClient = fakeDpClient
-
-	go func() { pr.Run() }()
+	// Run and exit plugin collecting the reason for the exit
+	reasonChan := make(chan string)
+	go func() {
+		reason := pr.Run()
+		reasonChan <- reason
+	}()
 	// Give time for the plugin to run.
 	time.Sleep(500 * time.Millisecond)
 	pr.cancelFunc()
+	// If this exits early verify that heartbeat hasn't closed before the main plugin loop causing the plugin loop to hang
+	select {
+	case exitReason := <-reasonChan:
+		require.Equal(t, exitReason, "Exiting runner after context was cancelled.")
+	case <-time.After(5 * time.Second):
+		t.Fatal("Failed to confirm plugin run exited in time!")
+	}
 }
 
 // Test a generic run with two results and then stop the run
