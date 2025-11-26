@@ -49,7 +49,6 @@ type PluginRunner struct {
 	dpClient         client.ClientInterface
 	config           *PluginSettings
 	logger           *zerolog.Logger
-	sigTermChannel   chan os.Signal
 }
 
 var localFileManager *testutils.FileManager
