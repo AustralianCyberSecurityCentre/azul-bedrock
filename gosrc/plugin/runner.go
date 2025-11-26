@@ -66,6 +66,8 @@ func createOrGetFileManager() (*testutils.FileManager, error) {
 
 /*Create a new plugin runner.*/
 func NewPluginRunner(inPlugin Plugin) *PluginRunner {
+	// Size on this channel allows the plugin to complete gracefully even if heartbeat has already exited.
+	// As it's possible for the runner to attempt to write to the heartbeat channel before after heartbeat has exited.
 	heartBeatChannel := make(chan *events.BinaryEvent, 10)
 	context, cancelFunc := context.WithCancel(context.Background())
 	settings := parsePluginSettings(inPlugin.GetDefaultSettings())
