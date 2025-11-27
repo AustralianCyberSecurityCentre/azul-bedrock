@@ -126,3 +126,35 @@ class ReadFeatureValues(BaseModelRepr):
     after: str | None = None  # pagination key for next request
     is_total_approx: bool = False  # is the total an approximation, occurs if a term query is done.
     total: int | None = None  # on first request only, expected number of items if all pages are collected
+
+
+class FeaturePivotRequest(BaseModelRepr):
+    """Format of the request body for a feature pivot request."""
+
+    feature_name: str
+    feature_value: str
+
+    model_config = ConfigDict(coerce_numbers_to_str=True)
+
+
+class FeaturePivotValueCount(BaseModelRepr):
+    """The value and count for a binary."""
+
+    feature_value: str
+    entity_count: str
+
+    model_config = ConfigDict(coerce_numbers_to_str=True)
+
+class FeaturePivotNameWithValueCount(BaseModelRepr):
+    """Feature name, value and total count."""
+
+    feature_name: str
+    values_and_counts: list[FeaturePivotValueCount]
+
+
+class FeaturePivotResponse(BaseModelRepr):
+    """Response from the Feature pivot containing a list of matching features and their counts."""
+
+    feature_value_counts: list[FeaturePivotNameWithValueCount] = []
+    incomplete_query: bool = False
+    reason: str = ""
