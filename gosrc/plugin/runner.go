@@ -66,9 +66,7 @@ func createOrGetFileManager() (*testutils.FileManager, error) {
 
 /*Create a new plugin runner.*/
 func NewPluginRunner(inPlugin Plugin) *PluginRunner {
-	// Size on this channel allows the plugin to complete gracefully even if heartbeat has already exited.
-	// As it's possible for the runner to attempt to write to the heartbeat channel before after heartbeat has exited.
-	heartBeatChannel := make(chan *events.BinaryEvent, 10)
+	heartBeatChannel := make(chan *events.BinaryEvent)
 	context, cancelFunc := context.WithCancel(context.Background())
 	settings := parsePluginSettings(inPlugin.GetDefaultSettings())
 	// Set default deployment key if not set.
@@ -183,7 +181,7 @@ func (pr *PluginRunner) Run() string {
 			pr.logger.Info().Msg(reason)
 			return reason
 		case pr.heartBeatChannel <- nil:
-			// attempt to write nil to heartbeat, if the heartbeat reciever has closed this will skip.
+			// attempt to write nil to heartbeat, if the heartbeat receiver has closed this will skip.
 		default:
 		}
 		// Get Event(s)
@@ -235,7 +233,12 @@ func (pr *PluginRunner) Run() string {
 
 // Inner runInner function returns nil to skip to the next event returns error to exit the runner.
 func (pr *PluginRunner) runInner(event *events.BinaryEvent) error {
-	pr.heartBeatChannel <- event
+	// Write to heartbeat channel unless context is already done.
+	select {
+	case <-pr.runContext.Done():
+	case pr.heartBeatChannel <- event:
+	}
+
 	// Ensure this get's closed to clear up all the temporary files.
 	job, err := NewJob(pr.dpClient, event, pr.author)
 	if err != nil {

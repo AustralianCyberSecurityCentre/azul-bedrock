@@ -145,6 +145,7 @@ class FeaturePivotValueCount(BaseModelRepr):
 
     model_config = ConfigDict(coerce_numbers_to_str=True)
 
+
 class FeaturePivotNameWithValueCount(BaseModelRepr):
     """Feature name, value and total count."""
 
