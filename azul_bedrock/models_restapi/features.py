@@ -150,6 +150,7 @@ class FeaturePivotNameWithValueCount(BaseModelRepr):
     """Feature name, value and total count."""
 
     feature_name: str
+    feature_description: str
     values_and_counts: list[FeaturePivotValueCount]
 
 
