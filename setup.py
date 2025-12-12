@@ -19,7 +19,6 @@ setup(
     packages=["azul_bedrock", "azul_bedrock.models_restapi"],
     include_package_data=True,
     python_requires=">=3.12",
-    classifiers=[],
     entry_points={},
     use_scm_version=True,
     setup_requires=["setuptools_scm"],
