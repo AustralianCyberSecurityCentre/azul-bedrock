@@ -2,6 +2,7 @@ package store
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -159,7 +160,20 @@ func (s *StoreS3) Put(source, label, id string, data io.ReadCloser, fileSize int
 		reportStreamsOpMetric(s.promStreamsOperationDuration, startTime, "put", err)
 	}()
 	key := createIdPath(source, label, id)
-	bufRead := bufio.NewReaderSize(data, MAX_BUFFERED_READER_BYTES)
+
+	var bufRead io.Reader
+	// If the file size is not known read the whole file into memory to get the file size, otherwise this S3 library leaks memory.
+	// The leak is it failing to release the memory it uses when uploading a file to minio.
+	if fileSize == -1 {
+		rawData, err := io.ReadAll(data)
+		if err != nil {
+			return err
+		}
+		fileSize = int64(len(rawData))
+		bufRead = bytes.NewReader(rawData)
+	} else {
+		bufRead = bufio.NewReaderSize(data, MAX_BUFFERED_READER_BYTES)
+	}
 
 	options := minio.PutObjectOptions{ContentType: "binary/octet-stream"}
 	// If file is large enough use concurrency.
