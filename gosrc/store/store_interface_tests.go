@@ -87,7 +87,7 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 			reader := bytes.NewReader(test.input)
 			readCloser := io.NopCloser(reader)
 
-			err = fs.Put("source", events.DataLabelContent.Str(), inBinSha256, readCloser, int64(len(test.input)))
+			err = fs.Put("source", events.DataLabelContent.Str(), inBinSha256, readCloser, -1)
 			assert.NoError(err, "Error occured while saving file")
 			defer func() {
 				if _, err := fs.Delete("source", events.DataLabelContent.Str(), inBinSha256); err != nil {
