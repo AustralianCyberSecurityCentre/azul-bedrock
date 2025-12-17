@@ -63,6 +63,9 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             except httpx.TimeoutException:
                 if tries > 20:  # Time out after about 4 seconds
                     raise RuntimeError("Timed out waiting for mock server to be ready")
+            except httpx.ConnectError:
+                if tries > 20:  # Time out after about 4 seconds
+                    raise RuntimeError("Connection error waiting for mock server to be ready")
 
     async def asyncSetUp(self):
         self.dp = DispatcherAPI(

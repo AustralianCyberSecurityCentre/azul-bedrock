@@ -36,14 +36,13 @@ class MockDispatcher(multiprocessing.Process):
             self.port = s.getsockname()[1]
         logger.debug("Dummy server using port %s" % self.port)
 
-        config = uvicorn.Config(app, host=host, port=self.port)
-        self.server = uvicorn.Server(config=config)
-        self.config = config
-
     def stop(self):
         """Stop the server."""
         self.terminate()
 
     def run(self, *args, **kwargs):
         """Run the server."""
+        config = uvicorn.Config(app, host=self.host, port=self.port)
+        self.server = uvicorn.Server(config=config)
+        self.config = config
         self.server.run()
