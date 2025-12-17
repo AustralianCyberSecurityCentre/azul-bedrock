@@ -4,6 +4,9 @@ import os
 
 from setuptools import setup
 
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
+
 
 def open_file(fname):
     """Open and return a file-like object for the relative filename."""
@@ -18,7 +21,6 @@ setup(
     url="https://www.asd.gov.au/",
     packages=["azul_bedrock", "azul_bedrock.models_restapi"],
     include_package_data=True,
-    python_requires=">=3.12",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
@@ -30,6 +32,9 @@ setup(
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries",
     ],
+    python_requires=">=3.12",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     entry_points={},
     use_scm_version=True,
     setup_requires=["setuptools_scm"],
