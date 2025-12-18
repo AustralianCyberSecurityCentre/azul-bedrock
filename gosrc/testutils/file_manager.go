@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/cart"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/cart"
 )
 
 type DownloadSource string

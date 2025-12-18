@@ -3,7 +3,7 @@ package models
 import (
 	"testing"
 
-	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/testdata"
+	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/testdata"
 	"github.com/stretchr/testify/require"
 )
 

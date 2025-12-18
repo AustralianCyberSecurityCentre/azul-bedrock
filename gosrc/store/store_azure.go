@@ -18,7 +18,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/bloberror"
 	"github.com/prometheus/client_golang/prometheus"
 
-	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/settings"
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/settings"
 )
 
 // One is all that is required, if you see EOF more than twice it's the end of the actual file not just a blob.

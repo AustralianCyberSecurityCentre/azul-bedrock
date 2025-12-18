@@ -6,11 +6,11 @@ import (
 	bufio "bufio"
 	io "io"
 
-	events "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/events"
+	events "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/events"
 
 	mock "github.com/stretchr/testify/mock"
 
-	models "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/models"
+	models "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/models"
 
 	time "time"
 )

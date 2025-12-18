@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/testdata"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/testdata"
 	"github.com/goccy/go-json"
 
 	"github.com/stretchr/testify/require"
@@ -362,7 +362,7 @@ func TestBinaryEvent2(t *testing.T) {
 			"model_version":12,
 			"timestamp":"2012-01-01T00:00:00Z",
 			"source":{"name":"source", "references": {"taskid":"lemon"},"path":[
-				{"author":{"name":"apple"},"action":"","sha256":"parent","timestamp":"0001-01-01T00:00:00Z"}, 
+				{"author":{"name":"apple"},"action":"","sha256":"parent","timestamp":"0001-01-01T00:00:00Z"},
 				{"author":{"name":"apple"},"action":"","sha256":"child","timestamp":"0001-01-01T00:00:00Z"}
 			],"timestamp":"2012-01-01T00:00:00Z"},
 			"entity":{"sha256":"child"}

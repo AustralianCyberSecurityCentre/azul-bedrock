@@ -4,7 +4,7 @@ import (
 	_ "embed"
 	"strings"
 
-	embeded_files "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc"
+	embeded_files "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc"
 	"gopkg.in/yaml.v3"
 )
 

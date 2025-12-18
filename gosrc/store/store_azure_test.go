@@ -5,7 +5,7 @@ package store
 import (
 	"testing"
 
-	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/settings"
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/settings"
 	"github.com/stretchr/testify/require"
 )
 

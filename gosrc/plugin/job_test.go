@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/events"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

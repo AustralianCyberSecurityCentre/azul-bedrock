@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/client"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/events"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/models"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/client"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/models"
 	"github.com/sanity-io/litter"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"

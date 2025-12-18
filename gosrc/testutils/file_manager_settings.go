@@ -3,7 +3,7 @@ package testutils
 import (
 	"strings"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/settings"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/settings"
 	"github.com/go-viper/mapstructure/v2"
 )
 

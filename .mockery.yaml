@@ -1,6 +1,6 @@
 with-expecter: true
 packages:
-  github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/store:
+  github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/store:
     # place your package-specific config here
     config:
       inpackage: true
@@ -11,7 +11,7 @@ packages:
         # Modify package-level config for this specific interface (if applicable)
         config:
           filename: store_mock.go
-  github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/client:
+  github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/client:
     # place your package-specific config here
     config:
       inpackage: true
