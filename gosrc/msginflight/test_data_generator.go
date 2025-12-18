@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/events"
 )
 
 func GenBinaryStream(id string) events.BinaryEntityDatastream {

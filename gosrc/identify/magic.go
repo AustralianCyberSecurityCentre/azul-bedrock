@@ -4,7 +4,7 @@ package identify
 import (
 	"strings"
 
-	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/settings"
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/settings"
 	"github.com/rakyll/magicmime"
 )
 

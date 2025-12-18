@@ -4,7 +4,7 @@ import (
 	"log"
 	"testing"
 
-	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/testdata"
+	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/testdata"
 	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

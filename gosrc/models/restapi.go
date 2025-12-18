@@ -1,6 +1,6 @@
 package models
 
-import "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/events"
+import "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/events"
 
 // Dispatcher response to a submitted binary blob?
 type DataResponse struct {

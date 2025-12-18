@@ -11,9 +11,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/events"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/models"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/testdata"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/models"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/testdata"
 	"github.com/goccy/go-json"
 	mock "github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"

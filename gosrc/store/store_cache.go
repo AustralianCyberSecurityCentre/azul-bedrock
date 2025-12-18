@@ -9,7 +9,7 @@ import (
 	"log"
 	"time"
 
-	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/settings"
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/settings"
 	"github.com/allegro/bigcache/v3"
 	"github.com/prometheus/client_golang/prometheus"
 )

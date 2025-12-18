@@ -7,9 +7,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/models"
-	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/settings"
-	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/testdata"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/models"
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/settings"
+	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/testdata"
 	"github.com/minio/minio-go/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

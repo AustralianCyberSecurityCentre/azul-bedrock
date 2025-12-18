@@ -3,7 +3,7 @@ package msginflight
 import (
 	"fmt"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/events"
 	"github.com/goccy/go-json"
 )
 

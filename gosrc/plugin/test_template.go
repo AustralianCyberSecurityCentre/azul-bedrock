@@ -11,7 +11,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/events"
 	"github.com/sanity-io/litter"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -193,7 +193,7 @@ func (jr *TestJobResult) GenerateActualEventCode(t *testing.T) {
 			return false
 		},
 	}
-	t.Logf(`The below printout can form the base of your test, 
+	t.Logf(`The below printout can form the base of your test,
 but you must double check the output is as expected.
 
 %s

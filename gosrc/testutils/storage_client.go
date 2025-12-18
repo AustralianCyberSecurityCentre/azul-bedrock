@@ -11,7 +11,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v9/gosrc/cart"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/cart"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/blob"
