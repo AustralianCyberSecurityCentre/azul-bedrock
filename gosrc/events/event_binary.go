@@ -244,17 +244,17 @@ func (b *BinaryEvent) CheckValid() error {
 func (data *BinaryEntityDatastream) ToInputEntity() *BinaryEntity {
 	// mirrors logic in models_network.py FileInfo.to_input_entity()
 	ret := &BinaryEntity{
-		Sha256:           data.Sha256,
-		Sha512:           data.Sha512,
-		Sha1:             data.Sha1,
-		Md5:              data.Md5,
-		Ssdeep:           data.Ssdeep,
-		Tlsh:             data.Tlsh,
-		Size:             data.Size,
-		Mime:             data.Mime,
-		Magic:            data.Magic,
-		FileFormat:       data.FileFormat,
-		FileExtension:    data.FileExtension,
+		Sha256:        data.Sha256,
+		Sha512:        data.Sha512,
+		Sha1:          data.Sha1,
+		Md5:           data.Md5,
+		Ssdeep:        data.Ssdeep,
+		Tlsh:          data.Tlsh,
+		Size:          data.Size,
+		Mime:          data.Mime,
+		Magic:         data.Magic,
+		FileFormat:    data.FileFormat,
+		FileExtension: data.FileExtension,
 		Features: []BinaryEntityFeature{
 			{Name: "file_format", Type: FeatureString, Value: data.FileFormat},
 			{Name: "file_extension", Type: FeatureString, Value: data.FileExtension},
