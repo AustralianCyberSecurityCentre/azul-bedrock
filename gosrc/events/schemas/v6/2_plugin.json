@@ -1,0 +1,51 @@
+{
+  "name": "PluginEvent",
+  "type": "record",
+  "fields": [
+    { "name": "model_version", "type": "long" },
+    { "name": "kafka_key", "type": "string" },
+    {
+      "name": "timestamp",
+      "type": { "type": "long", "logicalType": "timestamp-micros" }
+    },
+    { "name": "author", "type": "EventAuthor" },
+    {
+      "name": "entity",
+      "type": {
+        "name": "PluginEntity",
+        "type": "record",
+        "fields": [
+          { "name": "name", "type": "string" },
+          { "name": "version", "type": "string" },
+          { "name": "category", "type": "string" },
+          { "name": "contact", "type": "string" },
+          { "name": "description", "type": "string" },
+          {
+            "name": "features",
+            "type": {
+              "type": "array",
+              "items": {
+                "name": "PluginEntityFeature",
+                "type": "record",
+                "fields": [
+                  { "name": "name", "type": "string" },
+                  { "name": "type", "type": "string" },
+                  { "name": "desc", "type": "string" },
+                  {
+                    "name": "tags",
+                    "type": { "type": "array", "items": "string" }
+                  }
+                ]
+              }
+            }
+          },
+          { "name": "security", "type": "string" },
+          {
+            "name": "config",
+            "type": { "type": "map", "values": "string" }
+          }
+        ]
+      }
+    }
+  ]
+}

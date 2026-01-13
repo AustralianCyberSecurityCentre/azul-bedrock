@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const CurrentModelVersion uint32 = 5
+const CurrentModelVersion uint32 = 6
 
 // collection of all types of events
 type EventStructs interface {
@@ -24,16 +24,15 @@ type EventAuthor struct {
 
 // A link on the path to the original source entity
 type EventSourcePathNode struct {
-	Author           EventAuthor       `json:"author" avro:"author"`
-	Action           BinaryAction      `json:"action" avro:"action"`
-	Sha256           string            `json:"sha256" avro:"sha256"`
-	Relationship     map[string]string `json:"relationship,omitempty,omitzero" avro:"relationship"`
-	Timestamp        time.Time         `json:"timestamp" avro:"timestamp"`
-	FileFormatLegacy string            `json:"file_format_legacy,omitempty" avro:"file_format_legacy"`
-	FileFormat       string            `json:"file_format,omitempty" avro:"file_format"`
-	Size             uint64            `json:"size,omitempty" avro:"size"`
-	Filename         string            `json:"filename,omitempty" avro:"filename"`
-	Language         string            `json:"language,omitempty" avro:"language"`
+	Author       EventAuthor       `json:"author" avro:"author"`
+	Action       BinaryAction      `json:"action" avro:"action"`
+	Sha256       string            `json:"sha256" avro:"sha256"`
+	Relationship map[string]string `json:"relationship,omitempty,omitzero" avro:"relationship"`
+	Timestamp    time.Time         `json:"timestamp" avro:"timestamp"`
+	FileFormat   string            `json:"file_format,omitempty" avro:"file_format"`
+	Size         uint64            `json:"size,omitempty" avro:"size"`
+	Filename     string            `json:"filename,omitempty" avro:"filename"`
+	Language     string            `json:"language,omitempty" avro:"language"`
 }
 
 // Describes how the current event was derived from a base event

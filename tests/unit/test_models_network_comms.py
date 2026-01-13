@@ -124,7 +124,6 @@ class TestAPIContentEntry(_TupleConversionTests):
                 md5="5",
                 mime="application/octet-stream",
                 magic="abracadabra",
-                file_format_legacy="something",
             ),
             dict(
                 label=azm.DataLabel.TEXT,
@@ -135,7 +134,6 @@ class TestAPIContentEntry(_TupleConversionTests):
                 md5="5",
                 mime="application/octet-stream",
                 magic="abracadabra",
-                file_format_legacy="something",
             ),
             """
             {
@@ -146,8 +144,7 @@ class TestAPIContentEntry(_TupleConversionTests):
                 "sha512": "512",
                 "md5": "5",
                 "mime": "application/octet-stream",
-                "magic": "abracadabra",
-                "file_format_legacy": "something"
+                "magic": "abracadabra"
             }
             """,
         ),
@@ -161,7 +158,6 @@ class TestAPIContentEntry(_TupleConversionTests):
                 md5="5",
                 mime="application/octet-stream",
                 magic="abracadabra",
-                file_format_legacy="something",
                 language="random value",
             ),
             dict(
@@ -173,7 +169,6 @@ class TestAPIContentEntry(_TupleConversionTests):
                 md5="5",
                 mime="application/octet-stream",
                 magic="abracadabra",
-                file_format_legacy="something",
                 language="random value",
             ),
             """
@@ -186,7 +181,6 @@ class TestAPIContentEntry(_TupleConversionTests):
                  "md5": "5",
                  "mime": "application/octet-stream",
                  "magic": "abracadabra",
-                 "file_format_legacy": "something",
                  "language": "random value"
              }
             """,
@@ -234,7 +228,6 @@ class TestInputEntity(_TupleConversionTests):
                         md5="5",
                         mime="application/octet-stream",
                         magic="abracadabra",
-                        file_format_legacy="something",
                     )
                 ],
             ),
@@ -255,7 +248,6 @@ class TestInputEntity(_TupleConversionTests):
                         md5="5",
                         mime="application/octet-stream",
                         magic="abracadabra",
-                        file_format_legacy="something",
                     )
                 ],
             },
@@ -268,8 +260,7 @@ class TestInputEntity(_TupleConversionTests):
                     {"name": "feature", "type": "binary", "value": "Ynl0ZXM=", "label": "otherfeat"}
                 ],
                 "datastreams": [{"label": "text", "size": 7, "sha1": "1", "sha256": "256", "sha512": "512", "md5": "5",
-                          "mime": "application/octet-stream", "magic": "abracadabra",
-                          "file_format_legacy": "something"}]
+                          "mime": "application/octet-stream", "magic": "abracadabra"}]
             }
             """,
         ),

@@ -1,5 +1,5 @@
 {
-  "model_version": 5,
+  "model_version": 6,
   "author": {
     "name": "vtfilemapper",
     "version": "0.27",
@@ -21,7 +21,6 @@
       "sha256": "2222222222222222222222222222222222222222222222222",
       "filename": "org.eclipse.mylyn.commons.xmlrpc.nl_da_4.10.0.v20190713081526.jar",
       "size": 1469,
-      "file_format_legacy": "JAR",
       "timestamp": "2021-03-29T03:24:08.54928Z"
     }
   },

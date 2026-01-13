@@ -628,7 +628,6 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             sha256="b",
             md5="c",
             sha1="d",
-            file_format_legacy="f",
             magic="g",
             mime="h",
         )
@@ -708,7 +707,6 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             sha256="b",
             md5="c",
             sha1="d",
-            file_format_legacy="f",
             magic="g",
             mime="h",
         )

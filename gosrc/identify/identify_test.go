@@ -31,13 +31,13 @@ func dbgMismatch(t *testing.T, got, expected string, identified Identified) {
 	}
 }
 
-func testMatches(t *testing.T, sha256, exp_id, exp_legacy, exp_ext, exp_magic, exp_mime string) {
+func testMatches(t *testing.T, sha256, exp_id, exp_ext, exp_magic, exp_mime string) {
 	var data []byte
 	switch sha256 {
 	case ZERO_BYTE_SHA256:
 		data = []byte{}
 	case "":
-		t.Fatalf("Provided an empty sha256, other values were exp_id: %s, exp_legacy: %s, exp_ext: %s, exp_magic: %s, exp_mime: %s", exp_id, exp_legacy, exp_ext, exp_magic, exp_mime)
+		t.Fatalf("Provided an empty sha256, other values were exp_id: %s, exp_ext: %s, exp_magic: %s, exp_mime: %s", exp_id, exp_ext, exp_magic, exp_mime)
 	default:
 		data = loadCartFile(t, sha256)
 	}
@@ -58,13 +58,10 @@ func testMatches(t *testing.T, sha256, exp_id, exp_legacy, exp_ext, exp_magic, e
 
 	id, err := cfg.Find(uncartedTempFile.Name())
 	if err != nil {
-		t.Fatalf("For file '%v' -%v-%v-%v error - %v", sha256, exp_id, exp_legacy, exp_ext, err)
+		t.Fatalf("For file '%v' -%v-%v error - %v", sha256, exp_id, exp_ext, err)
 	}
 	if id.FileFormat != exp_id {
 		dbgMismatch(t, id.FileFormat, exp_id, id)
-	}
-	if id.FileFormatLegacy != exp_legacy {
-		dbgMismatch(t, id.FileFormatLegacy, exp_legacy, id)
 	}
 	if id.FileExtension != exp_ext {
 		t.Errorf("bad extension: %v vs %v", id.FileExtension, exp_ext)
@@ -97,6 +94,6 @@ func TestIdentifyAllFiles(t *testing.T) {
 
 	for _, tc := range test_data.Identify_Tests {
 		t.Logf("Testing file '%v'", tc.Sha256)
-		testMatches(t, tc.Sha256, tc.File_Format, tc.File_Format_Legacy, tc.File_Extension, tc.Magic, tc.Mime)
+		testMatches(t, tc.Sha256, tc.File_Format, tc.File_Extension, tc.Magic, tc.Mime)
 	}
 }

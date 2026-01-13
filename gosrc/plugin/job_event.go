@@ -289,16 +289,15 @@ func (je *JobEvent) recursivelyGetExtractedPathNodes(
 			)
 	}
 	newPathNode := events.EventSourcePathNode{
-		Author:           authorSummary,
-		Action:           events.ActionExtracted,
-		Sha256:           binaryEntityDatastream.Sha256,
-		Relationship:     contentStream.Relationship,
-		Timestamp:        now,
-		FileFormatLegacy: binaryEntityDatastream.FileFormatLegacy,
-		FileFormat:       binaryEntityDatastream.FileFormat,
-		Size:             binaryEntityDatastream.Size,
-		Filename:         je.getFileName(),
-		Language:         binaryEntityDatastream.Language,
+		Author:       authorSummary,
+		Action:       events.ActionExtracted,
+		Sha256:       binaryEntityDatastream.Sha256,
+		Relationship: contentStream.Relationship,
+		Timestamp:    now,
+		FileFormat:   binaryEntityDatastream.FileFormat,
+		Size:         binaryEntityDatastream.Size,
+		Filename:     je.getFileName(),
+		Language:     binaryEntityDatastream.Language,
 	}
 
 	return append(pathNodes, &newPathNode), nil

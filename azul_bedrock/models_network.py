@@ -250,9 +250,7 @@ class FileInfo(BaseModelStrict):
     tlsh: str | None = None
     # bytes in file
     size: NonNegativeInt | None = None
-    # azul type identification
-    file_format_legacy: str | None = None
-    # assemblyline type identification
+    # type identification
     file_format: str | None = None
     # expected file type extension
     file_extension: str | None = None
@@ -269,7 +267,6 @@ class FileInfo(BaseModelStrict):
             sha1=self.sha1,
             md5=self.md5,
             size=self.size,
-            file_format_legacy=self.file_format_legacy,
             file_format=self.file_format,
             tlsh=self.tlsh,
             ssdeep=self.ssdeep,
@@ -278,7 +275,6 @@ class FileInfo(BaseModelStrict):
             file_extension=self.file_extension,
             features=[
                 FeatureValue(name="file_format", type="string", value=self.file_format or ""),
-                FeatureValue(name="file_format_legacy", type="string", value=self.file_format_legacy or ""),
                 FeatureValue(name="file_extension", type="string", value=self.file_extension or ""),
                 FeatureValue(name="magic", type="string", value=self.magic or ""),
                 FeatureValue(name="mime", type="string", value=self.mime or ""),
@@ -350,7 +346,6 @@ class PathNode(BaseModelStrict):
     # name/value pairs describing the relationship from parent node
     relationship: dict[str, str] = {}
     # important binary info
-    file_format_legacy: str | None = None
     file_format: str | None = None
     size: NonNegativeInt | None = None
     filename: str | None = None

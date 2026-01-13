@@ -233,7 +233,6 @@ class Config(pydantic.BaseModel):
         """A mapping between id, extension and legacy type."""
 
         id: str
-        legacy: str = ""
         extension: str = ""
 
     class Rule(IdMapping):
@@ -324,11 +323,11 @@ def _apply_rules(magics: list[str], mimes: list[str]) -> tuple[str, str]:
         if rule.magicC:
             for mgc in magics:
                 if rule.magicC.search(mgc.lower()):
-                    return rule.id, rule.legacy, rule.extension
+                    return rule.id, rule.extension
         if rule.mimeC:
             for mime in mimes:
                 if rule.mimeC.search(mime.lower()):
-                    return rule.id, rule.legacy, rule.extension
+                    return rule.id, rule.extension
 
 
 def _apply_indicators(id: str, buf_start_of_file: bytes) -> str:
@@ -354,7 +353,7 @@ def _apply_indicators(id: str, buf_start_of_file: bytes) -> str:
     return ret_id
 
 
-def from_buffer(data: bytes) -> tuple[str, str, str, str, str]:
+def from_buffer(data: bytes) -> tuple[str, str, str, str]:
     """Identify via bytes buffer."""
     with tempfile.NamedTemporaryFile() as f:
         f.write(data)
@@ -362,7 +361,7 @@ def from_buffer(data: bytes) -> tuple[str, str, str, str, str]:
         return from_file(f.name)
 
 
-def from_file(path: str) -> tuple[str, str, str, str, str]:
+def from_file(path: str) -> tuple[str, str, str, str]:
     """Identify via file path."""
     with open(path, "rb") as f:
         buf_start_of_file = f.read(MAX_INDICATOR_BUFFERED_BYTES_SIZE)
@@ -386,7 +385,7 @@ def from_file(path: str) -> tuple[str, str, str, str, str]:
             mimes[i] = mimes[i].removeprefix("-").strip()
 
         # First attempt at identifying types
-        file_format, legacy_override, extension_override = _apply_rules(magics, mimes)
+        file_format, extension_override = _apply_rules(magics, mimes)
         file_format_with_overrides = file_format
 
         # Find fist good mime type and use it.
@@ -421,8 +420,7 @@ def from_file(path: str) -> tuple[str, str, str, str, str]:
                     fallback=file_format,
                 )
 
-        if file_format_with_overrides == file_format and legacy_override != "":
-            file_format_legacy = legacy_override
+        if file_format_with_overrides == file_format and extension_override != "":
             extension = extension_override
         else:
             found_type = cfg.id_mapping_dict.get(file_format, None)
@@ -430,10 +428,9 @@ def from_file(path: str) -> tuple[str, str, str, str, str]:
                 print(f"Error: the assemblyline type '{file_format}' doesn't have a mapping and should")
                 raise Exception(f"Assemblyline type found was '{file_format}' doesn't have a mapping and should")
 
-            file_format_legacy = found_type.legacy
             extension = found_type.extension
 
-        return magics[0], best_mime, file_format, file_format_legacy, extension
+        return magics[0], best_mime, file_format, extension
 
 
 def _dotdump(s):
@@ -450,5 +447,5 @@ if __name__ == "__main__":
         print("must supply file path")
         sys.exit(1)
     path = sys.argv[1]
-    magic, mime, file_format, file_format_legacy, extension = from_file(path)
-    print(f"'{magic}' + '{mime}' -> {file_format} {file_format_legacy} {extension}")
+    magic, mime, file_format, extension = from_file(path)
+    print(f"'{magic}' + '{mime}' -> {file_format} {extension}")

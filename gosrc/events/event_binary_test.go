@@ -149,12 +149,10 @@ func TestToInputEntity(t *testing.T) {
 		Size:             0x88ee,
 		Mime:             "image/gif",
 		Magic:            "GIF image data, version 89a, 80 x 35",
-		FileFormatLegacy: "GIF",
 		FileFormat:       "image/gif",
 		FileExtension:    "gif",
 		Features: []BinaryEntityFeature{
 			{Name: "file_format", Value: "image/gif", Type: FeatureString},
-			{Name: "file_format_legacy", Value: "GIF", Type: FeatureString},
 			{Name: "file_extension", Value: "gif", Type: FeatureString},
 			{Name: "magic", Value: "GIF image data, version 89a, 80 x 35", Type: FeatureString},
 			{Name: "mime", Value: "image/gif", Type: FeatureString},
@@ -170,7 +168,6 @@ func TestToInputEntity(t *testing.T) {
 			Tlsh:             "",
 			Mime:             "image/gif",
 			Magic:            "GIF image data, version 89a, 80 x 35",
-			FileFormatLegacy: "GIF",
 			FileFormat:       "image/gif",
 			FileExtension:    "gif",
 			Language:         ""},
@@ -181,7 +178,6 @@ func TestToInputEntity(t *testing.T) {
 	data.FileFormat = ""
 	input = data.ToInputEntity()
 	require.Equal(t, input.Features, []BinaryEntityFeature{
-		{Name: "file_format_legacy", Value: "GIF", Type: FeatureString},
 		{Name: "file_extension", Value: "gif", Type: FeatureString},
 		{Name: "magic", Value: "GIF image data, version 89a, 80 x 35", Type: FeatureString},
 		{Name: "mime", Value: "image/gif", Type: FeatureString},

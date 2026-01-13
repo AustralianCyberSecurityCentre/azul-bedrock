@@ -1,8 +1,8 @@
 {
-  "model_version": 5,
+  "model_version": 6,
   "events": [
     {
-      "model_version": 5,
+      "model_version": 6,
       "author": {
         "name": "person",
         "version": "1",
@@ -22,7 +22,7 @@
       "kafka_key": "ab3808f6d20b3c01513f89186becdcde"
     },
     {
-      "model_version": 5,
+      "model_version": 6,
       "author": {
         "name": "person",
         "version": "1",
