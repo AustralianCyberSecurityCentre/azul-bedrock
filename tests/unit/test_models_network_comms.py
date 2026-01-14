@@ -367,7 +367,7 @@ class TestStatusEntity(_TupleConversionTests):
             {
                 "status": "completed",
                 "input": {
-                    "model_version":5,
+                    "model_version":6,
                     "kafka_key":"abc",
                     "dequeued": "ccc",
                     "action": "sourced",
@@ -445,7 +445,7 @@ class TestStatusEvent(_TupleConversionTests):
             ),
             """
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key":"abc",
                 "author": {"name": "test", "category": "TEST"},
                 "timestamp": "1992-05-17T00:00:00+00:00",
@@ -453,7 +453,7 @@ class TestStatusEvent(_TupleConversionTests):
                     "status": "error-exception",
                     "error": "WORKER has fainted!",
                     "input": {
-                        "model_version": 5,
+                        "model_version": 6,
                         "kafka_key":"abc",
                         "dequeued": "input-dummy-dequeued-id",
                         "action": "extracted",
@@ -596,7 +596,7 @@ class TestBinaryEvent(_TupleConversionTests):
             # 'flags' is missing from this JSON to ensure that it correctly defaults to empty dict on load
             """
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key":"abc",
                 "dequeued": "ccc",
                 "action": "sourced",
@@ -649,7 +649,7 @@ class TestBinaryEvent(_TupleConversionTests):
             ),
             """
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key":"foobar-md5",
                 "dequeued": "dummy-dequeued-id",
                 "flags": {},

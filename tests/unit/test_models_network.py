@@ -220,7 +220,7 @@ class TestBasic(unittest.TestCase):
         self.assertJsonDict(
             tmp,
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key": "id",
                 "action": "sourced",
                 "timestamp": "2012-01-01T00:00:00+00:00",
@@ -246,7 +246,7 @@ class TestBasic(unittest.TestCase):
         self.assertJsonDict(
             tmp,
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key": "id",
                 "action": "sourced",
                 "timestamp": "2012-01-01T00:00:00+00:00",
@@ -279,13 +279,13 @@ class TestBasic(unittest.TestCase):
         self.assertJsonDict(
             tmp,
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key": "id",
                 "timestamp": "2012-01-01T00:00:00+00:00",
                 "author": {"name": "name"},
                 "entity": {
                     "input": {
-                        "model_version": 5,
+                        "model_version": 6,
                         "kafka_key": "id",
                         "action": "sourced",
                         "timestamp": "2012-01-01T00:00:00+00:00",
@@ -310,7 +310,7 @@ class TestBasic(unittest.TestCase):
         self.assertJsonDict(
             tmp,
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key": "id",
                 "timestamp": "2012-01-01T00:00:00+00:00",
                 "author": {"name": "name"},
@@ -340,7 +340,7 @@ class TestBasic(unittest.TestCase):
         self.assertJsonDict(
             tmp,
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key": "id",
                 "timestamp": "2012-01-01T00:00:00+00:00",
                 "author": {"name": "name"},
