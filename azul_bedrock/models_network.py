@@ -20,7 +20,7 @@ VALUE_DECODED = int | float | str | datetime.datetime | bytes
 # generally this module will be imported with this rename
 STD_IMPORT = "azm"
 # the current model version expected on events - must match events/event.go
-CURRENT_MODEL_VERSION: int = 5
+CURRENT_MODEL_VERSION: int = 6
 
 
 def repr_reproduce(instance: BaseModelStrict, name: str | None = None, required: list[str] | None = None):
