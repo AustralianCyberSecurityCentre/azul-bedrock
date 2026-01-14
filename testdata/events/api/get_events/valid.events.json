@@ -1,5 +1,5 @@
 {
-  "model_version": 5,
+  "model_version": 6,
   "events": [
     {
       "kafka_key": "8c0aa5935f953ddfc19a65fb1830ac59",
@@ -27,7 +27,6 @@
         "mime": "image/x-ms-bmp",
         "magic": "Device independent bitmap graphic, 32 x 64 x 8, image size 1024, 256 important colors",
         "type": "BMP",
-        "file_format_legacy": "BMP",
         "file_format": "image/bmp",
         "file_extension": "bmp"
       },
@@ -59,7 +58,6 @@
         "mime": "image/x-ms-bmp",
         "magic": "Device independent bitmap graphic, 32 x 64 x 8, image size 1024, 256 important colors",
         "type": "BMP",
-        "file_format_legacy": "BMP",
         "file_format": "image/bmp",
         "file_extension": "bmp"
       },

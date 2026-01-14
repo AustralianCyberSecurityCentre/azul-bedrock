@@ -23,6 +23,7 @@ class IncludeCousinsEnum(StrEnum):
     """Enum to decide how wide the cousin search should be for nearby searches."""
 
     No = "no"
+    Small = "yes_small"
     Standard = "yes"
     Large = "yes_large"
 
@@ -80,7 +81,6 @@ class EntityFindItem(BaseModelRepr):
     sources: list[EntityFindItemSource] | None = None
 
     file_size: int | None = None
-    file_format_legacy: str | None = None
     file_format: str | None = None
     file_extension: str | None = None
     magic: str | None = None

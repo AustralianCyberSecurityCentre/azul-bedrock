@@ -60,13 +60,14 @@ type AvroSchemaVersion uint32
 // When adding a new Version add it here
 const (
 	SchemaVersionLatest AvroSchemaVersion = AvroSchemaVersion(CurrentModelVersion) // Ensure CurrentModelVersion is updated! (in python as well 'CURRENT_MODEL_VERSION')
+	SchemaVersionV6     AvroSchemaVersion = 6
 	SchemaVersionV5     AvroSchemaVersion = 5
 	SchemaVersionV4     AvroSchemaVersion = 4
 )
 
 // Full list of schema versions (ensure this is updated when adding a new schema version)
 func getAllSchemaVersions() []AvroSchemaVersion {
-	return []AvroSchemaVersion{SchemaVersionV5, SchemaVersionV4}
+	return []AvroSchemaVersion{SchemaVersionV6, SchemaVersionV5, SchemaVersionV4}
 }
 
 var avroVersionedSchemas map[string]avro.Schema

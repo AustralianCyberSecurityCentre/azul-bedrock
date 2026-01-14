@@ -110,7 +110,6 @@ async def post_content_generic(request: Request, response: Response) -> azapi.Di
             size=len(data),
             mime="#TESTONLY",
             magic="#TESTONLY",
-            file_format_legacy="#TESTONLY",
             file_format="#TEST/ONLY",
             file_extension="tonly",
             # We currently never return the encoded content, regardless of size

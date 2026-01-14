@@ -1,6 +1,6 @@
 {
   "kafka_key": "test",
-  "model_version": 5,
+  "model_version": 6,
   "author": {
     "name": "MimeDecoder",
     "version": "2021.02.14",
@@ -9,7 +9,7 @@
   "entity": {
     "status": "completed",
     "input": {
-      "model_version": 5,
+      "model_version": 6,
       "kafka_key": "test",
       "dequeued": "8c5e67a7ad83fd5cd19fffb7d94941af-MimeDecoder-2021.02.14",
       "flags": {},
@@ -32,8 +32,7 @@
             },
             "action": "sourced",
 
-            "size": 343964,
-            "file_format_legacy": "Email"
+            "size": 343964
           }
         ],
         "references": {
@@ -42,11 +41,9 @@
         }
       },
       "entity": {
-        "file_format_legacy": "Email",
         "datastreams": [
           {
             "identify_version": 1,
-            "file_format_legacy": "Email",
             "magic": "Something Something",
             "md5": "a1",
             "size": 343964,
@@ -79,7 +76,7 @@
     },
     "results": [
       {
-        "model_version": 5,
+        "model_version": 6,
         "kafka_key": "test",
         "flags": {},
         "timestamp": "2021-01-10T10:00:00Z",
@@ -102,8 +99,7 @@
               },
               "action": "sourced",
 
-              "size": 343964,
-              "file_format_legacy": "Email"
+              "size": 343964
             },
             {
               "sha256": "ee303d3c6d7cfa24d42e6348bdd1103a26de77a887e9dbee3dd1fe6304414f69",
@@ -119,7 +115,6 @@
                 "encoding": "base64"
               },
 
-              "file_format_legacy": "GIF",
               "size": 35054,
               "filename": "ukr_kh1.gif"
             }
@@ -130,11 +125,9 @@
           }
         },
         "entity": {
-          "file_format_legacy": "GIF",
           "datastreams": [
             {
               "identify_version": 1,
-              "file_format_legacy": "GIF",
               "magic": "GIF image data, version 89a, 80 x 35",
               "md5": "9e4638d508c003f83f44f5d07748f33a",
               "size": 35054,
