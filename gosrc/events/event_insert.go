@@ -100,9 +100,6 @@ func (b *InsertEvent) CheckValid() error {
 	if len(b.Entity.ChildHistory.Author.Name) == 0 {
 		return errors.New("entity insert missing child_history.author.name")
 	}
-	if len(b.Entity.Child.FileFormatLegacy) == 0 {
-		return errors.New("entity insert missing child.file_format_legacy")
-	}
 	return nil
 }
 

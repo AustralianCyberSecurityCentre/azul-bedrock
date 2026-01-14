@@ -11,14 +11,13 @@ import (
 
 func GenBinaryStream(id string) events.BinaryEntityDatastream {
 	return events.BinaryEntityDatastream{
-		IdentifyVersion:  1,
-		Label:            events.DataLabelContent,
-		Size:             1111,
-		Sha512:           "data.Sha512",
-		Sha256:           id,
-		Sha1:             "data.Sha1",
-		Md5:              "data.Md5",
-		FileFormatLegacy: "data.FileFormatLegacy",
+		IdentifyVersion: 1,
+		Label:           events.DataLabelContent,
+		Size:            1111,
+		Sha512:          "data.Sha512",
+		Sha256:          id,
+		Sha1:            "data.Sha1",
+		Md5:             "data.Md5",
 	}
 }
 
@@ -27,14 +26,12 @@ func genEntityBinary(id string, noData bool) events.BinaryEntity {
 		id = "data.Sha256"
 	}
 	b := events.BinaryEntity{
-		Sha512:           "data.Sha512",
-		Sha256:           id,
-		Sha1:             "data.Sha1",
-		Md5:              "data.Md5",
-		Size:             1111,
-		FileFormatLegacy: "data.FileFormatLegacy",
+		Sha512: "data.Sha512",
+		Sha256: id,
+		Sha1:   "data.Sha1",
+		Md5:    "data.Md5",
+		Size:   1111,
 		Features: []events.BinaryEntityFeature{
-			{Name: "file_format_legacy", Type: "string", Value: "data.FileFormatLegacy"},
 			{Name: "magic", Type: "string", Value: "data.Magic"},
 			{Name: "mime", Type: "string", Value: "data.Mime"},
 		},
@@ -43,14 +40,13 @@ func genEntityBinary(id string, noData bool) events.BinaryEntity {
 	if !noData {
 		b.Datastreams = []events.BinaryEntityDatastream{
 			{
-				IdentifyVersion:  1,
-				Label:            events.DataLabelContent,
-				Size:             1111,
-				Sha512:           "data.Sha512",
-				Sha256:           id,
-				Sha1:             "data.Sha1",
-				Md5:              "data.Md5",
-				FileFormatLegacy: "data.FileFormatLegacy",
+				IdentifyVersion: 1,
+				Label:           events.DataLabelContent,
+				Size:            1111,
+				Sha512:          "data.Sha512",
+				Sha256:          id,
+				Sha1:            "data.Sha1",
+				Md5:             "data.Md5",
 			},
 		}
 	}
@@ -74,7 +70,6 @@ func genPluginEntity() events.PluginEntity {
 		Description: "Local file publishing plugin used as code example.",
 		Features: []events.PluginEntityFeature{
 			{Name: "filename", Type: "filepath", Description: "Filesystem path the file was sourced from", Tags: []string{"source"}},
-			{Name: "file_format_legacy", Type: "string", Description: "System normalised file type format"},
 			{Name: "magic", Type: "string", Description: "File magic description string"},
 			{Name: "mime", Type: "string", Description: "File magic mime-type label"},
 		},
@@ -138,13 +133,12 @@ func GenEventBinary(opt *BC) *events.BinaryEvent {
 			References: map[string]string{},
 			Path: []events.EventSourcePathNode{
 				{
-					Author:           author.Summary(),
-					Action:           opt.Action,
-					Sha256:           opt.Entity.Sha256,
-					Timestamp:        now,
-					Filename:         "file.exe",
-					FileFormatLegacy: "PE32+ executable",
-					Size:             1111,
+					Author:    author.Summary(),
+					Action:    opt.Action,
+					Sha256:    opt.Entity.Sha256,
+					Timestamp: now,
+					Filename:  "file.exe",
+					Size:      1111,
 				},
 			},
 			Timestamp: now,
@@ -202,9 +196,7 @@ func GenEventInsert(id string) *events.InsertEvent {
 		Entity: events.InsertEntity{
 			OriginalSource: id,
 			ParentSha256:   "sha2561",
-			Child: events.BinaryEntity{
-				FileFormatLegacy: "exe",
-			},
+			Child:          events.BinaryEntity{},
 			ChildHistory: events.EventSourcePathNode{
 				Sha256: "sha2562",
 				Action: "extracted",
@@ -240,10 +232,9 @@ func GetDequeuedBinaryEvent(id string, dequeued_id string) *events.BinaryEvent {
 		Action:       events.ActionEnriched,
 		Source:       events.EventSource{Name: "truck"},
 		Entity: events.BinaryEntity{
-			FileFormatLegacy: "ZIP",
-			FileFormat:       "compression/zip",
-			Sha256:           id,
-			Size:             5,
+			FileFormat: "compression/zip",
+			Sha256:     id,
+			Size:       5,
 		},
 		Dequeued: dequeued_id,
 	}

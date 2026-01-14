@@ -124,7 +124,6 @@ class TestAPIContentEntry(_TupleConversionTests):
                 md5="5",
                 mime="application/octet-stream",
                 magic="abracadabra",
-                file_format_legacy="something",
             ),
             dict(
                 label=azm.DataLabel.TEXT,
@@ -135,7 +134,6 @@ class TestAPIContentEntry(_TupleConversionTests):
                 md5="5",
                 mime="application/octet-stream",
                 magic="abracadabra",
-                file_format_legacy="something",
             ),
             """
             {
@@ -146,8 +144,7 @@ class TestAPIContentEntry(_TupleConversionTests):
                 "sha512": "512",
                 "md5": "5",
                 "mime": "application/octet-stream",
-                "magic": "abracadabra",
-                "file_format_legacy": "something"
+                "magic": "abracadabra"
             }
             """,
         ),
@@ -161,7 +158,6 @@ class TestAPIContentEntry(_TupleConversionTests):
                 md5="5",
                 mime="application/octet-stream",
                 magic="abracadabra",
-                file_format_legacy="something",
                 language="random value",
             ),
             dict(
@@ -173,7 +169,6 @@ class TestAPIContentEntry(_TupleConversionTests):
                 md5="5",
                 mime="application/octet-stream",
                 magic="abracadabra",
-                file_format_legacy="something",
                 language="random value",
             ),
             """
@@ -186,7 +181,6 @@ class TestAPIContentEntry(_TupleConversionTests):
                  "md5": "5",
                  "mime": "application/octet-stream",
                  "magic": "abracadabra",
-                 "file_format_legacy": "something",
                  "language": "random value"
              }
             """,
@@ -234,7 +228,6 @@ class TestInputEntity(_TupleConversionTests):
                         md5="5",
                         mime="application/octet-stream",
                         magic="abracadabra",
-                        file_format_legacy="something",
                     )
                 ],
             ),
@@ -255,7 +248,6 @@ class TestInputEntity(_TupleConversionTests):
                         md5="5",
                         mime="application/octet-stream",
                         magic="abracadabra",
-                        file_format_legacy="something",
                     )
                 ],
             },
@@ -268,8 +260,7 @@ class TestInputEntity(_TupleConversionTests):
                     {"name": "feature", "type": "binary", "value": "Ynl0ZXM=", "label": "otherfeat"}
                 ],
                 "datastreams": [{"label": "text", "size": 7, "sha1": "1", "sha256": "256", "sha512": "512", "md5": "5",
-                          "mime": "application/octet-stream", "magic": "abracadabra",
-                          "file_format_legacy": "something"}]
+                          "mime": "application/octet-stream", "magic": "abracadabra"}]
             }
             """,
         ),
@@ -376,7 +367,7 @@ class TestStatusEntity(_TupleConversionTests):
             {
                 "status": "completed",
                 "input": {
-                    "model_version":5,
+                    "model_version":6,
                     "kafka_key":"abc",
                     "dequeued": "ccc",
                     "action": "sourced",
@@ -454,7 +445,7 @@ class TestStatusEvent(_TupleConversionTests):
             ),
             """
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key":"abc",
                 "author": {"name": "test", "category": "TEST"},
                 "timestamp": "1992-05-17T00:00:00+00:00",
@@ -462,7 +453,7 @@ class TestStatusEvent(_TupleConversionTests):
                     "status": "error-exception",
                     "error": "WORKER has fainted!",
                     "input": {
-                        "model_version": 5,
+                        "model_version": 6,
                         "kafka_key":"abc",
                         "dequeued": "input-dummy-dequeued-id",
                         "action": "extracted",
@@ -605,7 +596,7 @@ class TestBinaryEvent(_TupleConversionTests):
             # 'flags' is missing from this JSON to ensure that it correctly defaults to empty dict on load
             """
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key":"abc",
                 "dequeued": "ccc",
                 "action": "sourced",
@@ -658,7 +649,7 @@ class TestBinaryEvent(_TupleConversionTests):
             ),
             """
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key":"foobar-md5",
                 "dequeued": "dummy-dequeued-id",
                 "flags": {},

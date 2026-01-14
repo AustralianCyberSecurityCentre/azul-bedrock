@@ -50,13 +50,12 @@ func min(x, y int) int {
 }
 
 type Identified struct {
-	FileFormat       string
-	FileFormatLegacy string
-	FileExtension    string
-	Mimes            []string
-	Magics           []string
-	Mime             string
-	Magic            string
+	FileFormat    string
+	FileExtension string
+	Mimes         []string
+	Magics        []string
+	Mime          string
+	Magic         string
 }
 
 type RefinedRule struct {
@@ -83,7 +82,6 @@ type Identify struct {
 
 	Rules []struct {
 		Id        string
-		Legacy    string
 		Extension string
 		Magic     string
 		MagicC    *regexp.Regexp
@@ -179,13 +177,13 @@ func NewIdentify() (*Identify, error) {
 }
 
 /* Apply identification rules, returns the first match found */
-func (cfg *Identify) applyRules(magics, mimes []string) (string, string, string) {
+func (cfg *Identify) applyRules(magics, mimes []string) (string, string) {
 	for _, elem := range cfg.Rules {
 		if len(elem.Magic) > 0 {
 			for _, magic := range magics {
 				lc := strings.ToLower(magic)
 				if elem.MagicC.MatchString(lc) {
-					return elem.Id, elem.Legacy, elem.Extension
+					return elem.Id, elem.Extension
 				}
 			}
 		}
@@ -193,12 +191,12 @@ func (cfg *Identify) applyRules(magics, mimes []string) (string, string, string)
 			for _, mime := range mimes {
 				lc := strings.ToLower(mime)
 				if elem.MimeC.MatchString(lc) {
-					return elem.Id, elem.Legacy, elem.Extension
+					return elem.Id, elem.Extension
 				}
 			}
 		}
 	}
-	return "", "", ""
+	return "", ""
 }
 
 /* Apply identification indicators, uses a point system to guess file type. */
@@ -241,11 +239,10 @@ func (cfg *Identify) Find(contentPath string) (Identified, error) {
 	rawContent, err := os.Open(contentPath)
 	if err != nil {
 		return Identified{
-			Mime:             "inode/x-empty",
-			Magic:            "empty",
-			FileFormatLegacy: "Data",
-			FileFormat:       "unknown",
-			FileExtension:    "",
+			Mime:          "inode/x-empty",
+			Magic:         "empty",
+			FileFormat:    "unknown",
+			FileExtension: "",
 		}, err
 	}
 	defer rawContent.Close()
@@ -255,11 +252,10 @@ func (cfg *Identify) Find(contentPath string) (Identified, error) {
 
 	if err != nil || bytesRead <= 0 {
 		return Identified{
-			Mime:             "inode/x-empty",
-			Magic:            "empty",
-			FileFormatLegacy: "Data",
-			FileFormat:       "unknown",
-			FileExtension:    "",
+			Mime:          "inode/x-empty",
+			Magic:         "empty",
+			FileFormat:    "unknown",
+			FileExtension: "",
 		}, nil
 	}
 	bufferedContent := b[:bytesRead]
@@ -267,7 +263,7 @@ func (cfg *Identify) Find(contentPath string) (Identified, error) {
 	magics := cfg.mw.CalcMagicsFromPath(contentPath)
 	mimes := cfg.mw.CalcMimesFromPath(contentPath)
 	// identify based on magic
-	fileTypeAlWithOverrides, overrideIdLegacy, overrideExtension := cfg.applyRules(magics, mimes)
+	fileTypeAlWithOverrides, overrideExtension := cfg.applyRules(magics, mimes)
 	fileTypeAl := fileTypeAlWithOverrides
 	// Find fist good mime type and use it.
 	bestMime := ""
@@ -310,11 +306,9 @@ func (cfg *Identify) Find(contentPath string) (Identified, error) {
 		}
 	}
 
-	legacy := ""
 	extension := ""
-	// Map to extensions and legacy.
-	if fileTypeAlWithOverrides == fileTypeAl && overrideIdLegacy != "" {
-		legacy = overrideIdLegacy
+	// Map to extensions.
+	if fileTypeAlWithOverrides == fileTypeAl && overrideExtension != "" {
 		extension = overrideExtension
 	} else {
 		foundType, success := cfg.Id_Mappings_Map[fileTypeAl]
@@ -327,7 +321,6 @@ func (cfg *Identify) Find(contentPath string) (Identified, error) {
 			panic(fmt.Sprintf("Error: the assemblyline type '%v'  doesn't have a mapping and should", fileTypeAl))
 		}
 
-		legacy = foundType.Legacy
 		extension = foundType.Extension
 	}
 
@@ -335,13 +328,12 @@ func (cfg *Identify) Find(contentPath string) (Identified, error) {
 	// i.e. perhaps for code language identification
 	ret := Identified{
 		// drop non ascii characters from primary magic/mime
-		Mime:             re_standard_ascii.ReplaceAllLiteralString(mimes[0], "."),
-		Magic:            re_standard_ascii.ReplaceAllLiteralString(magics[0], "."),
-		Mimes:            mimes,
-		Magics:           magics,
-		FileFormat:       fileTypeAl,
-		FileFormatLegacy: legacy,
-		FileExtension:    extension,
+		Mime:          re_standard_ascii.ReplaceAllLiteralString(mimes[0], "."),
+		Magic:         re_standard_ascii.ReplaceAllLiteralString(magics[0], "."),
+		Mimes:         mimes,
+		Magics:        magics,
+		FileFormat:    fileTypeAl,
+		FileExtension: extension,
 	}
 
 	if fileTypeAl == "" {

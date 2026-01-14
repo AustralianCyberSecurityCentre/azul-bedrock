@@ -46,7 +46,6 @@ class TestBasic(unittest.TestCase):
             ssdeep="ssdeep.",
             tlsh="current_tlsh.",
             size=4444,
-            file_format_legacy="file_format_legacy.",
             file_format="file_format.",
             file_extension="f_extension.",
             mime="mime.",
@@ -64,14 +63,12 @@ class TestBasic(unittest.TestCase):
                 "ssdeep": "ssdeep.",
                 "tlsh": "current_tlsh.",
                 "size": 4444,
-                "file_format_legacy": "file_format_legacy.",
                 "file_format": "file_format.",
                 "file_extension": "f_extension.",
                 "mime": "mime.",
                 "magic": "magic.",
                 "features": [
                     {"name": "file_format", "type": "string", "value": "file_format."},
-                    {"name": "file_format_legacy", "type": "string", "value": "file_format_legacy."},
                     {"name": "file_extension", "type": "string", "value": "f_extension."},
                     {"name": "magic", "type": "string", "value": "magic."},
                     {"name": "mime", "type": "string", "value": "mime."},
@@ -98,7 +95,6 @@ class TestBasic(unittest.TestCase):
             sha512="sha512.",
             mime="mime.",
             magic="magic.",
-            file_format_legacy="file_format_legacy.",
             file_format="file_format.",
             file_extension="f_extension.",
             tlsh="current_tlsh.",
@@ -114,14 +110,12 @@ class TestBasic(unittest.TestCase):
                 "md5": "md5.",
                 "tlsh": "current_tlsh.",
                 "size": 4444,
-                "file_format_legacy": "file_format_legacy.",
                 "file_format": "file_format.",
                 "file_extension": "f_extension.",
                 "mime": "mime.",
                 "magic": "magic.",
                 "features": [
                     {"name": "file_format", "type": "string", "value": "file_format."},
-                    {"name": "file_format_legacy", "type": "string", "value": "file_format_legacy."},
                     {"name": "file_extension", "type": "string", "value": "f_extension."},
                     {"name": "magic", "type": "string", "value": "magic."},
                     {"name": "mime", "type": "string", "value": "mime."},
@@ -134,7 +128,6 @@ class TestBasic(unittest.TestCase):
                         "md5": "md5.",
                         "tlsh": "current_tlsh.",
                         "size": 4444,
-                        "file_format_legacy": "file_format_legacy.",
                         "file_format": "file_format.",
                         "file_extension": "f_extension.",
                         "mime": "mime.",
@@ -227,7 +220,7 @@ class TestBasic(unittest.TestCase):
         self.assertJsonDict(
             tmp,
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key": "id",
                 "action": "sourced",
                 "timestamp": "2012-01-01T00:00:00+00:00",
@@ -253,7 +246,7 @@ class TestBasic(unittest.TestCase):
         self.assertJsonDict(
             tmp,
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key": "id",
                 "action": "sourced",
                 "timestamp": "2012-01-01T00:00:00+00:00",
@@ -286,13 +279,13 @@ class TestBasic(unittest.TestCase):
         self.assertJsonDict(
             tmp,
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key": "id",
                 "timestamp": "2012-01-01T00:00:00+00:00",
                 "author": {"name": "name"},
                 "entity": {
                     "input": {
-                        "model_version": 5,
+                        "model_version": 6,
                         "kafka_key": "id",
                         "action": "sourced",
                         "timestamp": "2012-01-01T00:00:00+00:00",
@@ -317,7 +310,7 @@ class TestBasic(unittest.TestCase):
         self.assertJsonDict(
             tmp,
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key": "id",
                 "timestamp": "2012-01-01T00:00:00+00:00",
                 "author": {"name": "name"},
@@ -347,7 +340,7 @@ class TestBasic(unittest.TestCase):
         self.assertJsonDict(
             tmp,
             {
-                "model_version": 5,
+                "model_version": 6,
                 "kafka_key": "id",
                 "timestamp": "2012-01-01T00:00:00+00:00",
                 "author": {"name": "name"},
