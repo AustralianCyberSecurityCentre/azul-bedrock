@@ -1,5 +1,5 @@
 {
-  "model_version": 5,
+  "model_version": 6,
   "author": {
     "name": "vtfilemapper",
     "version": "0.27",
@@ -9,7 +9,7 @@
     "status": "done",
     "error": "a bad thing happened, oh dear!",
     "input": {
-      "model_version": 5,
+      "model_version": 6,
       "kafka_key": "ee303d3c6d7cfa24d42e6348bdd1103a26de77a887e9dbee3dd1fe6304414f69",
       "dequeued": "xabzz",
       "timestamp": "2021-02-14T12:12:21.426232Z",
@@ -33,8 +33,7 @@
               "category": "plugin"
             },
             "action": "binary_downloaded",
-            "size": 343964,
-            "file_format_legacy": "Email"
+            "size": 343964
           },
           {
             "sha256": "ee303d3c6d7cfa24d42e6348bdd1103a26de77a887e9dbee3dd1fe6304414f69",
@@ -46,7 +45,6 @@
             },
             "action": "extracted",
             "relationship": { "action": "extracted", "encoding": "base64" },
-            "file_format_legacy": "GIF",
             "size": 35054,
             "filename": "ukr_kh1.gif"
           }
@@ -60,11 +58,9 @@
         }
       },
       "entity": {
-        "file_format_legacy": "GIF",
         "datastreams": [
           {
             "identify_version": 1,
-            "file_format_legacy": "GIF",
             "magic": "GIF image data, version 89a, 80 x 35",
             "md5": "9e4638d508c003f83f44f5d07748f33a",
             "size": 35054,
@@ -111,7 +107,7 @@
     "results": [
       {
         "kafka_key": "ee303d3c6d7cfa24d42e6348bdd1103a26de77a887e9dbee3dd1fe6304414f69",
-        "model_version": 5,
+        "model_version": 6,
         "timestamp": "2021-02-14T12:12:21.426232Z",
         "author": {
           "name": "MimeDecoder",
@@ -133,8 +129,7 @@
                 "category": "plugin"
               },
               "action": "binary_downloaded",
-              "size": 343964,
-              "file_format_legacy": "Email"
+              "size": 343964
             },
             {
               "sha256": "ee303d3c6d7cfa24d42e6348bdd1103a26de77a887e9dbee3dd1fe6304414f69",
@@ -146,7 +141,6 @@
               },
               "action": "augmented",
               "relationship": { "action": "extracted", "encoding": "base64" },
-              "file_format_legacy": "GIF",
               "size": 35054,
               "filename": "ukr_kh1.gif"
             }
@@ -160,11 +154,9 @@
           }
         },
         "entity": {
-          "file_format_legacy": "GIF",
           "datastreams": [
             {
               "identify_version": 1,
-              "file_format_legacy": "GIF",
               "magic": "GIF image data, version 89a, 80 x 35",
               "md5": "9e4638d508c003f83f44f5d07748f33a",
               "size": 35054,
@@ -176,7 +168,6 @@
             },
             {
               "identify_version": 1,
-              "file_format_legacy": "GIF",
               "magic": "GIF image data, version 89a, 80 x 35",
               "md5": "9e4638d508c003f83f44f5d07748f33a",
               "size": 35054,

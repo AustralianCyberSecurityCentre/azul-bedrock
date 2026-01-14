@@ -80,7 +80,6 @@ class EntityFindItem(BaseModelRepr):
     sources: list[EntityFindItemSource] | None = None
 
     file_size: int | None = None
-    file_format_legacy: str | None = None
     file_format: str | None = None
     file_extension: str | None = None
     magic: str | None = None

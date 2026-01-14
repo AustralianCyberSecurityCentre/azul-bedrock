@@ -26,40 +26,38 @@ type BinaryEntityFeature struct {
 
 // Dispatcher calcualted information about binary blob
 type BinaryEntityDatastream struct {
-	IdentifyVersion  uint32          `json:"identify_version,omitempty" avro:"identify_version"`
-	Label            DatastreamLabel `json:"label" avro:"label"`
-	Size             uint64          `json:"size" avro:"size"`
-	Sha512           string          `json:"sha512" avro:"sha512"`
-	Sha256           string          `json:"sha256" avro:"sha256"`
-	Sha1             string          `json:"sha1" avro:"sha1"`
-	Md5              string          `json:"md5" avro:"md5"`
-	Ssdeep           string          `json:"ssdeep,omitempty" avro:"ssdeep"`
-	Tlsh             string          `json:"tlsh,omitempty" avro:"tlsh"`
-	Mime             string          `json:"mime" avro:"mime"`
-	Magic            string          `json:"magic" avro:"magic"`
-	FileFormatLegacy string          `json:"file_format_legacy,omitempty" avro:"file_format_legacy"`
-	FileFormat       string          `json:"file_format,omitempty" avro:"file_format"`
-	FileExtension    string          `json:"file_extension,omitempty" avro:"file_extension"`
-	Language         string          `json:"language,omitempty" avro:"language"`
+	IdentifyVersion uint32          `json:"identify_version,omitempty" avro:"identify_version"`
+	Label           DatastreamLabel `json:"label" avro:"label"`
+	Size            uint64          `json:"size" avro:"size"`
+	Sha512          string          `json:"sha512" avro:"sha512"`
+	Sha256          string          `json:"sha256" avro:"sha256"`
+	Sha1            string          `json:"sha1" avro:"sha1"`
+	Md5             string          `json:"md5" avro:"md5"`
+	Ssdeep          string          `json:"ssdeep,omitempty" avro:"ssdeep"`
+	Tlsh            string          `json:"tlsh,omitempty" avro:"tlsh"`
+	Mime            string          `json:"mime" avro:"mime"`
+	Magic           string          `json:"magic" avro:"magic"`
+	FileFormat      string          `json:"file_format,omitempty" avro:"file_format"`
+	FileExtension   string          `json:"file_extension,omitempty" avro:"file_extension"`
+	Language        string          `json:"language,omitempty" avro:"language"`
 }
 
 // Binary Entity type
 type BinaryEntity struct {
-	Sha256           string                   `json:"sha256" avro:"sha256"`
-	Sha512           string                   `json:"sha512,omitempty" avro:"sha512"`
-	Sha1             string                   `json:"sha1,omitempty" avro:"sha1"`
-	Md5              string                   `json:"md5,omitempty" avro:"md5"`
-	Ssdeep           string                   `json:"ssdeep,omitempty" avro:"ssdeep"`
-	Tlsh             string                   `json:"tlsh,omitempty" avro:"tlsh"`
-	Size             uint64                   `json:"size,omitempty" avro:"size"`
-	Mime             string                   `json:"mime,omitempty" avro:"mime"`
-	Magic            string                   `json:"magic,omitempty" avro:"magic"`
-	FileFormatLegacy string                   `json:"file_format_legacy,omitempty" avro:"file_format_legacy"`
-	FileFormat       string                   `json:"file_format,omitempty" avro:"file_format"`
-	FileExtension    string                   `json:"file_extension,omitempty" avro:"file_extension"`
-	Features         []BinaryEntityFeature    `json:"features,omitempty,omitzero" avro:"features"`
-	Datastreams      []BinaryEntityDatastream `json:"datastreams,omitempty,omitzero" avro:"datastreams"`
-	Info             json.RawMessage          `json:"info,omitempty" avro:"info"` // info block
+	Sha256        string                   `json:"sha256" avro:"sha256"`
+	Sha512        string                   `json:"sha512,omitempty" avro:"sha512"`
+	Sha1          string                   `json:"sha1,omitempty" avro:"sha1"`
+	Md5           string                   `json:"md5,omitempty" avro:"md5"`
+	Ssdeep        string                   `json:"ssdeep,omitempty" avro:"ssdeep"`
+	Tlsh          string                   `json:"tlsh,omitempty" avro:"tlsh"`
+	Size          uint64                   `json:"size,omitempty" avro:"size"`
+	Mime          string                   `json:"mime,omitempty" avro:"mime"`
+	Magic         string                   `json:"magic,omitempty" avro:"magic"`
+	FileFormat    string                   `json:"file_format,omitempty" avro:"file_format"`
+	FileExtension string                   `json:"file_extension,omitempty" avro:"file_extension"`
+	Features      []BinaryEntityFeature    `json:"features,omitempty,omitzero" avro:"features"`
+	Datastreams   []BinaryEntityDatastream `json:"datastreams,omitempty,omitzero" avro:"datastreams"`
+	Info          json.RawMessage          `json:"info,omitempty" avro:"info"` // info block
 }
 
 /*Return a copy of the binary entity without features or info but keeping datastreams.*/
@@ -246,21 +244,19 @@ func (b *BinaryEvent) CheckValid() error {
 func (data *BinaryEntityDatastream) ToInputEntity() *BinaryEntity {
 	// mirrors logic in models_network.py FileInfo.to_input_entity()
 	ret := &BinaryEntity{
-		Sha256:           data.Sha256,
-		Sha512:           data.Sha512,
-		Sha1:             data.Sha1,
-		Md5:              data.Md5,
-		Ssdeep:           data.Ssdeep,
-		Tlsh:             data.Tlsh,
-		Size:             data.Size,
-		Mime:             data.Mime,
-		Magic:            data.Magic,
-		FileFormatLegacy: data.FileFormatLegacy,
-		FileFormat:       data.FileFormat,
-		FileExtension:    data.FileExtension,
+		Sha256:        data.Sha256,
+		Sha512:        data.Sha512,
+		Sha1:          data.Sha1,
+		Md5:           data.Md5,
+		Ssdeep:        data.Ssdeep,
+		Tlsh:          data.Tlsh,
+		Size:          data.Size,
+		Mime:          data.Mime,
+		Magic:         data.Magic,
+		FileFormat:    data.FileFormat,
+		FileExtension: data.FileExtension,
 		Features: []BinaryEntityFeature{
 			{Name: "file_format", Type: FeatureString, Value: data.FileFormat},
-			{Name: "file_format_legacy", Type: FeatureString, Value: data.FileFormatLegacy},
 			{Name: "file_extension", Type: FeatureString, Value: data.FileExtension},
 			{Name: "magic", Type: FeatureString, Value: data.Magic},
 			{Name: "mime", Type: FeatureString, Value: data.Mime},

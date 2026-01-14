@@ -1,8 +1,8 @@
 {
-  "model_version": 5,
+  "model_version": 6,
   "events": [
     {
-      "model_version": 5,
+      "model_version": 6,
       "author": {
         "name": "vtfilemapper",
         "version": "0.27",
@@ -27,7 +27,6 @@
             "sha256": "2951778f1ccce50e76e1dd71e1c257b51a61cea425cf1c5bedf4eb12c50392ff-1564891149",
             "filename": "org.eclipse.mylyn.commons.xmlrpc.nl_da_4.10.0.v20190713081526.jar",
             "size": 1469,
-            "file_format_legacy": "JAR",
             "timestamp": "2021-03-29T03:23:48Z"
           },
           {
@@ -40,7 +39,6 @@
             "sha256": "2951778f1ccce50e76e1dd71e1c257b51a61cea425cf1c5bedf4eb12c50392ff",
             "filename": "org.eclipse.mylyn.commons.xmlrpc.nl_da_4.10.0.v20190713081526.jar",
             "size": 1469,
-            "file_format_legacy": "JAR",
             "timestamp": "2021-03-29T03:24:08.54928Z"
           }
         ],
@@ -55,7 +53,7 @@
       "kafka_key": "ab3808f6d20b3c01513f89186becdcde"
     },
     {
-      "model_version": 5,
+      "model_version": 6,
       "author": {
         "name": "vtfilemapper",
         "version": "0.27",
@@ -80,7 +78,6 @@
             "sha256": "2951778f1ccce50e76e1dd71e1c257b51a61cea425cf1c5bedf4eb12c50392ff-1564891149",
             "filename": "org.eclipse.mylyn.commons.xmlrpc.nl_da_4.10.0.v20190713081526.jar",
             "size": 1469,
-            "file_format_legacy": "JAR",
             "timestamp": "2021-03-29T03:23:48Z"
           },
           {
@@ -93,7 +90,6 @@
             "sha256": "2951778f1ccce50e76e1dd71e1c257b51a61cea425cf1c5bedf4eb12c50392ff",
             "filename": "org.eclipse.mylyn.commons.xmlrpc.nl_da_4.10.0.v20190713081526.jar",
             "size": 1469,
-            "file_format_legacy": "JAR",
             "timestamp": "2021-03-29T03:24:08.54928Z"
           }
         ],

@@ -1,8 +1,8 @@
 {
-  "model_version": 5,
+  "model_version": 6,
   "events": [
     {
-      "model_version": 5,
+      "model_version": 6,
       "author": {
         "name": "retrohunt",
         "version": "0.27",
@@ -40,7 +40,7 @@
       }
     },
     {
-      "model_version": 5,
+      "model_version": 6,
       "author": {
         "name": "retrohunt",
         "version": "0.27",

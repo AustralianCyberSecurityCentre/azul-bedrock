@@ -161,6 +161,46 @@ func TestLegacyV4StabilityBulk(t *testing.T) {
 	testLegacyAvroUpgrades(t, &BulkRetrohuntEvent{}, &BulkRetrohuntEvent{}, "events/retrohunt/v4/bulk.json")
 }
 
+// Verify that legacy version 4 models can be loaded into the newest version of the models.
+func TestLegacyV5Stability(t *testing.T) {
+	// binary
+	testLegacyAvroUpgrades(t, &BinaryEvent{}, &BinaryEvent{}, "events/binary/v4/augmented_no_extra.json")
+	testLegacyAvroUpgrades(t, &BinaryEvent{}, &BinaryEvent{}, "events/binary/v4/augmented.json")
+	testLegacyAvroUpgrades(t, &BinaryEvent{}, &BinaryEvent{}, "events/binary/v4/enriched_w_data.json")
+	testLegacyAvroUpgrades(t, &BinaryEvent{}, &BinaryEvent{}, "events/binary/v4/enriched_w_info_dict.json")
+	testLegacyAvroUpgrades(t, &BinaryEvent{}, &BinaryEvent{}, "events/binary/v4/enriched_w_info_list.json")
+	testLegacyAvroUpgrades(t, &BinaryEvent{}, &BinaryEvent{}, "events/binary/v4/enriched.json")
+	testLegacyAvroUpgrades(t, &BinaryEvent{}, &BinaryEvent{}, "events/binary/v4/extracted.json")
+	testLegacyAvroUpgrades(t, &BinaryEvent{}, &BinaryEvent{}, "events/binary/v4/invalid_path.json")
+	// delete
+	testLegacyAvroUpgrades(t, &DeleteEvent{}, &DeleteEvent{}, "events/delete/v4/author.json")
+	testLegacyAvroUpgrades(t, &DeleteEvent{}, &DeleteEvent{}, "events/delete/v4/link.json")
+	testLegacyAvroUpgrades(t, &DeleteEvent{}, &DeleteEvent{}, "events/delete/v4/submission-complex.json")
+	testLegacyAvroUpgrades(t, &DeleteEvent{}, &DeleteEvent{}, "events/delete/v4/submission-simple.json")
+	// download
+	testLegacyAvroUpgrades(t, &DownloadEvent{}, &DownloadEvent{}, "events/download/v4/example1.json")
+	// insert
+	testLegacyAvroUpgrades(t, &InsertEvent{}, &InsertEvent{}, "events/insert/v4/example1.json")
+	// plugin
+	testLegacyAvroUpgrades(t, &PluginEvent{}, &PluginEvent{}, "events/plugin/v4/example1.json")
+	// status
+	testLegacyAvroUpgrades(t, &StatusEvent{}, &StatusEvent{}, "events/status/v4/example1.json")
+	testLegacyAvroUpgrades(t, &StatusEvent{}, &StatusEvent{}, "events/speed/v4/status.json")
+	// generic
+	testLegacyAvroUpgrades(t, &RetrohuntEvent{}, &RetrohuntEvent{}, "events/retrohunt/v4/example1.json")
+}
+
+// Verify that legacy version 4 Bulk models can be loaded into the newest version of the models.
+func TestLegacyV5StabilityBulk(t *testing.T) {
+	testLegacyAvroUpgrades(t, &BulkBinaryEvent{}, &BulkBinaryEvent{}, "events/binary/v4/bulk.json")
+	testLegacyAvroUpgrades(t, &BulkDeleteEvent{}, &BulkDeleteEvent{}, "events/delete/v4/bulk.json")
+	testLegacyAvroUpgrades(t, &BulkDownloadEvent{}, &BulkDownloadEvent{}, "events/download/v4/bulk.json")
+	testLegacyAvroUpgrades(t, &BulkInsertEvent{}, &BulkInsertEvent{}, "events/insert/v4/bulk.json")
+	testLegacyAvroUpgrades(t, &BulkPluginEvent{}, &BulkPluginEvent{}, "events/plugin/v4/bulk.json")
+	testLegacyAvroUpgrades(t, &BulkStatusEvent{}, &BulkStatusEvent{}, "events/status/v4/bulk.json")
+	testLegacyAvroUpgrades(t, &BulkRetrohuntEvent{}, &BulkRetrohuntEvent{}, "events/retrohunt/v4/bulk.json")
+}
+
 func verifyEncodeDecode[T any](t *testing.T, pre string, expected T, post string) {
 	var actual T
 	err := json.Unmarshal([]byte(pre), &actual)
@@ -415,20 +455,20 @@ func TestAlterThroughGetBase(t *testing.T) {
 // test that events are compatible with the event interface
 func TestInterface(t *testing.T) {
 	var ev EventInterface
-	ev = &BinaryEvent{ModelVersion: 5}
-	require.Equal(t, *ev.GetBase().ModelVersion, uint32(5))
-	ev = &DeleteEvent{ModelVersion: 5}
-	require.Equal(t, *ev.GetBase().ModelVersion, uint32(5))
-	ev = &RetrohuntEvent{ModelVersion: 5}
-	require.Equal(t, *ev.GetBase().ModelVersion, uint32(5))
-	ev = &InsertEvent{ModelVersion: 5}
-	require.Equal(t, *ev.GetBase().ModelVersion, uint32(5))
-	ev = &PluginEvent{ModelVersion: 5}
-	require.Equal(t, *ev.GetBase().ModelVersion, uint32(5))
-	ev = &StatusEvent{ModelVersion: 5}
-	require.Equal(t, *ev.GetBase().ModelVersion, uint32(5))
-	ev = &RetrohuntEvent{ModelVersion: 5}
-	require.Equal(t, *ev.GetBase().ModelVersion, uint32(5))
+	ev = &BinaryEvent{ModelVersion: 6}
+	require.Equal(t, *ev.GetBase().ModelVersion, uint32(6))
+	ev = &DeleteEvent{ModelVersion: 6}
+	require.Equal(t, *ev.GetBase().ModelVersion, uint32(6))
+	ev = &RetrohuntEvent{ModelVersion: 6}
+	require.Equal(t, *ev.GetBase().ModelVersion, uint32(6))
+	ev = &InsertEvent{ModelVersion: 6}
+	require.Equal(t, *ev.GetBase().ModelVersion, uint32(6))
+	ev = &PluginEvent{ModelVersion: 6}
+	require.Equal(t, *ev.GetBase().ModelVersion, uint32(6))
+	ev = &StatusEvent{ModelVersion: 6}
+	require.Equal(t, *ev.GetBase().ModelVersion, uint32(6))
+	ev = &RetrohuntEvent{ModelVersion: 6}
+	require.Equal(t, *ev.GetBase().ModelVersion, uint32(6))
 	// bulk
 	var av AvroInterface
 	av = &BulkBinaryEvent{}

@@ -1,0 +1,16 @@
+{
+  "name": "RetrohuntEvent",
+  "type": "record",
+  "fields": [
+    { "name": "model_version", "type": "long" },
+    { "name": "kafka_key", "type": "string" },
+    {
+      "name": "timestamp",
+      "type": { "type": "long", "logicalType": "timestamp-micros" }
+    },
+    { "name": "author", "type": "EventAuthor" },
+    { "name": "entity", "type": "bytes" },
+    { "name": "action", "type": "string" },
+    { "name": "source", "type": "RetrohuntSource" }
+  ]
+}

@@ -33,7 +33,6 @@ func TestInsertEventDataLabelValid(t *testing.T) {
 	err := json.Unmarshal(data, &ev)
 	require.Nil(t, err)
 
-	ev.Entity.Child.FileFormatLegacy = "TEXT"
 	ev.Entity.Child.FileFormat = "txt"
 	// Check Valid Label
 	ev.Entity.Child.Datastreams = append(ev.Entity.Child.Datastreams, BinaryEntityDatastream{IdentifyVersion: 0, Label: DataLabelContent})
