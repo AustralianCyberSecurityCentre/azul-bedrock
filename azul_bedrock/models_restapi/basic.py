@@ -28,6 +28,7 @@ class Meta(BaseModelRepr):
     """Meta is where non-data goes (interesting things about the query)."""
 
     security: str | None = None
+    sec_filter: str | None = None
     queries: list[QueryInfo] | None = None
     complete: bool = False
 
