@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Setup script."""
+
 import os
 
 from setuptools import setup
