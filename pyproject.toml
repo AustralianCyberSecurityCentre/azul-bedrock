@@ -25,16 +25,16 @@ classifiers=[
     "Topic :: Software Development :: Libraries",
 ]
 dependencies = [
-    "cachetools",
-    "fastapi",
-    "httpx",
-    "multipart",
-    "pendulum",
-    "pydantic",
-    "python-magic",
-    "pyyaml",
-    "starlette",
-    "yara-python",
+    "cachetools>=6.2.6",
+    "fastapi>=0.128.0",
+    "httpx>=0.28.1",
+    "multipart>=1.3.0",
+    "pendulum>=3.1.0",
+    "pydantic>=2.12.5",
+    "python-magic>=0.4.15",
+    "pyyaml>=6.0.3",
+    "starlette>=0.50.0",
+    "yara-python>=4.5.4",
 ]
 
 [project.urls]
@@ -53,33 +53,33 @@ version = "0.0.0"
 
 [dependency-groups]
 dev = [
-    "azure-storage-blob",
-    "cart",
-    "fastapi[all]",
-    "pytest",
-    "tox",
-    "tox-uv",
-    "urllib3",
+    "azure-storage-blob>=12.28.0",
+    "cart>=1.2.3",
+    "fastapi[all]>=0.60.0",
+    "pytest>=9.0.2",
+    "tox>=4.34.1",
+    "tox-uv>=1.29.0",
+    "urllib3>=2.6.3",
 ]
 
 [project.optional-dependencies]
 mock = [
-    "azure-storage-blob",
-    "cart",
-    "fastapi[all]",
-    "pytest",
-    "tox",
-    "tox-uv",
-    "urllib3",
+    "azure-storage-blob>=12.28.0",
+    "cart>=1.2.3",
+    "fastapi[all]>=0.60.0",
+    "pytest>=9.0.2",
+    "tox>=4.34.1",
+    "tox-uv>=1.29.0",
+    "urllib3>=2.6.3",
 ]
 test_utils = [
-    "azure-storage-blob",
-    "cart",
-    "fastapi[all]",
-    "pytest",
-    "tox",
-    "tox-uv",
-    "urllib3",
+    "azure-storage-blob>=12.28.0",
+    "cart>=1.2.3",
+    "fastapi[all]>=0.60.0",
+    "pytest>=9.0.2",
+    "tox>=4.34.1",
+    "tox-uv>=1.29.0",
+    "urllib3>=2.6.3",
 ]
 
 
