@@ -1,9 +1,45 @@
 [build-system]
-build-backend = "setuptools.build_meta"
-requires = [
-    "setuptools >= 64",
-    "setuptools_scm >= 8",
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "azul-bedrock"
+description = "Shared library for Azul models and operations."
+dynamic = ["version"]
+readme = "README.md"
+license = "MIT"
+license-files = ["license.md"]
+authors = [
+  { name="Azul"},
 ]
+requires-python = ">=3.12"
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "cachetools",
+    "fastapi",
+    "httpx",
+    "multipart",
+    "pendulum",
+    "pydantic",
+    "python-magic",
+    "pyyaml",
+    "starlette",
+    "yara-python",
+]
+
+[project.urls]
+Documentation = "https://australiancybersecuritycentre.github.io/azul/"
+Repository = "https://github.com/AustralianCyberSecurityCentre/azul-bedrock"
 
 [tool.black]
 line-length = 119
@@ -27,13 +63,36 @@ exclude = '''
 profile = "black"
 multi_line_output = 3
 
-[tool.cruft]
-skip = [
-    "debian.txt",
-    "README.md",
-    "azul_bedrock",
-    "tests"
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.fallback]
+version = "0.0.0"
+
+[dependency-groups]
+dev = [
+    "azure-storage-blob",
+    "cart",
+    "fastapi[all]",
+    "pytest",
+    "tox",
+    "urllib3",
 ]
 
-[tool.setuptools_scm]
-version_scheme = "only-version"
+[project.optional-dependencies]
+mock = [
+    "azure-storage-blob",
+    "cart",
+    "fastapi[all]",
+    "pytest",
+    "tox",
+    "urllib3",
+]
+test_utils = [
+    "azure-storage-blob",
+    "cart",
+    "fastapi[all]",
+    "pytest",
+    "tox",
+    "urllib3",
+]
