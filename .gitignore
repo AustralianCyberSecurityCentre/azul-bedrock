@@ -1,4 +1,3 @@
-.ruff_cache
 yara/
 # Created by https://www.toptal.com/developers/gitignore/api/python,vim,visualstudiocode,intellij+all
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,vim,visualstudiocode,intellij+all
@@ -273,3 +272,5 @@ tags
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/python,vim,visualstudiocode,intellij+all
+
+.ruff_cache
