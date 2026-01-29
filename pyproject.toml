@@ -41,24 +41,6 @@ dependencies = [
 Documentation = "https://australiancybersecuritycentre.github.io/azul/"
 Repository = "https://github.com/AustralianCyberSecurityCentre/azul-bedrock"
 
-[tool.black]
-line-length = 119
-target-version = ["py312"]
-exclude = '''
-(
-  /(
-      \.eggs
-    | \.git
-    | \.tox
-    | \.venv
-    | .*\.egg-info
-    | __pycache__
-    | build
-    | dist
-  )/
-)
-'''
-
 [tool.isort]
 profile = "black"
 multi_line_output = 3
@@ -76,6 +58,7 @@ dev = [
     "fastapi[all]",
     "pytest",
     "tox",
+    "tox-uv",
     "urllib3",
 ]
 
@@ -86,6 +69,7 @@ mock = [
     "fastapi[all]",
     "pytest",
     "tox",
+    "tox-uv",
     "urllib3",
 ]
 test_utils = [
@@ -94,5 +78,80 @@ test_utils = [
     "fastapi[all]",
     "pytest",
     "tox",
+    "tox-uv",
     "urllib3",
 ]
+
+
+[tool.ruff]
+# formatter config
+line-length = 119
+indent-width = 4
+target-version = "py312"
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".env",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+# Flake8 linting equivalent but for ruff
+[tool.ruff.lint]
+select = [
+  # isort
+  "I",
+  # Code styles
+  "E4",
+  "E7",
+  "E9",
+  # pyflakes
+  "F",
+  # flake8 bug bear
+  "B",
+  # flake8 doc strings
+  "D",
+]
+ignore = ["B008","C901","D104","D107","E203"]
+exclude = [
+    "tests/*",
+]
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+
+[tool.ruff.lint.pydocstyle]
+# Use the Google docstring convention
+convention = "google"
+
+# Make formatter match black
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = false
+docstring-code-line-length = "dynamic"

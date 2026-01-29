@@ -38,10 +38,10 @@ def convert_string_to_duration_ms(input_duration: str) -> int:
     duration, unit = input_duration.split(" ")
     try:
         duration = int(duration)
-    except Exception:
+    except Exception as e:
         raise ValueError(
             f"Invalid duration for expire_events_after '{duration=}' duration should be an integer value."
-        )
+        ) from e
 
     valid_units = ["days", "weeks", "months", "years"]
     if unit not in valid_units:
