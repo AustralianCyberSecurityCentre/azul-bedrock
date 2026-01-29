@@ -72,7 +72,9 @@ class AzureBlobStorage(BaseStorage):
                 f"Azure blob storage could not be found (check the blob URL) error: {str(e)}"
             ) from e
         except ValueError as e:
-            raise AzureBadContainerUrlError(f"Azure blob storage URL was completely invalid with error {str(e)}") from e
+            raise AzureBadContainerUrlError(
+                f"Azure blob storage URL was completely invalid with error {str(e)}"
+            ) from e
         except Exception:
             raise
 
