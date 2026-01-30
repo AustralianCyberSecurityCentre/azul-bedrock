@@ -1,6 +1,0 @@
-cart
-fastapi[all]>=0.60.0
-azure-storage-blob
-pytest
-tox
-urllib3

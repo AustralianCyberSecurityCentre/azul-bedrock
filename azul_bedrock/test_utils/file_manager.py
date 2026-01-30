@@ -81,10 +81,10 @@ class FileManager:
             try:
                 if not cache_dir.exists():
                     cache_dir.mkdir(parents=True, exist_ok=True)
-            except PermissionError:
+            except PermissionError as e:
                 raise PermissionError(
                     f"Python doesn't have permissions to access the file cache in directory '{cache_dir}'"
-                )
+                ) from e
             canary_file = cache_dir.joinpath("permissionCanaryFile")
             with open(canary_file, "w") as f:
                 f.write("Check to see if process can write to cache file location.")
@@ -137,10 +137,10 @@ class FileManager:
                     + f"{e.response.reason_phrase} for url {e.response.url}",
                     request=e.request,
                     response=e.response,
-                )
+                ) from e
             raise
         except httpx.ConnectError as e:
-            raise httpx.ConnectError(f"Failed to connect to virustotal server at url {e.request.url}")
+            raise httpx.ConnectError(f"Failed to connect to virustotal server at url {e.request.url}") from e
 
     def _get_local_file_bytes(self, sha256: str) -> bytes | None:
         """Read the entire file into memory if it's found in the local cache."""

@@ -66,13 +66,15 @@ class AzureBlobStorage(BaseStorage):
             if not self._client.exists():
                 self._client.create_container()
         except ClientAuthenticationError as e:
-            raise AzureAuthError(f"Azure blob storage failed to authenticate with error {str(e)}")
+            raise AzureAuthError(f"Azure blob storage failed to authenticate with error {str(e)}") from e
         except ServiceRequestError as e:
             raise AzureBadContainerUrlError(
                 f"Azure blob storage could not be found (check the blob URL) error: {str(e)}"
-            )
+            ) from e
         except ValueError as e:
-            raise AzureBadContainerUrlError(f"Azure blob storage URL was completely invalid with error {str(e)}")
+            raise AzureBadContainerUrlError(
+                f"Azure blob storage URL was completely invalid with error {str(e)}"
+            ) from e
         except Exception:
             raise
 
