@@ -45,7 +45,7 @@ Repository = "https://github.com/AustralianCyberSecurityCentre/azul-bedrock"
 source = "vcs"
 
 [tool.hatch.version.raw-options]
-version_scheme = "no-local-version"
+version_scheme = "only-version"
 
 [tool.hatch.version.fallback]
 version = "0.0.0"
