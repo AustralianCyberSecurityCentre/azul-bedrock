@@ -23,7 +23,7 @@ class FileManagerSettings(BaseSettings):
     virustotal_enabled: bool = True
 
     # Directory where files are cached on the local file system when downloaded. (stored as carts)
-    file_cache_dir: str = "/var/tmp/azul"  # nosec B108
+    file_cache_dir: str = "/var/tmp/azul"  # noqa S108
     # Flag used to enable/disable the caching of test files.
     file_caching_enabled: bool = True
 

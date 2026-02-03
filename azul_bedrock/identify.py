@@ -155,7 +155,7 @@ def dos_ident(buf_start_of_file: bytes, file_path: str, **kwargs) -> tuple[str, 
         else:
             raise ValueError()
         return "executable/windows/%s%i" % (pe_type, width)
-    except Exception:  # nosec B110
+    except Exception:  # noqa S110
         pass
     return "executable/windows/dos"
 
