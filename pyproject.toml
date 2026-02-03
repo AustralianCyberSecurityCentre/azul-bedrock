@@ -49,6 +49,9 @@ version_scheme = "only-version"
 [tool.hatch.version.fallback]
 version = "0.0.0"
 
+[tool.hatch.build.targets.wheel]
+packages = ["azul_bedrock", "azul_bedrock.models_restapi"]
+
 [dependency-groups]
 dev = [
     "azure-storage-blob>=12.28.0",
