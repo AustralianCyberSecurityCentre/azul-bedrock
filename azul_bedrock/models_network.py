@@ -222,7 +222,7 @@ class DataLabel(StrEnum):
     # Deobfuscated Javascript content.
     DEOB_JS = "deob_js"
     # Words extracted from a file that can potentially be used for extracting related zip files.
-    PASSWORD_DICTIONARY = "password_dictionary"  # nosec B105
+    PASSWORD_DICTIONARY = "password_dictionary"  # noqa S105
     # Network PCAP capture data.
     PCAP = "pcap"
     # Report about a binary found from an external source.
