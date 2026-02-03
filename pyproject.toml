@@ -1,39 +1,153 @@
 [build-system]
-build-backend = "setuptools.build_meta"
-requires = [
-    "setuptools >= 64",
-    "setuptools_scm >= 8",
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "azul-bedrock"
+description = "Shared library for Azul models and operations."
+dynamic = ["version"]
+readme = "README.md"
+license = "MIT"
+license-files = ["license.md"]
+authors = [
+  { name="Azul"},
+]
+requires-python = ">=3.12"
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "cachetools>=6.2.6",
+    "fastapi>=0.128.0",
+    "httpx>=0.28.1",
+    "multipart>=1.3.0",
+    "pendulum>=3.1.0",
+    "pydantic>=2.12.5",
+    "python-magic>=0.4.15",
+    "pyyaml>=6.0.3",
+    "starlette>=0.50.0",
+    "yara-python>=4.5.4",
 ]
 
-[tool.black]
-line-length = 119
-target-version = ["py312"]
-exclude = '''
-(
-  /(
-      \.eggs
-    | \.git
-    | \.tox
-    | \.venv
-    | .*\.egg-info
-    | __pycache__
-    | build
-    | dist
-  )/
-)
-'''
+[project.urls]
+Documentation = "https://australiancybersecuritycentre.github.io/azul/"
+Repository = "https://github.com/AustralianCyberSecurityCentre/azul-bedrock"
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
+[tool.hatch.version]
+source = "vcs"
 
-[tool.cruft]
-skip = [
-    "debian.txt",
-    "README.md",
-    "azul_bedrock",
-    "tests"
-]
-
-[tool.setuptools_scm]
+[tool.hatch.version.raw-options]
 version_scheme = "only-version"
+
+[tool.hatch.version.fallback]
+version = "0.0.0"
+
+[dependency-groups]
+dev = [
+    "azure-storage-blob>=12.28.0",
+    "cart>=1.2.3",
+    "fastapi[all]>=0.60.0",
+    "pytest>=9.0.2",
+    "tox>=4.34.1",
+    "urllib3>=2.6.3",
+]
+
+[project.optional-dependencies]
+mock = [
+    "azure-storage-blob>=12.28.0",
+    "cart>=1.2.3",
+    "fastapi[all]>=0.60.0",
+    "pytest>=9.0.2",
+    "tox>=4.34.1",
+    "urllib3>=2.6.3",
+]
+test_utils = [
+    "azure-storage-blob>=12.28.0",
+    "cart>=1.2.3",
+    "fastapi[all]>=0.60.0",
+    "pytest>=9.0.2",
+    "tox>=4.34.1",
+    "urllib3>=2.6.3",
+]
+
+
+[tool.ruff]
+# formatter config
+line-length = 119
+indent-width = 4
+target-version = "py312"
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".env",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+# Flake8 linting equivalent but for ruff
+[tool.ruff.lint]
+select = [
+  # isort
+  "I",
+  # Code styles
+  "E4",
+  "E7",
+  "E9",
+  # pyflakes
+  "F",
+  # flake8 bug bear
+  "B",
+  # flake8 doc strings
+  "D",
+]
+ignore = ["B008","C901","D104","D107","E203"]
+exclude = [
+    "tests/*",
+]
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+
+[tool.ruff.lint.pydocstyle]
+# Use the Google docstring convention
+convention = "google"
+
+# Make formatter match black
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = false
+docstring-code-line-length = "dynamic"
