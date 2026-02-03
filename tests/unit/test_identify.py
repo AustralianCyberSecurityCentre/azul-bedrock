@@ -91,8 +91,8 @@ def test_file_formats(sha256: str, file_format: str, file_extension: str, magic:
     else:
         file_bytes = active_file_manager.download_file_bytes(sha256)
     magic_calc, mime_calc, file_format_calc, file_extension_calc = identify.from_buffer(file_bytes)
-    msg_fn = (
-        lambda var_type, calc, expected, sha256: f"!!! --- {var_type} are not equal (calculated) {calc} != {expected} "
+    msg_fn = lambda var_type, calc, expected, sha256: (
+        f"!!! --- {var_type} are not equal (calculated) {calc} != {expected} "
         + f"(expected) for file '{sha256}' --- !!!"
     )
     print(f"Buffered values {magic_calc=}, {mime_calc=}, {file_format_calc=}, {file_extension_calc=}")
