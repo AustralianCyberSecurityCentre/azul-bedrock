@@ -5,7 +5,7 @@ import contextlib
 import typing
 from abc import abstractmethod
 from io import BytesIO
-from typing import IO, Callable, Type, TypeVar
+from typing import IO, Callable, TypeVar
 
 import cart
 from azure.core.exceptions import (
