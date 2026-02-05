@@ -23,7 +23,7 @@ an_event = azm.BinaryEvent(
     kafka_key="abc",
     dequeued="thing",
     action=azm.BinaryAction.Sourced,
-    flags={},
+    flags=azm.BinaryFlags(),
     timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
     author=azm.Author(name="some ingest process", category="automatic_input"),
     entity=azm.BinaryEvent.Entity(sha256="12345"),
@@ -231,7 +231,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
                         category="user",
                         security=None,
                     ),
-                    timestamp=pendulum.now(pendulum.UTC).to_iso8601_string(),
+                    timestamp=pendulum.now(pendulum.UTC),
                     entity=azm.DeleteEvent.DeleteEntity(reason="thingo"),
                     action=azm.DeleteAction.author,
                 ).model_dump()
@@ -260,8 +260,8 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
                         category="user",
                         security=None,
                     ),
-                    timestamp=pendulum.now(pendulum.UTC).to_iso8601_string(),
-                    entity=azm.StatusEvent.Entity(status="heartbeat", runtime=10, input=an_event),
+                    timestamp=pendulum.now(pendulum.UTC),
+                    entity=azm.StatusEvent.Entity(status=azm.StatusEnum.HEARTBEAT, runtime=10, input=an_event),
                 ).model_dump()
             ]
         }
@@ -288,7 +288,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
                         category="user",
                         security=None,
                     ),
-                    timestamp=pendulum.now(pendulum.UTC).to_iso8601_string(),
+                    timestamp=pendulum.now(pendulum.UTC),
                     entity=azm.PluginEvent.Entity(
                         category="plugin",
                         name="generic_plugin",
@@ -296,10 +296,10 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
                         contact="generic_contact",
                         description="generic_description",
                         features=[
-                            dict(
+                            azm.PluginEvent.Entity.Feature(
                                 name="generic_feature",
                                 desc="generic_description",
-                                type="string",
+                                type=azm.FeatureType.String,
                             )
                         ],
                         security="LOW TLP:CLEAR",
@@ -344,7 +344,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
 
         # Check simple error from Dispatcher works
         self.editor.set_response(
-            500, azapi.DispatcherApiErrorModel(detail="Dispatcher sourced error message").model_dump_json()
+            500, azapi.DispatcherApiErrorModel(detail="Dispatcher sourced error message").model_dump()
         )
         with self.assertRaises(DispatcherApiException) as ex:
             self.dp.submit_events([], model=azm.ModelType.Binary)
@@ -352,7 +352,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
 
         self.editor.set_response(
             500,
-            azapi.DispatcherApiErrorModel(title="title", detail="Dispatcher sourced error message").model_dump_json(),
+            azapi.DispatcherApiErrorModel(title="title", detail="Dispatcher sourced error message").model_dump(),
         )
         with self.assertRaises(DispatcherApiException) as ex:
             self.dp.submit_events([], model=azm.ModelType.Binary)
@@ -364,7 +364,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             kafka_key="abc",
             dequeued=tmp,
             action=azm.BinaryAction.Sourced,
-            flags={},
+            flags=azm.BinaryFlags(),
             timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
             author=azm.Author(name="some ingest process", category="automatic_input"),
             entity=azm.BinaryEvent.Entity(sha256="12345"),
@@ -395,7 +395,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             kafka_key="abc",
             dequeued=tmp,
             action=azm.BinaryAction.Sourced,
-            flags={},
+            flags=azm.BinaryFlags(),
             timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
             author=azm.Author(name="some ingest process", category="automatic_input"),
             entity=azm.BinaryEvent.Entity(sha256="12345"),
@@ -410,7 +410,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             kafka_key="abcd",
             dequeued=tmp,
             action=azm.BinaryAction.Sourced,
-            flags={},
+            flags=azm.BinaryFlags(),
             timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
             author=azm.Author(name="some ingest process", category="automatic_input"),
             entity=azm.BinaryEvent.Entity(sha256="12345"),
@@ -447,7 +447,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             class CustomEntity(azm.BaseModelStrict):
                 ipsum: int
 
-            entity: CustomEntity = None
+            entity: CustomEntity | None = None
 
         ev = CustomEvent(
             model_version=azm.CURRENT_MODEL_VERSION,
@@ -464,7 +464,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             kafka_key="abc",
             dequeued="tmp",
             action=azm.BinaryAction.Sourced,
-            flags={},
+            flags=azm.BinaryFlags(),
             timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
             author=azm.Author(name="some ingest process", category="automatic_input"),
             entity=azm.BinaryEvent.Entity(sha256="12345"),
@@ -645,7 +645,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(info.body, b"hello")
         # Submit a using a buffered random (like azul-runner) + extra timeout
         self.editor.set_response(200, {"data": finfo.model_dump()})
-        val = self.dp.submit_binary("source", azm.DataLabel.TEST, io.BufferedRandom(io.BytesIO(b"hello2")), timeout=20)
+        val = self.dp.submit_binary("source", azm.DataLabel.TEST, io.BufferedRandom(io.BytesIO(b"hello2")), timeout=20)  # type: ignore
         info = self.editor.get_last_request()
         self.assertEqual(val, finfo)
         self.assertEqual(info.body, b"hello2")
@@ -725,7 +725,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
 
         # Submit a using a buffered random (like azul-runner)
         self.editor.set_response(200, {"data": finfo.model_dump()})
-        val = await self.dp.async_submit_binary("source", azm.DataLabel.TEST, io.BufferedRandom(io.BytesIO(b"hello2")))
+        val = await self.dp.async_submit_binary("source", azm.DataLabel.TEST, io.BufferedRandom(io.BytesIO(b"hello2")))  # type: ignore
         info = self.editor.get_last_request()
         self.assertEqual(val, finfo)
         self.assertEqual(info.body, b"hello2")
@@ -778,16 +778,16 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
         # Bad data type
         self.editor.set_response(200, {"data": finfo.model_dump()})
         with self.assertRaises(ValueError):
-            await self.dp.async_submit_binary("source", azm.DataLabel.TEST, {"hello": "Goodbye"})
+            await self.dp.async_submit_binary("source", azm.DataLabel.TEST, {"hello": "Goodbye"})  # type: ignore
 
         # Bad string like buffer
         self.editor.set_response(200, {"data": finfo.model_dump()})
         with self.assertRaises(ValueError):
-            await self.dp.async_submit_binary("source", azm.DataLabel.TEST, io.TextIOWrapper(io.BytesIO(b"hello2")))
+            await self.dp.async_submit_binary("source", azm.DataLabel.TEST, io.TextIOWrapper(io.BytesIO(b"hello2")))  # type: ignore
 
     def test_delete_binary(self):
         """Mandatory."""
-        random_date = pendulum.now(datetime.timezone.utc)
+        random_date = pendulum.now(pendulum.UTC)
         # good response
         self.editor.set_response(200, {"deleted": True})
         resp = self.dp.delete_binary("source", azm.DataLabel.TEST, "not-sha256", random_date)

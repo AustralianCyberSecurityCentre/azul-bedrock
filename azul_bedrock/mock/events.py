@@ -24,11 +24,11 @@ async def get_events(rest: str, request: Request, response: Response) -> bytes |
     fetched = len(loaded["events"])
     content, response.headers["Content-Type"] = urllib3.encode_multipart_formdata(
         {
-            "info": (None, azapi.GetEventsInfo(filtered=0, fetched=fetched, ready=0).model_dump_json()),
+            "info": (None, azapi.GetEventsInfo(filtered=0, fetched=fetched, ready=False).model_dump_json()),
             "events": (None, state._next_resp_body),
-        }
+        }  # type: ignore
     )
-    return Response(content=content, media_type=response.headers["Content-Type"])
+    return Response(content=content, media_type=response.headers["Content-Type"])  # type: ignore
 
 
 @router.post("/api/v2/event")

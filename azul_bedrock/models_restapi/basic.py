@@ -79,4 +79,4 @@ class UserAccess(BaseModel):
     # set of internal Opensearch roles associated with user
     roles: list[str] = []
 
-    security: UserSecurity = None
+    security: UserSecurity | None = None

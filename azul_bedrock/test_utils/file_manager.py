@@ -14,7 +14,7 @@ import struct
 import tempfile
 import typing
 from io import BytesIO
-from typing import Callable, TypeVar
+from typing import IO, Callable, TypeVar
 
 import cart
 import httpx
@@ -149,7 +149,7 @@ class FileManager:
             return None
         unpacked = BytesIO()
         with local_file.open(mode="rb") as f:
-            cart.unpack_stream(f, unpacked)
+            cart.unpack_stream(f, unpacked)  # type: ignore
             unpacked.seek(0)
             return unpacked.getvalue()
 
@@ -206,12 +206,12 @@ class FileManager:
 
     # --- Cache handlers
 
-    def _save_to_local_cache(self, sha256: str, uncarted_content: BytesIO):
+    def _save_to_local_cache(self, sha256: str, uncarted_content: IO[bytes]):
         if not self._settings.file_caching_enabled:
             return
         cache_path: pathlib.Path = self._get_cache_file_path(sha256)
         with cache_path.open("wb") as out_path:
-            cart.pack_stream(uncarted_content, out_path)
+            cart.pack_stream(uncarted_content, out_path)  # type: ignore
 
     @staticmethod
     def check_for_zero_byte_file(sha256: str):

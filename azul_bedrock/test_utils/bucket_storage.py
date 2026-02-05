@@ -5,7 +5,7 @@ import contextlib
 import typing
 from abc import abstractmethod
 from io import BytesIO
-from typing import Callable, TypeVar
+from typing import IO, Callable, Type, TypeVar
 
 import cart
 from azure.core.exceptions import (
@@ -40,7 +40,7 @@ class BaseStorage(metaclass=abc.ABCMeta):
         ...
 
     @abstractmethod
-    def save_file(self, sha256: str, uncarted_content: BytesIO):
+    def save_file(self, sha256: str, uncarted_content: IO[bytes]):
         """Save a file to the storage container."""
         ...
 
@@ -89,13 +89,13 @@ class AzureBlobStorage(BaseStorage):
         except Exception:
             raise
 
-    def save_file(self, sha256: str, uncarted_content: BytesIO):
+    def save_file(self, sha256: str, uncarted_content: IO[bytes]):
         """Save a file to an azure blob storage container."""
         if not self._settings.azure_blob_cache_enabled:
             return
         carted_file = BytesIO()
         # NOTE - this reads the whole file into memory due to limitations of cart
-        cart.pack_stream(uncarted_content, carted_file)
+        cart.pack_stream(uncarted_content, carted_file)  # type: ignore
         # Seek to the end of the file to determine length
         carted_file.seek(0)
         # Ignore if the blob already exists.

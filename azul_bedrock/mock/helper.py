@@ -19,9 +19,10 @@ class Editor:
 
     def set_response(self, code: int, body: bytes | dict):
         """Set the response values for the next request."""
+        content = body
         if isinstance(body, dict):
-            body = json.dumps(body)
-        httpx.post(f"{self.server}/mock/set_resp/{code}", content=body)
+            content = json.dumps(body)
+        httpx.post(f"{self.server}/mock/set_resp/{code}", content=content)
 
     def get_last_request(self) -> LastReq:
         """Return last request info."""

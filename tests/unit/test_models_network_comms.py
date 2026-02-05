@@ -89,22 +89,22 @@ class TestFeatureDefs(_TupleConversionTests):
 class TestAPIFeatureValue(_TupleConversionTests):
     TEST_CASES = [
         (
-            azm.FeatureValue(name="some_feature", type="integer", value="5"),
+            azm.FeatureValue(name="some_feature", type=azm.FeatureType.Integer, value="5"),
             {"name": "some_feature", "type": "integer", "value": "5"},
             '{"name": "some_feature", "type": "integer", "value": "5"}',
         ),
         (
-            azm.FeatureValue(name="other_feature", type="filepath", value="/bin/foo"),
+            azm.FeatureValue(name="other_feature", type=azm.FeatureType.Filepath, value="/bin/foo"),
             {"name": "other_feature", "type": "filepath", "value": "/bin/foo"},
             '{"name": "other_feature", "type": "filepath", "value": "/bin/foo"}',
         ),
         (
-            azm.FeatureValue(name="other_feature", type="filepath", value="/bin/foo"),
+            azm.FeatureValue(name="other_feature", type=azm.FeatureType.Filepath, value="/bin/foo"),
             {"name": "other_feature", "type": "filepath", "value": "/bin/foo"},
             '{"name": "other_feature", "type": "filepath", "value": "/bin/foo"}',
         ),
         (
-            azm.FeatureValue(name="feature", type="binary", value="TVo=", label="string1"),
+            azm.FeatureValue(name="feature", type=azm.FeatureType.Binary, value="TVo=", label="string1"),
             {"name": "feature", "type": "binary", "value": "TVo=", "label": "string1"},
             '{"name": "feature", "type": "binary", "value": "TVo=", "label": "string1"}',
         ),
@@ -214,9 +214,11 @@ class TestInputEntity(_TupleConversionTests):
             azm.BinaryEvent.Entity(
                 sha256="entID",
                 features=[
-                    azm.FeatureValue(name="feature", type="string", value="string", label="labelfeat"),
-                    azm.FeatureValue(name="feature", type="string", value="string", label="labelfeat", offset=16),
-                    azm.FeatureValue(name="feature", type="binary", value="Ynl0ZXM=", label="otherfeat"),
+                    azm.FeatureValue(name="feature", type=azm.FeatureType.String, value="string", label="labelfeat"),
+                    azm.FeatureValue(
+                        name="feature", type=azm.FeatureType.String, value="string", label="labelfeat", offset=16
+                    ),
+                    azm.FeatureValue(name="feature", type=azm.FeatureType.Binary, value="Ynl0ZXM=", label="otherfeat"),
                 ],
                 datastreams=[
                     azm.Datastream(
@@ -327,15 +329,13 @@ class TestStatusEntity(_TupleConversionTests):
     TEST_CASES = (
         (
             azm.StatusEvent.Entity(
-                status="completed",
+                status=azm.StatusEnum.COMPLETED,
                 input=azm.BinaryEvent(
                     model_version=azm.CURRENT_MODEL_VERSION,
                     kafka_key="abc",
                     dequeued="ccc",
                     action=azm.BinaryAction.Sourced,
-                    flags={
-                        "expedite": True,
-                    },
+                    flags=azm.BinaryFlags(expedite=True),
                     author=azm.Author(name="system", category="something"),
                     entity=azm.BinaryEvent.Entity(sha256="42"),
                     source=azm.Source(
@@ -393,7 +393,7 @@ class TestStatusEvent(_TupleConversionTests):
                 author=azm.Author(name="test", category="TEST"),
                 timestamp=datetime.datetime(year=1992, month=5, day=17, tzinfo=datetime.timezone.utc),
                 entity=azm.StatusEvent.Entity(
-                    status="error-exception",
+                    status=azm.StatusEnum.ERROR_EXCEPTION,
                     error="WORKER has fainted!",
                     input=azm.BinaryEvent(
                         model_version=azm.CURRENT_MODEL_VERSION,
@@ -423,7 +423,7 @@ class TestStatusEvent(_TupleConversionTests):
                 author=dict(name="test", category="TEST"),
                 timestamp="1992-05-17T00:00:00+00:00",
                 entity=dict(
-                    status="error-exception",
+                    status=azm.StatusEnum.ERROR_EXCEPTION,
                     error="WORKER has fainted!",
                     input=dict(
                         model_version=azm.CURRENT_MODEL_VERSION,
@@ -566,7 +566,7 @@ class TestBinaryEvent(_TupleConversionTests):
                 kafka_key="abc",
                 dequeued="ccc",
                 action=azm.BinaryAction.Sourced,
-                flags={},
+                flags=azm.BinaryFlags(),
                 timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
                 author=azm.Author(name="some ingest process", category="automatic_input"),
                 entity=azm.BinaryEvent.Entity(sha256="12345"),
@@ -619,7 +619,7 @@ class TestBinaryEvent(_TupleConversionTests):
                 model_version=azm.CURRENT_MODEL_VERSION,
                 kafka_key="foobar-md5",
                 dequeued="dummy-dequeued-id",
-                flags={},
+                flags=azm.BinaryFlags(),
                 action=azm.BinaryAction.Sourced,
                 timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
                 author=azm.Author(name="some ingest process", category="automatic_input"),
