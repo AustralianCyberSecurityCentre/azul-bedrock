@@ -272,7 +272,7 @@ class TestBasic(unittest.TestCase):
                     author=azm.Author(name="name"),
                     entity=azm.BinaryEvent.Entity(sha256="id"),
                 ),
-                status="error-exception",
+                status=azm.StatusEnum.ERROR_EXCEPTION,
             ),
         )
         self.assertEqual(tmp.entity.results, [])

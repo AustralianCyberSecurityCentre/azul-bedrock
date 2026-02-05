@@ -39,7 +39,7 @@ def get_default_resp(response: Response) -> bytes:
     """Return the default response for a route."""
     global _next_resp_code, _next_resp_body
     if not _next_resp_code:
-        return False
+        return False  # type: ignore
     response.status_code = _next_resp_code
     body = _next_resp_body
     # reset

@@ -15,6 +15,8 @@ from pydantic import (
     PlainSerializer,
 )
 
+from azul_bedrock import models_network as azm
+
 # decoded feature value types
 VALUE_DECODED = int | float | str | datetime.datetime | bytes
 # generally this module will be imported with this rename
@@ -274,10 +276,10 @@ class FileInfo(BaseModelStrict):
             magic=self.magic,
             file_extension=self.file_extension,
             features=[
-                FeatureValue(name="file_format", type="string", value=self.file_format or ""),
-                FeatureValue(name="file_extension", type="string", value=self.file_extension or ""),
-                FeatureValue(name="magic", type="string", value=self.magic or ""),
-                FeatureValue(name="mime", type="string", value=self.mime or ""),
+                FeatureValue(name="file_format", type=azm.FeatureType.String, value=self.file_format or ""),
+                FeatureValue(name="file_extension", type=azm.FeatureType.String, value=self.file_extension or ""),
+                FeatureValue(name="magic", type=azm.FeatureType.String, value=self.magic or ""),
+                FeatureValue(name="mime", type=azm.FeatureType.String, value=self.mime or ""),
             ],
         )
         # remove features with no value

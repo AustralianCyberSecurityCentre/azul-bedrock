@@ -15,7 +15,7 @@ from typing import Any, Callable
 import magic
 import pydantic
 import yaml
-import yara
+import yara  # ty: ignore[unresolved-import]
 
 cfg = None
 cmagic = magic.Magic(keep_going=True, raw=True)
@@ -29,7 +29,7 @@ MIN_POINTS = 15
 MAX_INDICATOR_BUFFERED_BYTES_SIZE = 32000
 
 
-def zip_ident(buf_start_of_file: bytes, file_path: str, fallback: str = "unknown", **kwargs) -> tuple[str, str, str]:
+def zip_ident(buf_start_of_file: bytes, file_path: str, fallback: str = "unknown", **kwargs) -> str:
     """Extract filenames of a zipfile and attempt to identify a file type."""
     file_list = []
     try:
@@ -112,7 +112,7 @@ def zip_ident(buf_start_of_file: bytes, file_path: str, fallback: str = "unknown
         return "archive/zip"
 
 
-def cart_ident(buf_start_of_file: bytes, file_path: str, fallback: str = "unknown", **kwargs) -> tuple[str, str, str]:
+def cart_ident(buf_start_of_file: bytes, file_path: str, fallback: str = "unknown", **kwargs) -> str:
     """Identify cart files (done this way to make it easy to replicate to GO)."""
     if len(buf_start_of_file) > 38:
         cart_magic = buf_start_of_file[:4]
@@ -124,7 +124,7 @@ def cart_ident(buf_start_of_file: bytes, file_path: str, fallback: str = "unknow
     return fallback
 
 
-def dos_ident(buf_start_of_file: bytes, file_path: str, **kwargs) -> tuple[str, str, str]:
+def dos_ident(buf_start_of_file: bytes, file_path: str, **kwargs) -> str:
     """Identify what type of windows binary a file is (dll vs pe and 32 vs 64bit)."""
     # Data is too small to be any windows executable, so label it as unknown.
     if len(buf_start_of_file) < 48:
@@ -179,7 +179,7 @@ def dos_ident(buf_start_of_file: bytes, file_path: str, **kwargs) -> tuple[str, 
 #             pass
 
 
-def pdf_ident(buf_start_of_file: bytes, file_path: str, fallback: str = "unknown", **kwargs) -> tuple[str, str, str]:
+def pdf_ident(buf_start_of_file: bytes, file_path: str, fallback: str = "unknown", **kwargs) -> str:
     """Determine if a pdf is password protected or a portfolio."""
     # Password protected documents typically contain '/Encrypt'
     regex_encrypt = re.compile(b"/Encrypt")
@@ -211,6 +211,12 @@ def yara_ident(
     # except Exception:  # nosec B110
     #     pass
     # Run yara rules.
+    global cfg
+    if not cfg:
+        cfg = _load_config()
+    if not cfg.yara_rules:
+        return fallback
+
     externals = {"magic": magic, "mime": mime, "current_type": current_type}
     try:
         matches = cfg.yara_rules.match(file_path, externals=externals, fast=True)
@@ -272,13 +278,13 @@ class Config(pydantic.BaseModel):
     indicators: list[Indicator]
 
     refine_rules: list[RefineRules]
-    refine_rules_mapping: dict[str, Callable[[bytes, dict[str, int]], tuple[str, str, str]]] = {
+    refine_rules_mapping: dict[str, Callable[[bytes, dict[str, int]], str]] = {
         "zip_ident": zip_ident,
         "dos_ident": dos_ident,
         "cart_ident": cart_ident,
         "pdf_ident": pdf_ident,
         "yara_ident": yara_ident,
-    }
+    }  # type: ignore
 
     trusted_mimes: dict[str, str]
 
@@ -319,6 +325,10 @@ def _load_config():
 
 def _apply_rules(magics: list[str], mimes: list[str]) -> tuple[str, str]:
     """Apply identification rules over magic and mime."""
+    global cfg
+    if not cfg:
+        cfg = _load_config()
+
     for rule in cfg.rules:
         if rule.magicC:
             for mgc in magics:
@@ -328,6 +338,7 @@ def _apply_rules(magics: list[str], mimes: list[str]) -> tuple[str, str]:
             for mime in mimes:
                 if rule.mimeC.search(mime.lower()):
                     return rule.id, rule.extension
+    return "", ""
 
 
 def _apply_indicators(id: str, buf_start_of_file: bytes) -> str:
@@ -335,6 +346,10 @@ def _apply_indicators(id: str, buf_start_of_file: bytes) -> str:
     ret_id = id
     best_score = 0
     best_id = ""
+
+    global cfg
+    if not cfg:
+        cfg = _load_config()
 
     for indicator in cfg.indicators:
         tally = 0
@@ -369,11 +384,11 @@ def from_file(path: str) -> tuple[str, str, str, str]:
         if not cfg:
             cfg = _load_config()
         try:
-            magics = cmagic.from_file(path).split("\n")
+            magics: list[str] = cmagic.from_file(path).split("\n")
         except magic.MagicException as e:
             magics = ["error - " + e.message.decode()]
         try:
-            mimes = cmime.from_file(path).split("\n")
+            mimes: list[str] = cmime.from_file(path).split("\n")
         except magic.MagicException as e:
             mimes = ["error - " + e.message.decode()]
 
@@ -447,5 +462,5 @@ if __name__ == "__main__":
         print("must supply file path")
         sys.exit(1)
     path = sys.argv[1]
-    magic, mime, file_format, extension = from_file(path)
-    print(f"'{magic}' + '{mime}' -> {file_format} {extension}")
+    magic_val, mime, file_format, extension = from_file(path)
+    print(f"'{magic_val}' + '{mime}' -> {file_format} {extension}")

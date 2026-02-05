@@ -2,14 +2,14 @@
 
 from typing import Annotated
 
-from pydantic import AfterValidator, ConfigDict
-from pydantic_settings import BaseSettings
+from pydantic import AfterValidator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class FileManagerSettings(BaseSettings):
     """Environment settings that dictate how and where to download download test files."""
 
-    model_config = ConfigDict(env_prefix="file_manager_")
+    model_config = SettingsConfigDict(env_prefix="file_manager_")
 
     request_timeout: int = 30
 

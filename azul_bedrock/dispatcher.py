@@ -82,7 +82,7 @@ class DispatcherAPI:
         self,
         *,
         model: str,
-        loader: Callable[[bytes], list[Any]] = None,
+        loader: Callable[[bytes], list[Any]],
         count: int = 1,
         deadline: int = 1,
         is_task: bool = False,
@@ -393,11 +393,7 @@ class DispatcherAPI:
             pass
         elif start_pos is not None or end_pos is not None:
             # If the start or end is not None a range can be created.
-            if start_pos is None:
-                start_pos = ""
-            if end_pos is None:
-                end_pos = ""
-            req_header = {"range": f"bytes={start_pos}-{end_pos}"}
+            req_header = {"range": f"bytes={start_pos or ''}-{end_pos or ''}"}
 
         try:
             rsp = self._client.get(
@@ -455,11 +451,7 @@ class DispatcherAPI:
             pass
         elif start_pos is not None or end_pos is not None:
             # If the start or end is not None a range can be created.
-            if start_pos is None:
-                start_pos = ""
-            if end_pos is None:
-                end_pos = ""
-            req_header = {"range": f"bytes={start_pos}-{end_pos}"}
+            req_header = {"range": f"bytes={start_pos or ''}-{end_pos or ''}"}
 
         req = self._async_client.build_request(
             "GET", f"{self._data_url}/api/v3/stream/{source}/{label}/{sha256.lower()}", headers=req_header
@@ -519,7 +511,7 @@ class DispatcherAPI:
         elif isinstance(data, io.IOBase):
             while next_data := data.read(MAX_BUFFER_BYTES):
                 yield next_data
-        elif issubclass(type(data), UploadFile):
+        elif isinstance(data, UploadFile):
             while next_data := await data.read(MAX_BUFFER_BYTES):
                 yield next_data
         elif isinstance(data, AsyncIterable):
@@ -549,7 +541,7 @@ class DispatcherAPI:
                     + ", valid types are binary io.IOBase, UploadFile, AsyncIterable classes and bytes"
                 )
             data.seek(0)
-        elif issubclass(type(data), UploadFile):
+        elif isinstance(data, UploadFile):
             await data.seek(0)
         elif isinstance(data, AsyncIterable):
             pass

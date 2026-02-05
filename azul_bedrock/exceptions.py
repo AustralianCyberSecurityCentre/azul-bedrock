@@ -82,7 +82,7 @@ class DispatcherApiException(ApiException):
             status_code = self.response.status_code
 
         # Attempt to set external to the recommended value from dispatcher, only do with synchronous requests.
-        if response and not external and isinstance(response.stream, httpx.SyncByteStream):
+        if self.response and not external and isinstance(self.response.stream, httpx.SyncByteStream):
             with contextlib.suppress(ValidationError):
                 d_err = DispatcherApiErrorModel.model_validate_json(self.response.content)
                 if d_err.title and d_err.detail:

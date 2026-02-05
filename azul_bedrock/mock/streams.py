@@ -61,7 +61,6 @@ def _get_file_generic(size: int, datafunc: Callable[[int, int], bytes], request:
         return datafunc(0, size)
     start, end = _parse_range(request.headers["range"])
     state._last_req.range_raw = request.headers["range"]
-    state._last_req.range = [start, end]
     if start < 0:
         start = max(size + start, 0)
     if end is None or end >= size:
@@ -75,7 +74,7 @@ def _get_file_generic(size: int, datafunc: Callable[[int, int], bytes], request:
         return b""
         # return response(status=416, headers={'content-range': 'bytes */%s' % size})
 
-    state._last_req.range = (start, end)
+    state._last_req.range = [start, end]
     response.status_code = 206
     response.headers["content-range"] = "bytes %s-%s/%s" % (start, end, size)
     return datafunc(start, end + 1)
@@ -132,7 +131,7 @@ async def get_content_generic(data_hash: str, request: Request, response: Respon
     if code < 200 or code > 299:
         return
     content = _get_file_generic(len(data), lambda start, end: data[start:end], request, response)
-    return RawResponse(content, status_code=response.status_code, headers=response.headers)
+    return RawResponse(content, status_code=response.status_code, headers=response.headers)  # type: ignore
 
 
 @router.patch("/api/v3/stream/{source1}/{source2}/{label}/{data_hash}")
