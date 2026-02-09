@@ -9,4 +9,6 @@ class TestBasic(unittest.TestCase):
 
     def test_exceptions(self):
         """Ensure Dispatcher API Exception works on basic case (regression test)"""
-        exceptions.DispatcherApiException(ref="", internal="", response=None, external=None)
+        exceptions.DispatcherApiException(
+            ref="", internal=exceptions.ExceptionCodeEnum.DPGetEventFailStatusCode, response=None
+        )
