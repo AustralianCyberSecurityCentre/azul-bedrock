@@ -3,6 +3,7 @@
 It is intended for use during plugin tests only.
 """
 
+import contextlib
 import io
 import os
 import re
@@ -15,7 +16,10 @@ from typing import Any, Callable
 import magic
 import pydantic
 import yaml
-import yara  # ty: ignore[unresolved-import]
+import yara
+
+from azul_bedrock.exception_enums import ExceptionCodeEnum
+from azul_bedrock.exceptions_bedrock import AzulValueError, BaseAzulException  # ty: ignore[unresolved-import]
 
 cfg = None
 cmagic = magic.Magic(keep_going=True, raw=True)
@@ -130,22 +134,24 @@ def dos_ident(buf_start_of_file: bytes, file_path: str, **kwargs) -> str:
     if len(buf_start_of_file) < 48:
         return "unknown"
     # noinspection PyBroadException
-    try:
+    with contextlib.suppress(Exception):
         file_header = io.BytesIO(buf_start_of_file)
         if buf_start_of_file[0:2] != b"MZ":
-            raise ValueError()
+            raise AzulValueError(
+                internal=ExceptionCodeEnum.IdentifyDosIdentNotDos,
+            )
 
         (header_pos,) = struct.unpack("<I", buf_start_of_file[:0x40][-4:])
         file_header.seek(header_pos)
         if file_header.read(4) != b"PE\x00\x00":
-            raise ValueError()
+            raise AzulValueError(internal=ExceptionCodeEnum.IdentifyDosIdentNotDos)
         (machine_id,) = struct.unpack("<H", file_header.read(2))
         if machine_id == 0x014C:
             width = 32
         elif machine_id == 0x8664:
             width = 64
         else:
-            raise ValueError()
+            raise AzulValueError(internal=ExceptionCodeEnum.IdentifyDosIdentNotDos)
         val = file_header.read(18)[-2:]
         (characteristics,) = struct.unpack("<H", val)
         if characteristics & 0x2000:
@@ -153,10 +159,8 @@ def dos_ident(buf_start_of_file: bytes, file_path: str, **kwargs) -> str:
         elif characteristics & 0x0002:
             pe_type = "pe"
         else:
-            raise ValueError()
+            raise AzulValueError(internal=ExceptionCodeEnum.IdentifyDosIdentNotDos)
         return "executable/windows/%s%i" % (pe_type, width)
-    except Exception:  # noqa S110
-        pass
     return "executable/windows/dos"
 
 
@@ -441,7 +445,11 @@ def from_file(path: str) -> tuple[str, str, str, str]:
             found_type = cfg.id_mapping_dict.get(file_format, None)
             if found_type is None:
                 print(f"Error: the assemblyline type '{file_format}' doesn't have a mapping and should")
-                raise Exception(f"Assemblyline type found was '{file_format}' doesn't have a mapping and should")
+                raise BaseAzulException(
+                    ref=f"Assemblyline type found was '{file_format}' doesn't have a mapping and should",
+                    internal=ExceptionCodeEnum.NoFiletypeIdentificationHappened,
+                    parameters={"file_format": file_format},
+                )
 
             extension = found_type.extension
 

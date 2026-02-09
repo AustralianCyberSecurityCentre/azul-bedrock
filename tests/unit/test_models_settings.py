@@ -8,6 +8,7 @@ import yaml
 from pydantic import BaseModel
 
 from azul_bedrock import models_settings
+from azul_bedrock.exceptions_bedrock import AzulValueError
 
 BASE_FILE_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "testdata")
 
@@ -82,21 +83,21 @@ class TestBasic(unittest.TestCase):
         src = self._load_source("sources_bad_expiry_inner_spaces.yaml")
         self.assertEqual(src.sources["testing"].expire_events_after, "7  days")
         with self.assertRaises(
-            ValueError, msg="Expected error when there is multiple spaces between number and unit."
+            AzulValueError, msg="Expected error when there is multiple spaces between number and unit."
         ):
             src.sources["testing"].expire_events_ms
 
         src = self._load_source("sources_bad_expiry_no_number.yaml")
         self.assertEqual(src.sources["testing"].expire_events_after, "seven days")
-        with self.assertRaises(ValueError, msg="Expected error with no number"):
+        with self.assertRaises(AzulValueError, msg="Expected error with no number"):
             src.sources["testing"].expire_events_ms
 
         src = self._load_source("sources_bad_expiry_outer_spaces_lead.yaml")
         self.assertEqual(src.sources["testing"].expire_events_after, " 7 days")
-        with self.assertRaises(ValueError, msg="Expected error with leading space"):
+        with self.assertRaises(AzulValueError, msg="Expected error with leading space"):
             src.sources["testing"].expire_events_ms
 
         src = self._load_source("sources_bad_expiry_outer_spaces_trail.yaml")
         self.assertEqual(src.sources["testing"].expire_events_after, "7 days ")
-        with self.assertRaises(ValueError, msg="Expected error with trailing space."):
+        with self.assertRaises(AzulValueError, msg="Expected error with trailing space."):
             src.sources["testing"].expire_events_ms

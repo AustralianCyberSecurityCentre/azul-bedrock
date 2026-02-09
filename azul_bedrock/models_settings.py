@@ -6,6 +6,9 @@ from functools import cached_property
 import pendulum
 from pydantic import BaseModel, computed_field
 
+from azul_bedrock.exception_enums import ExceptionCodeEnum
+from azul_bedrock.exceptions_bedrock import AzulValueError
+
 
 class PartitionUnitEnum(str, enum.Enum):
     """Valid partition unit settings for event types."""
@@ -31,21 +34,33 @@ def convert_string_to_duration_ms(input_duration: str) -> int:
         return -1
     split_string = input_duration.split(" ")
     if len(split_string) != 2:
-        raise ValueError(
-            f"provided input '{input_duration}' split into '{len(split_string)}' strings it must split"
-            + f" into 2, the split was actually {split_string}"
+        raise AzulValueError(
+            ref=f"provided input '{input_duration}' split into '{len(split_string)}' strings it must split"
+            + f" into 2, the split was actually {split_string}",
+            internal=ExceptionCodeEnum.ConvertStringToDurationIncorrectNumberOfValuesAfterSplit,
+            parameters={
+                "input_duration": input_duration,
+                "length_split_string": str(len(split_string)),
+                "split_string": str(split_string),
+            },
         )
     duration, unit = input_duration.split(" ")
     try:
         duration = int(duration)
     except Exception as e:
-        raise ValueError(
-            f"Invalid duration for expire_events_after '{duration=}' duration should be an integer value."
+        raise AzulValueError(
+            ref=f"Invalid duration for expire_events_after '{duration=}' duration should be an integer value.",
+            internal=ExceptionCodeEnum.ConvertStringToDurationInvalidDuration,
+            parameters={"duration": str(duration)},
         ) from e
 
     valid_units = ["days", "weeks", "months", "years"]
     if unit not in valid_units:
-        raise ValueError(f"Invalid unit for expire_events_after {unit=} valid values are {valid_units}")
+        raise AzulValueError(
+            ref=f"Invalid unit for expire_events_after {unit=} valid values are {valid_units}",
+            internal=ExceptionCodeEnum.ConvertStringToDurationInvalidUnitProvided,
+            parameters={"unit": unit, "valid_units": str(valid_units)},
+        )
     pend_dur = pendulum.Duration(**{unit: duration})
     return int(pend_dur.total_seconds() * 1000)
 

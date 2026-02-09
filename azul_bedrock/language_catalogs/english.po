@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Azul 10\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-02-09 01:07+0000\n"
+"POT-Creation-Date: 2026-02-09 04:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -151,4 +151,38 @@ msgid "DPDeleteBinaryBadStatusCode"
 msgstr ""
 "Unable to delete binary from dispatcher with status code {status_code} "
 "and error {response_text}"
+
+msgid "IdentifyDosIdentNotDos"
+msgstr "Error occurred when attempting to identify the type of a PE file."
+
+msgid "NoFiletypeIdentificationHappened"
+msgstr ""
+"Assemblyline type found was '{file_format}' doesn't have a mapping and "
+"should"
+
+msgid "FeatureValueEncodingFailure"
+msgstr "Cannot encode value {value} with type {value_type}"
+
+msgid "FeatureValueDecodingFailure"
+msgstr "Could not decode type {value_type} for value {value}"
+
+msgid "ConvertingStreamToInputEntityFailure"
+msgstr ""
+"Only content fileinfo can become entity, no content label found on "
+"current entity."
+
+msgid "ConvertStringToDurationIncorrectNumberOfValuesAfterSplit"
+msgstr ""
+"provided input '{input_duration}' split into '{length_split_string}' "
+"strings it must split into 2, the split was actually {split_string}"
+
+msgid "ConvertStringToDurationInvalidDuration"
+msgstr ""
+"Invalid duration for expire_events_after duration='{duration}' duration "
+"should be an integer value."
+
+msgid "ConvertStringToDurationInvalidUnitProvided"
+msgstr ""
+"Invalid unit for expire_events_after unt={unit} valid values are "
+"valid_units={valid_units}"
 

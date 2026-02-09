@@ -52,3 +52,19 @@ class ExceptionCodeEnum(StrEnum):
     DPCopyBinaryBadStatusCode = "DPCopyBinaryBadStatusCode"
     # DP Delete Binary
     DPDeleteBinaryBadStatusCode = "DPDeleteBinaryBadStatusCode"
+
+    # Identify
+    IdentifyDosIdentNotDos = "IdentifyDosIdentNotDos"
+    NoFiletypeIdentificationHappened = "NoFiletypeIdentificationHappened"
+
+    # models_network
+    FeatureValueEncodingFailure = "FeatureValueEncodingFailure"
+    FeatureValueDecodingFailure = "FeatureValueDecodingFailure"
+    ConvertingStreamToInputEntityFailure = "ConvertingStreamToInputEntityFailure"
+
+    # models_settings
+    ConvertStringToDurationIncorrectNumberOfValuesAfterSplit = (
+        "ConvertStringToDurationIncorrectNumberOfValuesAfterSplit"
+    )
+    ConvertStringToDurationInvalidDuration = "ConvertStringToDurationInvalidDuration"
+    ConvertStringToDurationInvalidUnitProvided = "ConvertStringToDurationInvalidUnitProvided"

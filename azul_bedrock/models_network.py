@@ -16,6 +16,8 @@ from pydantic import (
 )
 
 from azul_bedrock import models_network as azm
+from azul_bedrock.exception_enums import ExceptionCodeEnum
+from azul_bedrock.exceptions_bedrock import AzulValueError, BaseAzulException
 
 # decoded feature value types
 VALUE_DECODED = int | float | str | datetime.datetime | bytes
@@ -160,7 +162,11 @@ def value_encode(val: VALUE_DECODED) -> str:
     elif isinstance(val, (int, float)):
         val = str(val)
     elif not isinstance(val, str):
-        raise Exception(f"cannot encode value {val} with type {type(val)}")
+        raise BaseAzulException(
+            ref=f"cannot encode value {val} with type {type(val)}",
+            internal=ExceptionCodeEnum.FeatureValueEncodingFailure,
+            parameters={"value": str(val), "value_type": str(type(val))},
+        )
     return val
 
 
@@ -177,7 +183,11 @@ def value_decode(_type: FeatureType, val: str) -> VALUE_DECODED:
     elif _type in [FeatureType.String, FeatureType.Filepath, FeatureType.Uri]:
         return val
     else:
-        raise ValueError(f"could not decode type {_type} for value {val}")
+        raise AzulValueError(
+            ref=f"could not decode type {_type} for value {val}",
+            internal=ExceptionCodeEnum.FeatureValueEncodingFailure,
+            parameters={"value": str(val), "value_type": str(type(val))},
+        )
 
 
 class FeatureValue(BaseModelStrict):
@@ -313,7 +323,10 @@ class Datastream(FileInfo):
         azul-runner's BaseEvent type and BinaryEvent.Entity's data-less submissions.
         """
         if self.label != DataLabel.CONTENT:
-            raise ValueError("only content fileinfo can become entity")
+            raise AzulValueError(
+                ref="Only content fileinfo can become entity, no content label found on current entity.",
+                internal=ExceptionCodeEnum.ConvertingStreamToInputEntityFailure,
+            )
         ent = super().to_input_entity()
         # Not in BaseClass to support data-less submissions and overrides from azul-runner plugin post-processing.
         ent.datastreams = [self]

@@ -15,7 +15,7 @@ from azul_bedrock import mock as md
 from azul_bedrock import models_api as azapi
 from azul_bedrock import models_network as azm
 from azul_bedrock.dispatcher import DispatcherAPI
-from azul_bedrock.exceptions import AzulValueError, DispatcherApiException, NetworkDataException
+from azul_bedrock.exceptions_bedrock import AzulValueError, DispatcherApiException, NetworkDataException
 from azul_bedrock.mock import streams
 
 an_event = azm.BinaryEvent(

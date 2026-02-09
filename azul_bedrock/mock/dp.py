@@ -9,7 +9,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from . import events, state, streams
+from azul_bedrock.mock import events, state, streams
 
 logger = logging.getLogger(__name__)
 

@@ -13,18 +13,17 @@ from pendulum.datetime import DateTime
 from starlette.datastructures import UploadFile
 from starlette.status import HTTP_200_OK, HTTP_206_PARTIAL_CONTENT, HTTP_404_NOT_FOUND
 
+from azul_bedrock import dispatcher_params as DPP
 from azul_bedrock import models_api as azapi
 from azul_bedrock import models_network as azm
 from azul_bedrock.exception_enums import ExceptionCodeEnum
-from azul_bedrock.exceptions import (
+from azul_bedrock.exceptions_bedrock import (
     AzulDispatcherRawResponseException,
     AzulValueError,
     BaseAzulException,
     DispatcherApiException,
     NetworkDataException,
 )
-
-from . import dispatcher_params as DPP
 
 logger = logging.getLogger(__name__)
 

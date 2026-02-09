@@ -11,7 +11,6 @@ from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 from azul_bedrock.exception_enums import ExceptionCodeEnum
 from azul_bedrock.language_catalogs.catalog_creation import get_catalog
-from azul_bedrock.models_api import DispatcherApiErrorModel
 from azul_bedrock.settings import BedrockSettings, LanguageCatalogsEnum
 
 settings = BedrockSettings()
@@ -42,11 +41,17 @@ class NetworkDataException(BaseAzulException):
     pass
 
 
+class AzulRuntimeException(BaseAzulException):
+    """Raised when a runtime type error occurs in Azul."""
+
+    pass
+
+
 class BaseError(BaseModel):
     """Standard Azul REST API Error format."""
 
     id: str = Field(default="", description="A unique identifier for this particular occurrence of the problem.")
-    ref: str = Field(description="An application-specific error reference.")
+    ref: str = Field(default="", description="An application-specific error reference.")
     internal: ExceptionCodeEnum = Field(
         description="Specific error type which has an error method associated with it."
     )
@@ -75,7 +80,7 @@ class ApiException(HTTPException):
         self,
         *,
         status_code: int = HTTP_500_INTERNAL_SERVER_ERROR,
-        ref: str,
+        ref: str = "",
         internal: ExceptionCodeEnum,
         parameters: PARAMETER_TYPE = None,
         external_override: str | None = None,
@@ -111,8 +116,8 @@ class DispatcherApiException(ApiException):
     def __init__(
         self,
         *,
-        ref: str,
         internal: ExceptionCodeEnum,
+        ref: str = "",
         parameters: PARAMETER_TYPE | None = None,
         response: httpx.Response | None = None,  # Dispatchers status code if part of exception.
     ):
@@ -125,6 +130,9 @@ class DispatcherApiException(ApiException):
         # Attempt to set external to the recommended value from dispatcher, only do with synchronous requests.
         if self.response and isinstance(self.response.stream, httpx.SyncByteStream):
             with contextlib.suppress(ValidationError):
+                # Delayed import to avoid circular imports
+                from azul_bedrock.models_api import DispatcherApiErrorModel
+
                 d_err = DispatcherApiErrorModel.model_validate_json(self.response.content)
                 if d_err.title and d_err.detail:
                     external_override = f"{d_err.title}: {d_err.detail}"
@@ -148,8 +156,8 @@ class AzulValueError(BaseAzulException):
     def __init__(
         self,
         *,
-        ref: str,
         internal: ExceptionCodeEnum,
+        ref: str = "",
         parameters: PARAMETER_TYPE = None,
     ) -> None:
         """Init."""

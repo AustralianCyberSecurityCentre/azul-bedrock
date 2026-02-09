@@ -6,8 +6,7 @@ import urllib3
 from fastapi import APIRouter, Request, Response
 
 from azul_bedrock import models_api as azapi
-
-from . import state
+from azul_bedrock.mock import state
 
 router = APIRouter()
 
