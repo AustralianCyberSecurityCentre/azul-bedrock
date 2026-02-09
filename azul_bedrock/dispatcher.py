@@ -13,11 +13,17 @@ from pendulum.datetime import DateTime
 from starlette.datastructures import UploadFile
 from starlette.status import HTTP_200_OK, HTTP_206_PARTIAL_CONTENT, HTTP_404_NOT_FOUND
 
+from azul_bedrock import dispatcher_params as DPP
 from azul_bedrock import models_api as azapi
 from azul_bedrock import models_network as azm
-from azul_bedrock.exceptions import DispatcherApiException, NetworkDataException
-
-from . import dispatcher_params as DPP
+from azul_bedrock.exception_enums import ExceptionCodeEnum
+from azul_bedrock.exceptions_bedrock import (
+    AzulDispatcherRawResponseException,
+    AzulValueError,
+    BaseAzulException,
+    DispatcherApiException,
+    NetworkDataException,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -99,7 +105,11 @@ class DispatcherAPI:
     ) -> tuple[azapi.GetEventsInfo, list[Any]]:
         """Get azul events from dispatcher."""
         if model not in azm.ModelType:
-            raise Exception(f"invalid model for _get_events: {model}")
+            raise BaseAzulException(
+                ref=f"invalid model for _get_events: {model}",
+                internal=ExceptionCodeEnum.DPGetEventsBadModelType,
+                parameters={"model_type": model},
+            )
 
         if not require_actions:
             require_actions = []
@@ -112,7 +122,7 @@ class DispatcherAPI:
         if not is_task:
             endpoint = DPP.GET_EVENTS_ENDPOINT_PASSIVE
 
-        params_opt = {
+        params_opt: dict[DPP.GetEvent, str | int | bool | list[str]] = {
             DPP.GetEvent.Name: self._author_name,
             DPP.GetEvent.Version: self._author_version,
             DPP.GetEvent.Count: count,
@@ -145,24 +155,26 @@ class DispatcherAPI:
             raise DispatcherApiException(
                 response=resp,
                 ref="Unable to get events from dispatcher",
-                internal=str(resp.text),
+                internal=ExceptionCodeEnum.DPGetEventFailStatusCode,
+                parameters={"response_text": str(resp.text)},
             )
 
         filecontent = None  # needs to exist for certain exceptions
-        filetype = None  # needs to exist for certain exceptions
         try:
             content_type, options = multipart.parse_options_header(resp.headers["Content-Type"])
             if content_type != "multipart/form-data":
                 raise DispatcherApiException(
                     response=resp,
                     ref="not form data",
-                    internal=str(resp.text),
+                    internal=ExceptionCodeEnum.DPGetEventNotMultipartForm,
+                    parameters={"response_text": str(resp.text)},
                 )
             if "boundary" not in options:
                 raise DispatcherApiException(
                     response=resp,
                     ref="no form data boundary",
-                    internal=str(resp.text),
+                    internal=ExceptionCodeEnum.DPGetEventNotBoundaryFormData,
+                    parameters={"response_text": str(resp.text)},
                 )
 
             boundary = options["boundary"]
@@ -178,14 +190,26 @@ class DispatcherAPI:
                     respEvents = loader(filecontent)
 
             if respInfo is None:
-                raise Exception("no info filepart from dispatcher response")
+                raise BaseAzulException(
+                    ref="didn't get filepart information from dispatcher response",
+                    internal=ExceptionCodeEnum.DPGetEventsMissingResponseInfo,
+                )
             if respEvents is None:
-                raise Exception(f"no events filepart from dispatcher response (bad loader?):\n{respInfo=}")
+                raise BaseAzulException(
+                    ref="no events filepart from dispatcher",
+                    internal=ExceptionCodeEnum.DPGetEventsFilepartMissingFromResponse,
+                    parameters={"response_info": repr(respInfo)},
+                )
 
         except Exception as e:
             # ensure that bad content is within the exception
-            err = BadResponseException(f"invalid response content for {filetype}: {str(e)}")
-            err.content = filecontent or resp.content
+            content = filecontent or resp.content
+            err = AzulDispatcherRawResponseException(
+                content=content,
+                ref=f"invalid response content for: {str(e)}",
+                internal=ExceptionCodeEnum.DPGetEventBadResponseWithContent,
+                parameters={"inner_exception": str(e)},
+            )
             raise err from e
 
         return respInfo, respEvents
@@ -258,7 +282,11 @@ class DispatcherAPI:
         # our python client can't handle avro
         params["avro-format"] = False
         if model not in azm.ModelType:
-            raise Exception(f"invalid model for submit_events: {model}")
+            raise BaseAzulException(
+                ref=f"invalid model for submit_events: {model}",
+                internal=ExceptionCodeEnum.DPSubmitEventsInvalidModel,
+                parameters={"model": model},
+            )
         params["model"] = model
         if sync:
             params["sync"] = sync
@@ -271,7 +299,9 @@ class DispatcherAPI:
         for event in encoded_events:
             if len(event) > MAX_MESSAGE_SIZE:
                 raise NetworkDataException(
-                    f"an event to submit to dispatcher was too large: {len(event)}b > {MAX_MESSAGE_SIZE}b"
+                    ref=f"an event to submit to dispatcher was too large: {len(event)}b > {MAX_MESSAGE_SIZE}b",
+                    internal=ExceptionCodeEnum.DPSubmitEventMessageTooLarge,
+                    parameters={"length_of_event": len(event), "max_message_size": MAX_MESSAGE_SIZE},
                 )
 
         data = b"[" + b",".join(encoded_events) + b"]"
@@ -286,7 +316,8 @@ class DispatcherAPI:
         except Exception as e:
             raise DispatcherApiException(
                 ref="Unable to contact dispatcher",
-                internal=str(e),
+                internal=ExceptionCodeEnum.DPSubmitEventsUnableToContactDP,
+                parameters={"inner_exception": str(e)},
             ) from e
 
         if 400 <= rsp.status_code <= 499:
@@ -301,7 +332,8 @@ class DispatcherAPI:
             raise DispatcherApiException(
                 response=rsp,
                 ref="Unable to submit event to dispatcher",
-                internal=str(rsp.text),
+                internal=ExceptionCodeEnum.DPSubmitEventsUnableToSubmitEvents,
+                parameters={"response_text": str(rsp.text)},
             )
         resp = azapi.ResponsePostEvent.model_validate_json(rsp.content)
 
@@ -311,7 +343,8 @@ class DispatcherAPI:
             raise DispatcherApiException(
                 response=rsp,
                 ref="submitted events were invalid",
-                internal=str(resp),
+                internal=ExceptionCodeEnum.DPSubmitEventsSubmittedEventsWereInvalid,
+                parameters={"response_text": str(rsp.text)},
             )
 
         return resp
@@ -329,7 +362,8 @@ class DispatcherAPI:
         except Exception as e:
             raise DispatcherApiException(
                 ref="Unable to contact dispatcher",
-                internal=str(e),
+                internal=ExceptionCodeEnum.DPSubmitEventsUnableToContactDP,
+                parameters={"internal_error": str(e)},
             ) from e
 
         if 400 <= rsp.status_code <= 499:
@@ -344,7 +378,8 @@ class DispatcherAPI:
             raise DispatcherApiException(
                 response=rsp,
                 ref="Unable to submit event to dispatcher",
-                internal=str(rsp.text),
+                internal=ExceptionCodeEnum.DPSubmitEventsUnableToSubmitEvents,
+                parameters={"response_text": str(rsp.text)},
             )
         return azapi.EventSimulate.model_validate_json(rsp.content)
 
@@ -359,15 +394,25 @@ class DispatcherAPI:
             rsp = self._client.head(f"{self._data_url}/api/v3/stream/{source}/{label}/{sha256.lower()}")
         except Exception as e:
             # remote disconnects without response if offset is out of range
-            raise DispatcherApiException(ref="Unable to request file", internal=str(e)) from e
+            raise DispatcherApiException(
+                ref="Unable to request file",
+                internal=ExceptionCodeEnum.DPHasBinaryUnableToRequestFile,
+                parameters={"inner_exception": str(e)},
+            ) from e
 
         if rsp.status_code == HTTP_404_NOT_FOUND:
-            raise DispatcherApiException(response=rsp, ref="Binary content not found", internal=rsp.text)
+            raise DispatcherApiException(
+                response=rsp,
+                ref="Binary content not found",
+                internal=ExceptionCodeEnum.DPHasBinaryNotFound,
+                parameters={"response_text": str(rsp.text)},
+            )
         if rsp.status_code != HTTP_200_OK and rsp.status_code != HTTP_206_PARTIAL_CONTENT:
             raise DispatcherApiException(
                 response=rsp,
                 ref=f"Unable to request file bad dispatcher status code {rsp.status_code}",
-                internal=rsp.text,
+                internal=ExceptionCodeEnum.DPHasBinaryBadStatusCode,
+                parameters={"status_code": rsp.status_code, "response_text": str(rsp.text)},
             )
 
     def get_binary(
@@ -403,17 +448,24 @@ class DispatcherAPI:
             # remote disconnects without response if offset is out of range
             raise DispatcherApiException(
                 ref="Unable to request file, is offset too large?",
-                internal=str(e),
+                internal=ExceptionCodeEnum.DPGetBinaryOffsetTooLarge,
+                parameters={"inner_exception": str(e)},
             ) from e
 
         if rsp.status_code == HTTP_404_NOT_FOUND:
-            raise DispatcherApiException(response=rsp, ref="Binary content not found", internal=rsp.text)
+            raise DispatcherApiException(
+                response=rsp,
+                ref="Binary content not found",
+                internal=ExceptionCodeEnum.DPGetBinaryNotFound,
+                parameters={"response_text": rsp.text},
+            )
 
         if rsp.status_code != HTTP_200_OK and rsp.status_code != HTTP_206_PARTIAL_CONTENT:
             raise DispatcherApiException(
                 response=rsp,
                 ref="Unable to request file",
-                internal=rsp.text,
+                internal=ExceptionCodeEnum.DPGetBinaryBadStatusCode,
+                parameters={"status_code": rsp.status_code, "response_text": rsp.text},
             )
 
         return rsp
@@ -462,23 +514,36 @@ class DispatcherAPI:
             if rsp.status_code == HTTP_404_NOT_FOUND:
                 logger.warning(f"Failed to download file due to 404 with {source=}, {label=}, {sha256=}")
                 raise DispatcherApiException(
-                    response=rsp, ref="Binary content not found", internal=await self._get_error_message(rsp)
+                    response=rsp,
+                    ref="Binary content not found",
+                    internal=ExceptionCodeEnum.DPGetBinaryAsyncNotFound,
+                    parameters={"response_test": await self._get_error_message(rsp)},
                 )
             elif rsp.status_code != HTTP_200_OK and rsp.status_code != HTTP_206_PARTIAL_CONTENT:
                 logger.warning(
-                    "Failed to download file with statsu code to "
+                    "Failed to download file with status code to "
                     + f"{rsp.status_code} with {source=}, {label=}, {sha256=}"
                 )
                 raise DispatcherApiException(
                     response=rsp,
                     ref="Unable to request file",
-                    internal=await self._get_error_message(rsp),
+                    internal=ExceptionCodeEnum.DPGetBinaryAsyncBadStatusCode,
+                    parameters={"status_code": rsp.status_code, "response_test": await self._get_error_message(rsp)},
                 )
-        except Exception:
+        except (BaseAzulException, DispatcherApiException):
             # Close the response body if there is an exception.
             # NOTE - a memory leak could occur if aclose is never called.
             await rsp.aclose()
             raise
+        except Exception as e:
+            # Close the response body if there is an exception.
+            # NOTE - a memory leak could occur if aclose is never called.
+            await rsp.aclose()
+            raise BaseAzulException(
+                ref="unexpected error when streaming binary",
+                internal=ExceptionCodeEnum.DPAsyncGetBinaryUnexpectedError,
+                parameters={"inner_exception": str(e)},
+            ) from e
 
         async def content_generator() -> AsyncIterable[bytes]:
             """Coroutine to yield the contents as the status code is 200 or 206.
@@ -492,7 +557,8 @@ class DispatcherAPI:
                 # remote disconnects without response if offset is out of range
                 raise DispatcherApiException(
                     ref="Unable to request file, is offset too large?",
-                    internal=str(e),
+                    internal=ExceptionCodeEnum.DPGetBinaryAsyncOffsetTooLarge,
+                    parameters={"inner_exception": str(e)},
                 ) from e
             finally:
                 # Ensure body of response closes.
@@ -518,7 +584,11 @@ class DispatcherAPI:
             async for b in data:
                 yield b
         else:
-            raise ValueError(f"Bad type for _yield_data, Unexpected type when submitting binary {type(data)}")
+            raise AzulValueError(
+                ref=f"Bad type for _yield_data, Unexpected type when submitting binary {type(data)}",
+                internal=ExceptionCodeEnum.ConvertingContentToAsyncIterable,
+                parameters={"data_type": str(type(data))},
+            )
 
     async def async_submit_binary(
         self,
@@ -536,9 +606,11 @@ class DispatcherAPI:
             pass
         elif isinstance(data, io.IOBase):
             if isinstance(data, io.TextIOBase):
-                raise ValueError(
-                    f"Unexpected string buffer when submitting binary {type(data)}"
-                    + ", valid types are binary io.IOBase, UploadFile, AsyncIterable classes and bytes"
+                raise AzulValueError(
+                    ref=f"Unexpected string buffer when submitting binary {type(data)}"
+                    + ", valid types are binary io.IOBase, UploadFile, AsyncIterable classes and bytes",
+                    internal=ExceptionCodeEnum.InvalidAsyncSubmissionStringBuffer,
+                    parameters={"data_type": str(type(data))},
                 )
             data.seek(0)
         elif isinstance(data, UploadFile):
@@ -546,9 +618,11 @@ class DispatcherAPI:
         elif isinstance(data, AsyncIterable):
             pass
         else:
-            raise ValueError(
-                f"Unexpected type when submitting binary {type(data)}"
-                + ", valid types are binary io.IOBase, UploadFile, AsyncIterable classes and bytes"
+            raise AzulValueError(
+                ref=f"Unexpected type when submitting binary {type(data)}"
+                + ", valid types are binary io.IOBase, UploadFile, AsyncIterable classes and bytes",
+                internal=ExceptionCodeEnum.InvalidAsyncSubmissionContentStream,
+                parameters={"data_type": str(type(data))},
             )
 
         # prepare query params
@@ -570,13 +644,18 @@ class DispatcherAPI:
                 **extra_kwargs,
             )
         except Exception as e:
-            raise DispatcherApiException(ref="Unable to contact dispatcher", internal=str(e)) from e
+            raise DispatcherApiException(
+                ref="Unable to contact dispatcher",
+                internal=ExceptionCodeEnum.DPAsyncSubmitBinaryUnableToContactDP,
+                parameters={"inner_exception": str(e)},
+            ) from e
 
         if rsp.status_code != HTTP_200_OK:
             raise DispatcherApiException(
                 response=rsp,
                 ref="Unable to submit file",
-                internal=rsp.text,
+                internal=ExceptionCodeEnum.DPAsyncSubmitBinaryBadStatusCode,
+                parameters={"status_code": rsp.status_code, "response_text": rsp.text},
             )
 
         try:
@@ -584,7 +663,7 @@ class DispatcherAPI:
         except KeyError as e:
             raise DispatcherApiException(
                 ref="Unable to submit file",
-                internal="Error submitting file to DISPATCHER service",
+                internal=ExceptionCodeEnum.DPAsyncSubmitBinaryInvalidResponseFormat,
             ) from e
 
         return azm.Datastream(**bin_info)
@@ -604,15 +683,19 @@ class DispatcherAPI:
             pass
         elif isinstance(data, io.IOBase):
             if isinstance(data, io.TextIOBase):
-                raise ValueError(
-                    f"Unexpected string buffer when submitting binary {type(data)}"
-                    + ", valid types are binary io.IOBase classes and bytes"
+                raise AzulValueError(
+                    ref=f"Unexpected string buffer when submitting binary {type(data)}"
+                    + ", valid types are binary io.IOBase classes and bytes",
+                    internal=ExceptionCodeEnum.DPSubmitBinaryInvalidSubmissionStringBuffer,
+                    parameters={"data_type": str(type(data))},
                 )
             data.seek(0)
         else:
-            raise ValueError(
-                f"Unexpected type when submitting binary {type(data)}"
-                + ", valid types are binary io.IOBase classes and bytes"
+            raise AzulValueError(
+                ref=f"Unexpected type when submitting binary {type(data)}"
+                + ", valid types are binary io.IOBase classes and bytes",
+                internal=ExceptionCodeEnum.DPSubmitBinaryInvalidSubmissionContentStream,
+                parameters={"data_type": str(type(data))},
             )
 
         # prepare query params
@@ -634,19 +717,24 @@ class DispatcherAPI:
                 **extra_kwargs,
             )
         except Exception as e:
-            raise DispatcherApiException(ref="Unable to contact dispatcher", internal=str(e)) from e
+            raise DispatcherApiException(
+                ref="Unable to contact dispatcher",
+                internal=ExceptionCodeEnum.DPSubmitBinaryUnableToContactDP,
+                parameters={"inner_exception": str(e)},
+            ) from e
         if rsp.status_code != HTTP_200_OK:
             raise DispatcherApiException(
                 response=rsp,
                 ref="Unable to submit file",
-                internal=rsp.text,
+                internal=ExceptionCodeEnum.DPSubmitBinaryBadStatusCode,
+                parameters={"status_code": rsp.status_code, "response_text": rsp.text},
             )
         try:
             bin_info = rsp.json()["data"]
         except KeyError as e:
             raise DispatcherApiException(
                 ref="Unable to submit file",
-                internal="Error submitting file to DISPATCHER service",
+                internal=ExceptionCodeEnum.DPSubmitBinaryInvalidResponseFormat,
             ) from e
 
         return azm.Datastream(**bin_info)
@@ -661,7 +749,8 @@ class DispatcherAPI:
             raise DispatcherApiException(
                 response=rsp,
                 ref="Unable to copy file",
-                internal=rsp.text,
+                internal=ExceptionCodeEnum.DPCopyBinaryBadStatusCode,
+                parameters={"status_code": rsp.status_code, "response_text": rsp.text},
             )
 
     def delete_binary(
@@ -687,4 +776,9 @@ class DispatcherAPI:
             return False, False
         else:
             msg = f"unknown dispatcher response {rsp.status_code}: {rsp.content}"
-            raise DispatcherApiException(response=rsp, ref=msg, internal=msg)
+            raise DispatcherApiException(
+                response=rsp,
+                ref=msg,
+                internal=ExceptionCodeEnum.DPDeleteBinaryBadStatusCode,
+                parameters={"status_code": rsp.status_code, "response_text": msg},
+            )

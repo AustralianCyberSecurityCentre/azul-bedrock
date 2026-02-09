@@ -15,7 +15,7 @@ from azul_bedrock import mock as md
 from azul_bedrock import models_api as azapi
 from azul_bedrock import models_network as azm
 from azul_bedrock.dispatcher import DispatcherAPI
-from azul_bedrock.exceptions import DispatcherApiException, NetworkDataException
+from azul_bedrock.exceptions_bedrock import AzulValueError, DispatcherApiException, NetworkDataException
 from azul_bedrock.mock import streams
 
 an_event = azm.BinaryEvent(
@@ -676,12 +676,16 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
 
         # Bad data type
         self.editor.set_response(200, {"data": finfo.model_dump()})
-        self.assertRaises(ValueError, self.dp.submit_binary, "source", azm.DataLabel.TEST, {"hello": "Goodbye"})
+        self.assertRaises(AzulValueError, self.dp.submit_binary, "source", azm.DataLabel.TEST, {"hello": "Goodbye"})
 
         # Bad string like buffer
         self.editor.set_response(200, {"data": finfo.model_dump()})
         self.assertRaises(
-            ValueError, self.dp.submit_binary, "source", azm.DataLabel.TEST, io.TextIOWrapper(io.BytesIO(b"hello2"))
+            AzulValueError,
+            self.dp.submit_binary,
+            "source",
+            azm.DataLabel.TEST,
+            io.TextIOWrapper(io.BytesIO(b"hello2")),
         )
 
         # check skip identify & expected sha256
@@ -777,13 +781,23 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
 
         # Bad data type
         self.editor.set_response(200, {"data": finfo.model_dump()})
-        with self.assertRaises(ValueError):
+        with self.assertRaises(AzulValueError) as ave:
             await self.dp.async_submit_binary("source", azm.DataLabel.TEST, {"hello": "Goodbye"})  # type: ignore
+        print(ave.exception.external)
+        self.assertEqual(
+            ave.exception.external,
+            "Unexpected type when submitting binary <class 'dict'>, valid types are binary io.IOBase, UploadFile, AsyncIterable classes and bytes",
+        )
 
         # Bad string like buffer
         self.editor.set_response(200, {"data": finfo.model_dump()})
-        with self.assertRaises(ValueError):
+        with self.assertRaises(AzulValueError) as ave2:
             await self.dp.async_submit_binary("source", azm.DataLabel.TEST, io.TextIOWrapper(io.BytesIO(b"hello2")))  # type: ignore
+        print(ave2.exception.external)
+        self.assertEqual(
+            ave2.exception.external,
+            "Unexpected string buffer when submitting binary <class '_io.TextIOWrapper'>, valid types are binary io.IOBase, UploadFile, AsyncIterable classes and bytes",
+        )
 
     def test_delete_binary(self):
         """Mandatory."""

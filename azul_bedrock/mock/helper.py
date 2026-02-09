@@ -4,7 +4,7 @@ import json
 
 import httpx
 
-from .state import LastReq
+from azul_bedrock.mock.state import LastReq
 
 
 class Editor:

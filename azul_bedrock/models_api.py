@@ -1,7 +1,7 @@
 """Models representing dispatcher api requests and responses."""
 
-from . import models_network as azm
-from .models_network import BaseModelStrict
+from azul_bedrock import models_network as azm
+from azul_bedrock.models_network import BaseModelStrict
 
 
 class GetEventsInfo(BaseModelStrict):

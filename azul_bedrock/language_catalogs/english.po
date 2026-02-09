@@ -1,0 +1,188 @@
+# Translations template for Azul.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the Azul project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Azul 10\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-02-09 04:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+msgid "DPGetEventsBadModelType"
+msgstr "Invalid model_type '{model_type}' to get events for"
+
+msgid "DPGetEventFailStatusCode"
+msgstr "Unable to get events from dispatcher with error: {response_text}"
+
+msgid "DPGetEventNotMultipartForm"
+msgstr "Non form data provided by dispatcher with error: {response_text}"
+
+msgid "DPGetEventNotBoundaryFormData"
+msgstr "No form data boundary exists with error: {response_text}"
+
+msgid "DPGetEventsMissingResponseInfo"
+msgstr ""
+"No info filepart was found in the dispatcher response, can't process "
+"event!"
+
+msgid "DPGetEventsFilepartMissingFromResponse"
+msgstr ""
+"No events filepart from dispatcher response (bad loader?): \n"
+"response_info={response_info}"
+
+msgid "DPGetEventBadResponseWithContent"
+msgstr "Invalid response content: {inner_exception}"
+
+msgid "DPSubmitEventsInvalidModel"
+msgstr "Invalid model for submit_events: {model}"
+
+msgid "DPSubmitEventMessageTooLarge"
+msgstr ""
+"An event to submit to dispatcher was too large: {length_of_event}b > "
+"{max_message_size}b"
+
+msgid "DPSubmitEventsUnableToContactDP"
+msgstr "Unable to contact dispatcher with error {inner_exception}"
+
+msgid "DPSubmitEventsUnableToSubmitEvents"
+msgstr "Unable to submit event to dispatcher with error: {response_text}"
+
+msgid "DPSubmitEventsSubmittedEventsWereInvalid"
+msgstr "Submitted events were invalid with error: {response_text}"
+
+msgid "DPHasBinaryUnabletoRequestFile"
+msgstr "Unable to request file."
+
+msgid "DPHasBinaryNotFound"
+msgstr "Binary content not found."
+
+msgid "DPHasBinaryBadStatusCode"
+msgstr ""
+"Unable to request file, bad dispatcher status code {status_code}, "
+"response: {response_text}"
+
+msgid "DPGetBinaryOffsetTooLarge"
+msgstr "Unable to request file, is offset too large?"
+
+msgid "DPGetBinaryNotFound"
+msgstr "Binary content not found."
+
+msgid "DPGetBinaryBadStatusCode"
+msgstr ""
+"Unable to request file with bad status code {status_code}, content: "
+"{response_text}"
+
+msgid "DPGetBinaryAsyncOffsetTooLarge"
+msgstr "Unable to request file, is offset too large?"
+
+msgid "DPGetBinaryAsyncNotFound"
+msgstr "Binary content not found."
+
+msgid "DPGetBinaryAsyncBadStatusCode"
+msgstr ""
+"Unable to request file with status_code {status_code} and error "
+"{response_text}"
+
+msgid "DPAsyncGetBinaryUnexpectedError"
+msgstr "Unexpected error when streaming binary, error: {inner_exception}"
+
+msgid "ConvertingContentToAsyncIterable"
+msgstr ""
+"Bad type for _yield_data, Unexpected type when submitting binary "
+"{data_type}."
+
+msgid "InvalidAsyncSubmissionStringBuffer"
+msgstr ""
+"Unexpected string buffer when submitting binary {data_type}, valid types "
+"are binary io.IOBase, UploadFile, AsyncIterable classes and bytes"
+
+msgid " InvalidAsyncSubmissionContentStream"
+msgstr ""
+"Unexpected type when submitting binary {data_type}, valid types are "
+"binary io.IOBase, UploadFile, AsyncIterable classes and bytes"
+
+msgid "DPAsyncSubmitBinaryUnableToContactDP"
+msgstr "Unable to contact dispatcher."
+
+msgid "DPAsyncSubmitBinaryBadStatusCode"
+msgstr ""
+"Unable to submit file to dispatcher with status_code {status_code} and "
+"error: {response_text}"
+
+msgid "DPAsyncSubmitBinaryInvalidResponseFormat"
+msgstr "Error submitting file to dispatcher."
+
+msgid "DPSubmitBinaryInvalidSubmissionStringBuffer"
+msgstr ""
+"Unexpected string buffer when submitting binary {data_type}, valid types "
+"are binary io.IOBase classes and bytes"
+
+msgid "DPSubmitBinaryInvalidSubmissionContentStream"
+msgstr ""
+"Unexpected type when submitting binary {data_type}, valid types are "
+"binary io.IOBase classes and bytes"
+
+msgid "DPSubmitBinaryUnableToContactDP"
+msgstr "Unable to contact dispatcher with error: {inner_exception}"
+
+msgid "DPSubmitBinaryBadStatusCode"
+msgstr ""
+"Unable to submit file to dispatcher with status code {status_code} and "
+"error {response_text}"
+
+msgid "DPSubmitBinaryInvalidResponseFormat"
+msgstr "Error submitting file to dispatcher."
+
+msgid "DPCopyBinaryBadStatusCode"
+msgstr ""
+"Unable to copy file in dispatcher with status code {status_code} and "
+"error {response_text}"
+
+msgid "DPDeleteBinaryBadStatusCode"
+msgstr ""
+"Unable to delete binary from dispatcher with status code {status_code} "
+"and error {response_text}"
+
+msgid "IdentifyDosIdentNotDos"
+msgstr "Error occurred when attempting to identify the type of a PE file."
+
+msgid "NoFiletypeIdentificationHappened"
+msgstr ""
+"Assemblyline type found was '{file_format}' doesn't have a mapping and "
+"should"
+
+msgid "FeatureValueEncodingFailure"
+msgstr "Cannot encode value {value} with type {value_type}"
+
+msgid "FeatureValueDecodingFailure"
+msgstr "Could not decode type {value_type} for value {value}"
+
+msgid "ConvertingStreamToInputEntityFailure"
+msgstr ""
+"Only content fileinfo can become entity, no content label found on "
+"current entity."
+
+msgid "ConvertStringToDurationIncorrectNumberOfValuesAfterSplit"
+msgstr ""
+"provided input '{input_duration}' split into '{length_split_string}' "
+"strings it must split into 2, the split was actually {split_string}"
+
+msgid "ConvertStringToDurationInvalidDuration"
+msgstr ""
+"Invalid duration for expire_events_after duration='{duration}' duration "
+"should be an integer value."
+
+msgid "ConvertStringToDurationInvalidUnitProvided"
+msgstr ""
+"Invalid unit for expire_events_after unt={unit} valid values are "
+"valid_units={valid_units}"
+
