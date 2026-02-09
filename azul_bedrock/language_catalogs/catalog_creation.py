@@ -14,10 +14,8 @@ from babel.messages.pofile import read_po, write_po
 from azul_bedrock.exception_enums import ExceptionCodeEnum
 from azul_bedrock.settings import LanguageCatalogsEnum
 
-"""To add a new translation update _get_all_unchecked_catalogs and create a function that creates a catalog similar
-to the function _get_english_catalog, also add the translation to LanguageCatalogsEnum."""
-
-############ Implementation for translations.
+# To add a new translation update _get_all_unchecked_catalogs and create a function that creates a catalog similar
+# to the function _get_english_catalog, also add the translation to LanguageCatalogsEnum.
 
 
 def _create_catalog(translation: dict[str, str]) -> BabCatalog:
@@ -129,9 +127,6 @@ def _get_all_unchecked_catalogs() -> dict[LanguageCatalogsEnum, BabCatalog]:
 def _get_catalog_directory() -> pathlib.Path:
     """Get the catalog directory (should be where this python file is)."""
     return pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
-
-
-############ Public interface
 
 
 @cache
