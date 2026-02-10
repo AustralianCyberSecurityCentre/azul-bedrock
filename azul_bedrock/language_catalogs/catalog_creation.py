@@ -92,6 +92,9 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.ConvertStringToDurationIncorrectNumberOfValuesAfterSplit.value: "provided input '{input_duration}' split into '{length_split_string}' strings it must split into 2, the split was actually {split_string}",
         ExceptionCodeEnum.ConvertStringToDurationInvalidDuration.value: "Invalid duration for expire_events_after duration='{duration}' duration should be an integer value.",
         ExceptionCodeEnum.ConvertStringToDurationInvalidUnitProvided.value: "Invalid unit for expire_events_after unt={unit} valid values are valid_units={valid_units}",
+        ### Runner
+        # test_template
+        ExceptionCodeEnum.TestRunnerExecutionEventTooLarge.value: "event produced by plugin was too large: {length_of_event}b > {max_message_size}b",
     }
     return _create_catalog(translation_values)
 

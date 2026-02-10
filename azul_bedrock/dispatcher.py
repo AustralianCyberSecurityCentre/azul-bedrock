@@ -438,7 +438,11 @@ class DispatcherAPI:
             pass
         elif start_pos is not None or end_pos is not None:
             # If the start or end is not None a range can be created.
-            req_header = {"range": f"bytes={start_pos or ''}-{end_pos or ''}"}
+            if start_pos is None:
+                start_pos = ""
+            if end_pos is None:
+                end_pos = ""
+            req_header = {"range": f"bytes={start_pos}-{end_pos}"}
 
         try:
             rsp = self._client.get(
@@ -503,7 +507,11 @@ class DispatcherAPI:
             pass
         elif start_pos is not None or end_pos is not None:
             # If the start or end is not None a range can be created.
-            req_header = {"range": f"bytes={start_pos or ''}-{end_pos or ''}"}
+            if start_pos is None:
+                start_pos = ""
+            if end_pos is None:
+                end_pos = ""
+            req_header = {"range": f"bytes={start_pos}-{end_pos}"}
 
         req = self._async_client.build_request(
             "GET", f"{self._data_url}/api/v3/stream/{source}/{label}/{sha256.lower()}", headers=req_header
