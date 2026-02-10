@@ -68,3 +68,7 @@ class ExceptionCodeEnum(StrEnum):
     )
     ConvertStringToDurationInvalidDuration = "ConvertStringToDurationInvalidDuration"
     ConvertStringToDurationInvalidUnitProvided = "ConvertStringToDurationInvalidUnitProvided"
+
+    ### Runner
+    # test_template
+    TestRunnerExecutionEventTooLarge = "TestRunnerExecutionEventTooLarge"
