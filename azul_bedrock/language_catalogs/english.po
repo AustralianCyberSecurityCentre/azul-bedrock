@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Azul 10\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-02-10 00:43+0000\n"
+"POT-Creation-Date: 2026-02-13 03:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -190,4 +190,449 @@ msgid "TestRunnerExecutionEventTooLarge"
 msgstr ""
 "event produced by plugin was too large: {length_of_event}b > "
 "{max_message_size}b"
+
+msgid "MetastoreContextBadSecurity"
+msgstr "security was not valid ({security})"
+
+msgid "MetastoreContextInsufficientPermissionsForWrite"
+msgstr "Could not initialise metastore templates"
+
+msgid "MetastoreEntryBadInputParameters"
+msgstr ""
+"When using --no-input, both METASTORE_OPENSEARCH_ADMIN_USERNAME and "
+"METASTORE_OPENSEARCH_ADMIN_PASSWORD must be set."
+
+msgid "MetastoreIngestorBadStatusDocument"
+msgstr ""
+"bad status {status_code}\n"
+"{content_text}"
+
+msgid "MetastoreIngestorGetDataNetworkError"
+msgstr "connection error"
+
+msgid "MetastoreSettingsPartitionNotSet"
+msgstr ""
+"metastore_partition must be set. Recommended to set to dev01, qa01, "
+"prod01, etc."
+
+msgid "MetastoreSettingsFieldsAreMissing"
+msgstr "source={source}: missing fields= {fields_missing}"
+
+msgid "MetastoreSettingsExtraFieldsAreMissing"
+msgstr "source={source}: has extra fields {fields_extra}"
+
+msgid "MetastoreFeatureEnrichmentFailed"
+msgstr ""
+"failed to parse and enrich feature: {feature} with error message: "
+"{inner_exception}"
+
+msgid "MetastoreFileFormatTooLargeForUnzip"
+msgstr "Can't extract file larger than {max_bundled_pre_extract_size}"
+
+msgid "MetastoreFileFormatTooManyFilesToExtract"
+msgstr ""
+"too many files to extract archive "
+"({number_of_files}/{max_number_of_files})"
+
+msgid "MetastoreFileFormatFileTooLargeToExtract"
+msgstr ""
+"too many bytes in extracted submission "
+"({total_bytes}/{max_extraction_size})"
+
+msgid "MetastoreFileFormatFilePathTooLong"
+msgstr ""
+"file path too long ({path_len}/{max_bundled_filename_length}): "
+"{first_part_of_path}..."
+
+msgid "MetastoreFileFormatBadPathElevation"
+msgstr "file name has bad character sequence (/../): {file_path}"
+
+msgid "MetastoreFileFormatNotAZipFile"
+msgstr "not a zip file"
+
+msgid "MetastoreFileFormatUnknownException"
+msgstr "Unexpected error of type {error_type}: {error_text}"
+
+msgid "MetastoreFileFormatZipFileRequiresPassword"
+msgstr "zip requires password"
+
+msgid "MetastoreFileFormatZipFileBadPasswordProvided"
+msgstr "bad zip password"
+
+msgid "MetastoreFileFormatNoFilesExtractedFromZip"
+msgstr "no files were extracted from zip"
+
+msgid "MetastoreFileFormatFileTooLargeForUnmalpz"
+msgstr "Can't unmalpz file larger than {file_size}"
+
+msgid "MetastoreMemcacheTTLCacheAlreadyCreated"
+msgstr "TTL cache already exists {cache_id}"
+
+msgid "MetastoreMemcacheLRUCacheAlreadyCreated"
+msgstr "LRU cache already exists {cache_id}"
+
+msgid "MetastoreOpensearchCantGetUserAccountInner"
+msgstr "status_code={status_code}, with response={response_text}"
+
+msgid "MetastoreOpensearchCantGetUserAccount"
+msgstr "could not get user account: {inner_exception}"
+
+msgid "MetastoreSearchDataBadCredentials"
+msgstr "unrecognised credential format: {credential_format}"
+
+msgid "MetastoreSearchDataMissingOrBadParameters"
+msgstr "missing/bad parameter: {inner_exception}"
+
+msgid "MetastoreSearchQueryMissingToken"
+msgstr "Token missing start/end"
+
+msgid "MetastoreSearchQueryInvalidUnescapeSequence"
+msgstr "Invalid escape character: {character}"
+
+msgid "MetastoreSearchQueryUnterminatedEscapeAtEnd"
+msgstr "Unterminated escape at end of string"
+
+msgid "MetastoreSearchQueryNumberOfInputTokens"
+msgstr "Input tokens don't match expected length"
+
+msgid "MetastoreSearchQueryNumberExpressionNotInteger"
+msgstr "Internal error: RawToken of numeric field is not an integer"
+
+msgid "MetastoreSearchQueryStringFieldNotString"
+msgstr "Internal error: RawToken of string field is not an string"
+
+msgid "MetastoreSearchQueryNumberExpressionUnexpectedTokenCount"
+msgstr "Unexpected count of tokens when parsing number expression"
+
+msgid "MetastoreSearchQueryInvalidType"
+msgstr "Invalid types passed to range expression"
+
+msgid "MetastoreSearchQueryMissingContext"
+msgstr "Dynamic evaluation needed for tag searches."
+
+msgid "MetastoreSearchQueryTagSearchNotOnStringValue"
+msgstr "Tag search must be made on a string value."
+
+msgid "MetastoreSearchQueryTagSearchNotWithEquals"
+msgstr "Tag search can only be a literal search."
+
+msgid "MetastoreSearchQueryTagDoesntExist"
+msgstr "tag does not exist in opensearch"
+
+msgid "MetastoreFeatureValueTagNotFound"
+msgstr "feature value tag not found"
+
+msgid "MetastoreSearchQueryUnreachableDuringConversion"
+msgstr "Hit unreachable during conversion of field"
+
+msgid "MetastoreSearchQuerySearchForImplicitShouldBeLiteral"
+msgstr "Search for an implicit field should be a literal, not a range"
+
+msgid "MetastoreSearchQueryAutocompleteParentNotATag"
+msgstr "Parent of a node is not a Tag? ({parents})"
+
+msgid "MetastoreSearchQueryInvalidTermKey"
+msgstr "Failed to parse term: {inner_exception}"
+
+msgid "MetastoreAiStringFilterFailure"
+msgstr "AI filter failed with error:  {text_content}"
+
+msgid "MetastoreInvalidTLSHFormat"
+msgstr "Invalid TLSH version in: '{tlsh_hash}'"
+
+msgid "MetastoreInvalidTLSHLength"
+msgstr "Invalid TLSH length in: '{tlsh_str}'"
+
+msgid "MetastoreOpensearchAuthFailure"
+msgstr ""
+"Failed to get templates from Opensearch for index: {self.alias}, with "
+"error: {e.error}"
+
+msgid "MetastoreOpensearchFailedToCreateIndex"
+msgstr "Failure creating index '{index}'"
+
+msgid "MetastoreOpensearchTemplateOldVersion"
+msgstr ""
+"{index} template ({existing_template_version}) does not match metastore "
+"({new_version}). Consider using a new metastore partition and reindexing "
+"data."
+
+msgid "MetastoreOpensearchKnnMisconfigured"
+msgstr "kNN filters only supported for one search term"
+
+msgid "MetastoreOnlyAllowTopLevelBoolOrKnn"
+msgstr "Can only have bool in top level query (or within kNN query filter)"
+
+msgid "MetastoreBadSecurityConversionExclude"
+msgstr ""
+"Bad security provided in security_exclude {security_exclude}. Exception: "
+"{inner_exception}"
+
+msgid "MetastoreBadSecurityConversionInclude"
+msgstr ""
+"Bad security provided in security_include {security_include}. Exception: "
+"{inner_exception}"
+
+msgid "MetastoreKnnTooManySearchTerms"
+msgstr "kNN filters only supported for one search term"
+
+msgid "MetastoreUnknownDocType"
+msgstr "unknown doc type to handle error in {doc_type}"
+
+msgid "MetastoreUnknownAnnotation"
+msgstr "unknown annotation {event_type}"
+
+msgid "MetastoreAnnotationBadCharacterInTag"
+msgstr "bad characters in tag: {event_tag}"
+
+msgid "MetastoreAnnotationTagTooLong"
+msgstr "tag too long: {event_tag}"
+
+msgid "MetastoreAnnotationCommentTooLong"
+msgstr "comment too long: {event_comment}"
+
+msgid "MetastoreEncoderInvalidTimestamp"
+msgstr "invalid timestamp {timestamp}; is not an absolute timestamp"
+
+msgid "MetastoreInvalidPartitionFormatUnits"
+msgstr ""
+"unknown value index_time_unit={index_time_unit}, should be one of "
+"{available_options}"
+
+msgid "MetastoreEncodeErrorMissingTrackingInfo"
+msgstr "event is missing tracking information '{item}': {event}"
+
+msgid "MetastoreEncodingMissingSource"
+msgstr "Source does not exist: {source_id}"
+
+msgid "MetastoreEncodingInvalidSSDeep"
+msgstr "ssdeep could not be parsed {ssdeep}"
+
+msgid "MetastorePreProcessTooManyStreams"
+msgstr "too many streams: {len_streams} > {stream_limit}"
+
+msgid "MetastorePreProcessTooManyFeatures"
+msgstr "too many features: {len_features} > {feature_limit}"
+
+msgid "MetastoreEncoderInvalidPluginConfig"
+msgstr "plugin config value for '{config_key}' is not json string: {config_value}"
+
+msgid "MetastoreFailedToAgeoffDocs"
+msgstr ""
+"failed to process ageoff on alias={alias} with "
+"expire_events_ms={expire_events_ms} response:\n"
+"{resp}"
+
+msgid "MetastoreCacheTooManyIds"
+msgstr "max counts in one call exceeded"
+
+msgid "MetastoreCannotCreatePurgeFolder"
+msgstr "to purge data, 'purge_sha256_folder' config option must be set"
+
+msgid "MetastoreMetaDataDeletionFailure"
+msgstr "{ret}"
+
+msgid "MetastoreNothingToPurge"
+msgstr "nothing to delete"
+
+msgid "MetastoreBadMappingToOpensearch"
+msgstr "Bad mapping object: {value}"
+
+msgid "MetastoreInvalidAfterProvided"
+msgstr "Invalid after provided '{after}', after must be valid JSON!"
+
+msgid "MetastoreFailedToParseTermQuery"
+msgstr "Failed to parse term: {inner_exception}"
+
+msgid "MetastoreSha256NotProvidedForFindFamily"
+msgstr ""
+"Sha256 to search for parent or child binaries for was not set and should "
+"have been!"
+
+msgid "MetastoreBinaryFindTooManyBinariesRequested"
+msgstr ""
+"too many binaries have been requested max is "
+"{requested_binaries}/{max_allowed_binaries}"
+
+msgid "MetastoreBinaryFindFaildToParseSearchTerm"
+msgstr "Failed to parse term '{term}': {inner_exception}"
+
+msgid "MetastoreSha256NotProvidedForFindingStreamRefs"
+msgstr "Sha256 was not provided and is required."
+
+msgid "MetastoreLibFuzzyFailedToInitalise"
+msgstr "could not find libfuzzy-dev; check that it is installed."
+
+msgid "MetastoreReadSimilarSSDeepBadFuzzyHash"
+msgstr "ssdeep fuzzy hash could not be parsed {fuzzy_hash}"
+
+msgid "MetastoreDispatcherRejectedEvents"
+msgstr "Dispatcher rejected the submitted events, with response {response}"
+
+msgid "MetastoreSubmissionsCantCreateInsertionEvents"
+msgstr "Unable to propagate insert events to metastore"
+
+msgid "MetastoreNoSourcesForBinarySubmission"
+msgstr "Attempting to upload a binary to no sources!"
+
+msgid "MetastoreBadAugmentedStreamLabel"
+msgstr "augmented stream label cannot be 'content'"
+
+msgid "MetastoreInvalidSourceForBinarySubmission"
+msgstr "Source does not exist: {source}"
+
+msgid "MetastoreBadSourceReferenceDefinition"
+msgstr "{inner_exception}"
+
+msgid "MetastoreUnableToSubmitBinaryEventImmediately"
+msgstr "Unable to submit binary event to metastore immediately, {inner_exception}"
+
+msgid "MetastoreBinarySubmitDispatcherRejectedEvent"
+msgstr "Dispatcher rejected the submitted events, with response {response}"
+
+msgid "MetastoreBadBinarySubmissionBadSecurityString"
+msgstr "Must provide valid security string."
+
+msgid "MetastoreBadBinarySubmissionUserSecurity"
+msgstr ""
+"security being applied by the user is greater than the current users "
+"security. because user: {inner_exception}"
+
+msgid "MetastoreBadBinarySubmissionSourceOrParent"
+msgstr "Must provide source or parent information."
+
+msgid "MetastoreBadBinarySubmissionParentAndSource"
+msgstr "cannot insert binary to source and parent at same time"
+
+msgid "MetastoreBadBinarySubmissionNoSha256Provided"
+msgstr "Must supply binary or sha256"
+
+msgid "MetastoreBadBinarySubmissionParentNotFound"
+msgstr "Parent Id (sha256) must already exist"
+
+msgid "MetastoreUnableToExtractProvidedArchive"
+msgstr "Unable to extract provided archive with error {inner_exception}"
+
+msgid "MetastoreDatalessSubmissionBinaryDoesNotExist"
+msgstr ""
+"Cannot find existing metadata for entity {sha256}. You will need to "
+"supply Azul with the original binary."
+
+msgid "MetastoreUnableToExtractAnyFiles"
+msgstr ""
+"Cannot find any files to extract. This may be an unsupported filetype or "
+"bad password."
+
+msgid "MetastoreCheckedBinaryNotFound"
+msgstr "Binary {sha256} not found in Azul."
+
+msgid "MetastoreBinaryStreamNotFound"
+msgstr "The stream for the binary {sha256} was not found in Azul."
+
+msgid "MetastoreInvalidSha256Provided"
+msgstr ""
+"One of the provided sha256s '{sha256}' is invalid and the request cannot "
+"be processed."
+
+msgid "MetastoreBulkUnableToDownloadAnyBinaries"
+msgstr "No binaries can be downloaded."
+
+msgid "MetastoreNoBinariesDownloaded"
+msgstr "No items in bulk zip file."
+
+msgid "MetastoreDownloadingBadStreamType"
+msgstr "Stream of file tpe '{file_format}' is not allowed for direct download"
+
+msgid "MetastoreInvalidStringsRegexProvided"
+msgstr "Invalid regex pattern '{regex}' provided"
+
+msgid "MetastoreInvalidHexPatternProvided"
+msgstr "Invalid hex filter provided '{filter}'"
+
+msgid "MetastoreCannotParseTimestampToUTC"
+msgstr "a bad timestamp was provided {inner_exception}"
+
+msgid "MetastoreInvalidJson"
+msgstr "Bad json for the field {field_name} was provided, value was {field_value}"
+
+msgid "MetastoreAltStreamsLabelsDoesNotMatch"
+msgstr ""
+"stream labels ({stream_label_count}) must be supplied for all stream data"
+" ({stream_data_count})"
+
+msgid "MetastoreFindBinaryInvalidSearch"
+msgstr "{inner_exception}"
+
+msgid "MetastorePotentiallyInvalidQueryOption"
+msgstr ""
+"The following term query key:{opt_s} could not be found: "
+"[{invalid_keys_string}]. Either the key:{opt_s} are related to results "
+"and temporarily missing or the query is invalid."
+
+msgid "MetastoreIncludeCousinsInvalidEnum"
+msgstr "Provided value for include_cousins={include_cousins} is invalid."
+
+msgid "MetastoreTagBinaryBadSecurityString"
+msgstr "Must provide valid security string."
+
+msgid "MetastoreTagBinaryInvalidSecurity"
+msgstr ""
+"security being applied by the user is greater than the current users "
+"security. because user: {inner_exception}"
+
+msgid "MetastoreInvalidAnnotationForCreate"
+msgstr "{inner_exception}"
+
+msgid "MetastoreCantDeleteTagFromBinary"
+msgstr "Cannot delete tag {tag} from the sha256 {sha256}, because it is not found."
+
+msgid "MetastoreInvalidDeleteTag"
+msgstr "Cannot delete tag {tag} because it doesn't exist."
+
+msgid "MetastoreNoFeatureValuesFound"
+msgstr "No feature values found for feature '{feature}'"
+
+msgid "MetastoreFeaturesInvalidPivotFeatures"
+msgstr ""
+"No feature values provided, feature values must be a valid list of tuples"
+" containing feature_name, feature_value"
+
+msgid "MetastoreNoPluginsInAzul"
+msgstr "There are no plugins registered in Azul."
+
+msgid "MetastoreNoPluginStatusesInAzul"
+msgstr "There are no plugin statuses in Azul."
+
+msgid "MetastorePluginNotInAzul"
+msgstr "The requested plugin version does was not found."
+
+msgid "MetastoreUserNotAllowedToPurge"
+msgstr "user '{username} not superuser"
+
+msgid "MetastoreInvalidTimestampForPurge"
+msgstr "The timestamp provided '{timestamp}' has an invalid format."
+
+msgid "MetastoreInvalidPurgeExceptionApi"
+msgstr "{inner_exception}"
+
+msgid "MetastoreUserUnauthorized"
+msgstr "{inner_exception}"
+
+msgid "MetastoreSetSecurityHeaderUnexpected"
+msgstr "Logic error - should be setting response and/or exception!"
+
+msgid "MetastoreUserInfoNotAvailable"
+msgstr "user_info is not available on request.state"
+
+msgid "MetastoreNoSourcesInAzul"
+msgstr "No sources can be found in Azul."
+
+msgid "MetastoreSourceNotFound"
+msgstr "The provided source cannot be found in Azul."
+
+msgid "MetastoreSourceNoReferences"
+msgstr "No references can be found for the provided source."
+
+msgid "MetastoreSourceSubmissionNoInformationFound"
+msgstr "No source information could be found for the given request."
 
