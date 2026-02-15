@@ -251,7 +251,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreNoPluginsInAzul.value: "There are no plugins registered in Azul.",
         ExceptionCodeEnum.MetastoreNoPluginStatusesInAzul.value: "There are no plugin statuses in Azul.",
         ExceptionCodeEnum.MetastorePluginNotInAzul.value: "The requested plugin version does was not found.",
-        ExceptionCodeEnum.MetastoreUserNotAllowedToPurge.value: "user '{username} not superuser",
+        ExceptionCodeEnum.MetastoreUserNotAllowedToPurge.value: "user '{username}' not superuser",
         ExceptionCodeEnum.MetastoreInvalidTimestampForPurge.value: "The timestamp provided '{timestamp}' has an invalid format.",
         ExceptionCodeEnum.MetastoreInvalidPurgeExceptionApi.value: "{inner_exception}",
         # quick
