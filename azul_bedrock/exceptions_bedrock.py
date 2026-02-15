@@ -21,7 +21,7 @@ PARAMETER_TYPE = dict[str, str | int | float | bool] | None
 class BaseAzulException(Exception):
     """Base Exception of Azul."""
 
-    def __init__(self, ref: str, internal: ExceptionCodeEnum, parameters: PARAMETER_TYPE = None):
+    def __init__(self, *, internal: ExceptionCodeEnum, ref: str = "", parameters: PARAMETER_TYPE = None):
         """Creation of exception."""
         self.ref = ref
         self.internal = internal
@@ -33,6 +33,17 @@ class BaseAzulException(Exception):
     def _external(internal: ExceptionCodeEnum, parameters: PARAMETER_TYPE) -> str:
         """Get the value of the message meant to be provided to a user."""
         return get_message_from_error_code(internal, parameters, settings.language)
+
+    def __str__(self) -> str:
+        """String."""
+        if self.external:
+            return self.external
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        """Repr."""
+        class_name = self.__class__.__name__
+        return f"{class_name}(ref={self.ref!r}, internal={self.internal.value!r}, external={self.external!r}, )"
 
 
 class NetworkDataException(BaseAzulException):
@@ -86,13 +97,17 @@ class ApiException(HTTPException):
         external_override: str | None = None,
     ) -> None:
         """Init."""
+        if parameters:
+            parameters = parameters.copy()
+        else:
+            parameters = {}
+        parameters["status_code"] = status_code
         detail = BaseError(
             id=str(uuid.uuid4()),
             ref=ref,
             parameters=parameters,
             external_override=external_override,
             internal=internal,
-            # meta=meta,
         ).model_dump(exclude_unset=True)
         super().__init__(status_code=status_code, detail=detail, headers=None)
 
@@ -108,6 +123,13 @@ class ApiException(HTTPException):
             f"external={self.detail['external']!r}"
             f")"
         )
+
+    def __str__(self) -> str:
+        """String."""
+        detail = self.detail.get("external")
+        if detail:
+            return detail
+        return self.__repr__()
 
 
 class DispatcherApiException(ApiException):
@@ -125,6 +147,12 @@ class DispatcherApiException(ApiException):
         status_code = HTTP_500_INTERNAL_SERVER_ERROR
         if self.response is not None:
             status_code = self.response.status_code
+
+        if parameters:
+            parameters = parameters.copy()
+        else:
+            parameters = {}
+        parameters["status_code"] = status_code
 
         external_override = ""
         # Attempt to set external to the recommended value from dispatcher, only do with synchronous requests.
@@ -173,7 +201,7 @@ class AzulDispatcherRawResponseException(BaseAzulException):
         self,
         *,
         content: bytes,
-        ref: str,
+        ref: str = "",
         internal: ExceptionCodeEnum,
         parameters: PARAMETER_TYPE = None,
     ) -> None:
