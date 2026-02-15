@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Azul 10\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-02-13 03:26+0000\n"
+"POT-Creation-Date: 2026-02-15 22:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -635,4 +635,97 @@ msgstr "No references can be found for the provided source."
 
 msgid "MetastoreSourceSubmissionNoInformationFound"
 msgstr "No source information could be found for the given request."
+
+msgid "SecurityMissingOrigin"
+msgstr "has releasability but does not have origin={origin}"
+
+msgid "SecurityClassificationDoesntSupportReleasability"
+msgstr ""
+"Classifications '{exclusive_string}' have a releasability(s) "
+"{inclusive_string} but none of the classifications support releasability."
+
+msgid "SecurityInvalidReleasabilityGroup"
+msgstr "has invalid group in bad_group={bad_group}"
+
+msgid "SecurityInvalidExclusiveGroup"
+msgstr "Unregistered security items 'exclusive': {unregistered}"
+
+msgid "SecurityInvalidInclusiveGroup"
+msgstr "Unregistered security items 'inclusive': {unregistered}"
+
+msgid "SecurityInvalidMarkingsGroup"
+msgstr "Unregistered security items 'markings': {unregistered}"
+
+msgid "SecurityNoClassificationInRawSecurity"
+msgstr "no classification in {raw_security}"
+
+msgid "SecurityInvalidGroupsWhileNormalising"
+msgstr "invalid groups: {normalised_clean_groups}"
+
+msgid "SecurityInvalidSecurityStringWhileNormalising"
+msgstr "{inner_exception}: raw_security={raw_security}"
+
+msgid "SecurityInvalidReleasabilitiesConvertFromLabels"
+msgstr "security has invalid groups: {group_diff}"
+
+msgid "SecurityInvalidLabelConvertingFromLabels"
+msgstr "security has invalid label {security_label}"
+
+msgid "SecurityMinRequiredAccessNotFound"
+msgstr ""
+"minimum required access level ({security_label}) not found in inclusive "
+"or exclusive sets"
+
+msgid "SecuritySecurityDefaultNotSet"
+msgstr "must set security_default to valid security option"
+
+msgid "SecurityNoCommonSecurityUnviewable"
+msgstr "no common inclusive set: {inc}"
+
+msgid "SecurityUserCannotAccessExclusive"
+msgstr "User cannot access all {exclusive_difference}"
+
+msgid "SecurityUserCannotAccessInclusive"
+msgstr "User cannot access all {inclusive_difference}"
+
+msgid "SecurityUserCannotAccessMarkings"
+msgstr "User cannot access all {markings_difference}"
+
+msgid "SecurityUnmatchedLabelsGoingSafeToUnsafe"
+msgstr "unmatched safe->unsafe in {labels}"
+
+msgid "SecurityUnmatchedLabelsGoingUnsafeToSafe"
+msgstr "unmatched unsafe->safe in {labels}"
+
+msgid "SecurityUserDoesNotHaveMinimumAccess"
+msgstr ""
+"user does not meet minimum_required_access, missing security labels "
+"{missing_labels}"
+
+msgid "SecurityConfigLabelsWithExtraSpaces"
+msgstr "security labels must not start or end with a space: '{raw_label_name}'"
+
+msgid "SecurityConfigReleasabilitiesMissingRequiredPrefix"
+msgstr "All security group labels must be prefixed with '{releasability_prefix}'"
+
+msgid "SecurityConfigLabelDefinedTwice"
+msgstr "a security label has been defined twice: {summed}"
+
+msgid "SecurityConfigGroupLabelMustNotHaveSpaces"
+msgstr "group labels must not have spaces: '{label}'"
+
+msgid "SecurityConfigMultipleValuesMappedToSameValue"
+msgstr "two labels were made safe to the same value: {safe_label}"
+
+msgid "SecurityNormaliseInvalidSecurity"
+msgstr "invalid security strings: {inner_exception}"
+
+msgid "SecurityInvalidMaxSecurity"
+msgstr "invalid security strings or combination: {inner_exception}"
+
+msgid "SecurityEmptyResultForMaxSecurity"
+msgstr "empty result"
+
+msgid "SecurityUserInfoCannotBeAcquired"
+msgstr "user_info is not available on request.state"
 

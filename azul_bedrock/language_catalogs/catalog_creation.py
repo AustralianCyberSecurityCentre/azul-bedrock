@@ -263,6 +263,40 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreSourceNotFound.value: "The provided source cannot be found in Azul.",
         ExceptionCodeEnum.MetastoreSourceNoReferences.value: "No references can be found for the provided source.",
         ExceptionCodeEnum.MetastoreSourceSubmissionNoInformationFound.value: "No source information could be found for the given request.",
+        ### Security
+        # friendly
+        ExceptionCodeEnum.SecurityMissingOrigin.value: "has releasability but does not have origin={origin}",
+        ExceptionCodeEnum.SecurityClassificationDoesntSupportReleasability.value: "Classifications '{exclusive_string}' have a releasability(s) {inclusive_string} but none of the classifications support releasability.",
+        ExceptionCodeEnum.SecurityInvalidReleasabilityGroup.value: "has invalid group in bad_group={bad_group}",
+        ExceptionCodeEnum.SecurityInvalidExclusiveGroup.value: "Unregistered security items 'exclusive': {unregistered}",
+        ExceptionCodeEnum.SecurityInvalidInclusiveGroup.value: "Unregistered security items 'inclusive': {unregistered}",
+        ExceptionCodeEnum.SecurityInvalidMarkingsGroup.value: "Unregistered security items 'markings': {unregistered}",
+        ExceptionCodeEnum.SecurityNoClassificationInRawSecurity.value: "no classification in {raw_security}",
+        ExceptionCodeEnum.SecurityInvalidGroupsWhileNormalising.value: "invalid groups: {normalised_clean_groups}",
+        ExceptionCodeEnum.SecurityInvalidSecurityStringWhileNormalising.value: "{inner_exception}: raw_security={raw_security}",
+        ExceptionCodeEnum.SecurityInvalidReleasabilitiesConvertFromLabels.value: "security has invalid groups: {group_diff}",
+        ExceptionCodeEnum.SecurityInvalidLabelConvertingFromLabels.value: "security has invalid label {security_label}",
+        # security
+        ExceptionCodeEnum.SecurityMinRequiredAccessNotFound.value: "minimum required access level ({security_label}) not found in inclusive or exclusive sets",
+        ExceptionCodeEnum.SecuritySecurityDefaultNotSet.value: "must set security_default to valid security option",
+        ExceptionCodeEnum.SecurityNoCommonSecurityUnviewable.value: "no common inclusive set: {inc}",
+        ExceptionCodeEnum.SecurityUserCannotAccessExclusive.value: "User cannot access all {exclusive_difference}",
+        ExceptionCodeEnum.SecurityUserCannotAccessInclusive.value: "User cannot access all {inclusive_difference}",
+        ExceptionCodeEnum.SecurityUserCannotAccessMarkings.value: "User cannot access all {markings_difference}",
+        ExceptionCodeEnum.SecurityUnmatchedLabelsGoingSafeToUnsafe.value: "unmatched safe->unsafe in {labels}",
+        ExceptionCodeEnum.SecurityUnmatchedLabelsGoingUnsafeToSafe.value: "unmatched unsafe->safe in {labels}",
+        ExceptionCodeEnum.SecurityUserDoesNotHaveMinimumAccess.value: "user does not meet minimum_required_access, missing security labels {missing_labels}",
+        # settings
+        ExceptionCodeEnum.SecurityConfigLabelsWithExtraSpaces.value: "security labels must not start or end with a space: '{raw_label_name}'",
+        ExceptionCodeEnum.SecurityConfigReleasabilitiesMissingRequiredPrefix.value: "All security group labels must be prefixed with '{releasability_prefix}'",
+        ExceptionCodeEnum.SecurityConfigLabelDefinedTwice.value: "a security label has been defined twice: {summed}",
+        ExceptionCodeEnum.SecurityConfigGroupLabelMustNotHaveSpaces.value: "group labels must not have spaces: '{label}'",
+        ExceptionCodeEnum.SecurityConfigMultipleValuesMappedToSameValue.value: "two labels were made safe to the same value: {safe_label}",
+        # restapi
+        ExceptionCodeEnum.SecurityNormaliseInvalidSecurity: "invalid security strings: {inner_exception}",
+        ExceptionCodeEnum.SecurityInvalidMaxSecurity: "invalid security strings or combination: {inner_exception}",
+        ExceptionCodeEnum.SecurityEmptyResultForMaxSecurity: "empty result",
+        ExceptionCodeEnum.SecurityUserInfoCannotBeAcquired: "user_info is not available on request.state",
     }
     return _create_catalog(translation_values)
 

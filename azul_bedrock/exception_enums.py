@@ -244,3 +244,41 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreSourceNotFound = "MetastoreSourceNotFound"
     MetastoreSourceNoReferences = "MetastoreSourceNoReferences"
     MetastoreSourceSubmissionNoInformationFound = "MetastoreSourceSubmissionNoInformationFound"
+
+    ### Security
+    # friendly
+    SecurityMissingOrigin = "SecurityMissingOrigin"
+    SecurityClassificationDoesntSupportReleasability = "SecurityClassificationDoesntSupportReleasability"
+    SecurityInvalidReleasabilityGroup = "SecurityInvalidReleasabilityGroup"
+    SecurityInvalidExclusiveGroup = "SecurityInvalidExclusiveGroup"
+    SecurityInvalidInclusiveGroup = "SecurityInvalidInclusiveGroup"
+    SecurityInvalidMarkingsGroup = "SecurityInvalidMarkingsGroup"
+    SecurityNoClassificationInRawSecurity = "SecurityNoClassificationInRawSecurity"
+    SecurityInvalidGroupsWhileNormalising = "SecurityInvalidGroupsWhileNormalising"
+    SecurityInvalidSecurityStringWhileNormalising = "SecurityInvalidSecurityStringWhileNormalising"
+    SecurityInvalidReleasabilitiesConvertFromLabels = "SecurityInvalidReleasabilitiesConvertFromLabels"
+    SecurityInvalidLabelConvertingFromLabels = "SecurityInvalidLabelConvertingFromLabels"
+
+    # security
+    SecurityMinRequiredAccessNotFound = "SecurityMinRequiredAccessNotFound"
+    SecuritySecurityDefaultNotSet = "SecuritySecurityDefaultNotSet"
+    SecurityNoCommonSecurityUnviewable = "SecurityNoCommonSecurityUnviewable"
+    SecurityUserCannotAccessExclusive = "SecurityUserCannotAccessExclusive"
+    SecurityUserCannotAccessInclusive = "SecurityUserCannotAccessInclusive"
+    SecurityUserCannotAccessMarkings = "SecurityUserCannotAccessMarkings"
+    SecurityUnmatchedLabelsGoingSafeToUnsafe = "SecurityUnmatchedLabelsGoingSafeToUnsafe"
+    SecurityUnmatchedLabelsGoingUnsafeToSafe = "SecurityUnmatchedLabelsGoingUnsafeToSafe"
+    SecurityUserDoesNotHaveMinimumAccess = "SecurityUserDoesNotHaveMinimumAccess"
+
+    # settings
+    SecurityConfigLabelsWithExtraSpaces = "SecurityConfigLabelsWithExtraSpaces"
+    SecurityConfigReleasabilitiesMissingRequiredPrefix = "SecurityConfigReleasabilitiesMissingRequiredPrefix"
+    SecurityConfigLabelDefinedTwice = "SecurityConfigLabelDefinedTwice"
+    SecurityConfigGroupLabelMustNotHaveSpaces = "SecurityConfigGroupLabelMustNotHaveSpaces"
+    SecurityConfigMultipleValuesMappedToSameValue = "SecurityConfigMultipleValuesMappedToSameValue"
+
+    # restapi
+    SecurityNormaliseInvalidSecurity = "SecurityNormaliseInvalidSecurity"
+    SecurityInvalidMaxSecurity = "SecurityInvalidMaxSecurity"
+    SecurityEmptyResultForMaxSecurity = "SecurityEmptyResultForMaxSecurity"
+    SecurityUserInfoCannotBeAcquired = "SecurityUserInfoCannotBeAcquired"
