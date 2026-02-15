@@ -34,6 +34,12 @@ class BaseAzulException(Exception):
         """Get the value of the message meant to be provided to a user."""
         return get_message_from_error_code(internal, parameters, settings.language)
 
+    def __str__(self) -> str:
+        """String."""
+        if self.external:
+            return self.external
+        return self.__repr__()
+
     def __repr__(self) -> str:
         """Repr."""
         class_name = self.__class__.__name__
@@ -117,6 +123,13 @@ class ApiException(HTTPException):
             f"external={self.detail['external']!r}"
             f")"
         )
+
+    def __str__(self) -> str:
+        """String."""
+        detail = self.detail.get("external")
+        if detail:
+            return detail
+        return self.__repr__()
 
 
 class DispatcherApiException(ApiException):
