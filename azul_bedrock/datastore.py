@@ -5,7 +5,7 @@ import opensearchpy
 from azul_bedrock import exceptions_metastore, settings
 from azul_bedrock.exception_enums import ExceptionCodeEnum
 
-s = settings.get()
+s = settings.get_opensearch()
 
 
 def credentials_to_access(c: dict) -> dict:

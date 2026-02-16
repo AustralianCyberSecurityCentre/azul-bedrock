@@ -64,6 +64,6 @@ class OpensearchSettings(BaseSettings):
 
 
 @lru_cache()
-def get():
+def get_opensearch():
     """Return a cached copy of bedrock Opensearch settings."""
     return OpensearchSettings()
