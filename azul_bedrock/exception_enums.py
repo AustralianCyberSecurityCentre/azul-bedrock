@@ -110,7 +110,7 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreOpensearchCantGetUserAccount = "MetastoreOpensearchCantGetUserAccount"
     # search_data
     MetastoreSearchDataBadCredentials = "MetastoreSearchDataBadCredentials"
-    MetastoreSearchDataMissingOrBadParameters = "MetastoreSearchDataMissingOrBadParameters"
+    BedrockBadOpensearchCredential = "BedrockBadOpensearchCredential"
     # search_query_parser
     MetastoreSearchQueryMissingToken = "MetastoreSearchQueryMissingToken"
     MetastoreSearchQueryInvalidUnescapeSequence = "MetastoreSearchQueryInvalidUnescapeSequence"

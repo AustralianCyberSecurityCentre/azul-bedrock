@@ -131,7 +131,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreOpensearchCantGetUserAccount.value: "could not get user account: {inner_exception}",
         # search_data
         ExceptionCodeEnum.MetastoreSearchDataBadCredentials.value: "unrecognised credential format: {credential_format}",
-        ExceptionCodeEnum.MetastoreSearchDataMissingOrBadParameters.value: "missing/bad parameter: {inner_exception}",
+        ExceptionCodeEnum.BedrockBadOpensearchCredential.value: "Missing a required value for auth method '{method}' (basic auth missing username/password other auth missing token)",
         # search_query_parser
         ExceptionCodeEnum.MetastoreSearchQueryMissingToken.value: "Token missing start/end",
         ExceptionCodeEnum.MetastoreSearchQueryInvalidUnescapeSequence.value: "Invalid escape character: {character}",

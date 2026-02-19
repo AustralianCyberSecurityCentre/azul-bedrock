@@ -2,7 +2,7 @@
 
 from enum import StrEnum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class CredentialFormat(StrEnum):
@@ -16,6 +16,8 @@ class CredentialFormat(StrEnum):
 
 class Credentials(BaseModel):
     """Credentials for user access to systems."""
+
+    model_config = ConfigDict(use_enum_values=True)
 
     format: CredentialFormat
     unique: str  # unique identifier for credentials (for caching)
