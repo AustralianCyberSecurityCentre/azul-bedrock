@@ -5,8 +5,6 @@ from typing import Annotated
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, PlainSerializer, StringConstraints
 
-from azul_bedrock.models_auth import Credentials
-
 
 class PATRequest(BaseModel):
     """Request for a PAT."""
