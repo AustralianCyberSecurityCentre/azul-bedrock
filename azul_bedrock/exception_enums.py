@@ -6,6 +6,8 @@ from enum import StrEnum
 class ExceptionCodeEnum(StrEnum):
     """String enum of possible exceptions from the API."""
 
+    TODO = "DevelopmentCodeWithRawExceptionOnly"
+
     # DP Get events
     DPGetEventsBadModelType = "DPGetEventsBadModelType"
     DPGetEventFailStatusCode = "DPGetEventFailStatusCode"
@@ -282,3 +284,7 @@ class ExceptionCodeEnum(StrEnum):
     SecurityInvalidMaxSecurity = "SecurityInvalidMaxSecurity"
     SecurityEmptyResultForMaxSecurity = "SecurityEmptyResultForMaxSecurity"
     SecurityUserInfoCannotBeAcquired = "SecurityUserInfoCannotBeAcquired"
+
+    ### azul-restapi-server
+    # pat
+    RestapiAllowedPATAction = "RestapiAllowedPATAction"

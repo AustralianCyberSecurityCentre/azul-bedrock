@@ -35,6 +35,7 @@ def _create_catalog(translation: dict[str, str]) -> BabCatalog:
 def _get_english_catalog() -> BabCatalog:
     """Get all the values ready to write into the english catalog."""
     translation_values = {
+        ExceptionCodeEnum.TODO.value: "{message}",
         # DP Get events
         ExceptionCodeEnum.DPGetEventsBadModelType.value: "Invalid model_type '{model_type}' to get events for",
         ExceptionCodeEnum.DPGetEventFailStatusCode.value: "Unable to get events from dispatcher with error: {response_text}",
@@ -293,10 +294,13 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.SecurityConfigGroupLabelMustNotHaveSpaces.value: "group labels must not have spaces: '{label}'",
         ExceptionCodeEnum.SecurityConfigMultipleValuesMappedToSameValue.value: "two labels were made safe to the same value: {safe_label}",
         # restapi
-        ExceptionCodeEnum.SecurityNormaliseInvalidSecurity: "invalid security strings: {inner_exception}",
-        ExceptionCodeEnum.SecurityInvalidMaxSecurity: "invalid security strings or combination: {inner_exception}",
-        ExceptionCodeEnum.SecurityEmptyResultForMaxSecurity: "empty result",
-        ExceptionCodeEnum.SecurityUserInfoCannotBeAcquired: "user_info is not available on request.state",
+        ExceptionCodeEnum.SecurityNormaliseInvalidSecurity.value: "invalid security strings: {inner_exception}",
+        ExceptionCodeEnum.SecurityInvalidMaxSecurity.value: "invalid security strings or combination: {inner_exception}",
+        ExceptionCodeEnum.SecurityEmptyResultForMaxSecurity.value: "empty result",
+        ExceptionCodeEnum.SecurityUserInfoCannotBeAcquired.value: "user_info is not available on request.state",
+        ### azul-restapi-server
+        # pat
+        ExceptionCodeEnum.RestapiAllowedPATAction.value: "user '{username}' not superuser",
     }
     return _create_catalog(translation_values)
 

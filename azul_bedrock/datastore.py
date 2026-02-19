@@ -5,8 +5,6 @@ import opensearchpy
 from azul_bedrock import exceptions_metastore, settings
 from azul_bedrock.exception_enums import ExceptionCodeEnum
 
-s = settings.get_opensearch()
-
 
 def credentials_to_access(c: dict) -> dict:
     """Return credentials in format used to get access."""
@@ -38,6 +36,7 @@ def credentials_to_access(c: dict) -> dict:
 def credentials_to_es(c: dict) -> opensearchpy.OpenSearch:
     """Turn credentials into an opensearch object and cache. Invalidate after some time."""
     access = credentials_to_access(c)
+    s = settings.get_opensearch()
     # unfortunately opensearchpy does not use requests library, but urlli3 directly
     # we have to manually reference certificates not found in Certifi for consistency
     # as we query opensearch via both requests and opensearchpy

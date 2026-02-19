@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Azul 10\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-02-15 22:27+0000\n"
+"POT-Creation-Date: 2026-02-18 01:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,9 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
+
+msgid "DevelopmentCodeWithRawExceptionOnly"
+msgstr "{message}"
 
 msgid "DPGetEventsBadModelType"
 msgstr "Invalid model_type '{model_type}' to get events for"
@@ -728,4 +731,7 @@ msgstr "empty result"
 
 msgid "SecurityUserInfoCannotBeAcquired"
 msgstr "user_info is not available on request.state"
+
+msgid "RestapiAllowedPATAction"
+msgstr "user '{username}' not superuser"
 

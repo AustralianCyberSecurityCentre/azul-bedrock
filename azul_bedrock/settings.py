@@ -54,6 +54,7 @@ class OpensearchSettings(BaseSettings):
     # Opensearch
     opensearch_azul_security_username: str = "azul_security"
     opensearch_azul_security_password: str = ""  # noqa: S105
+    opensearch_azul_security_index: str = "security_azul"
 
     # admin credentials to create roles and rolemappings (must be used in conjunction with no-input flag)
     opensearch_admin_username: str = "azul_admin"

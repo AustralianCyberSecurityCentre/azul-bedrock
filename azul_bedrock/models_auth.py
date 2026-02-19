@@ -36,17 +36,3 @@ class UserInfo(BaseModel):
     decoded: dict | None = None
     # Unique Identifier for the user if OIDC auth is used this will be the subject `sub` claim.
     unique_id: str
-
-
-class PATRequest(BaseModel):
-    """Request for a PAT."""
-
-    name: str
-    roles: list[str]
-
-
-class PATIssue(BaseModel):
-    """Issuing of a PAT token."""
-
-    pat: str
-    pat_name: str
