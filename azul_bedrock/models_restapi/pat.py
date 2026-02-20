@@ -20,7 +20,7 @@ class PATView(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     id: str
-    pat_name: str
+    pat_description: str
     owner_username: str
     roles: list[str]
     creation_date: Annotated[AwareDatetime, PlainSerializer(lambda v: v.isoformat(), return_type=str)]
@@ -31,7 +31,7 @@ class PATIssue(PATView):
     """Issuing of a PAT token."""
 
     pat: Annotated[str, StringConstraints(min_length=4, max_length=100)]
-    # Base64 encoded pat_name:PAT put into the X-API-Key header for authentication to work.
+    # Base64 encoded pat_id:PAT put into the X-API-Key header for authentication to work.
     ready_api_key: str
 
 
