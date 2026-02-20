@@ -34,7 +34,6 @@ def credentials_to_access(c: Credentials) -> dict:
             parameters={"credential_format": str(c.format)},
         )
     if raise_bad_creds:
-        print(c.model_dump())
         raise exceptions_metastore.BadCredentialsException(
             internal=ExceptionCodeEnum.BedrockBadOpensearchCredential,
             parameters={"method": c.format},
