@@ -35,6 +35,9 @@ def _create_catalog(translation: dict[str, str]) -> BabCatalog:
 def _get_english_catalog() -> BabCatalog:
     """Get all the values ready to write into the english catalog."""
     translation_values = {
+        ExceptionCodeEnum.TODO.value: "{message}",
+        # datastore
+        ExceptionCodeEnum.BedrockInvalidCredentialType.value: "Invalid credential type expected type Credential but got {type}",
         # DP Get events
         ExceptionCodeEnum.DPGetEventsBadModelType.value: "Invalid model_type '{model_type}' to get events for",
         ExceptionCodeEnum.DPGetEventFailStatusCode.value: "Unable to get events from dispatcher with error: {response_text}",
@@ -130,7 +133,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreOpensearchCantGetUserAccount.value: "could not get user account: {inner_exception}",
         # search_data
         ExceptionCodeEnum.MetastoreSearchDataBadCredentials.value: "unrecognised credential format: {credential_format}",
-        ExceptionCodeEnum.MetastoreSearchDataMissingOrBadParameters.value: "missing/bad parameter: {inner_exception}",
+        ExceptionCodeEnum.BedrockBadOpensearchCredential.value: "Missing a required value for auth method '{method}' (basic auth missing username/password other auth missing token)",
         # search_query_parser
         ExceptionCodeEnum.MetastoreSearchQueryMissingToken.value: "Token missing start/end",
         ExceptionCodeEnum.MetastoreSearchQueryInvalidUnescapeSequence.value: "Invalid escape character: {character}",
@@ -293,10 +296,28 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.SecurityConfigGroupLabelMustNotHaveSpaces.value: "group labels must not have spaces: '{label}'",
         ExceptionCodeEnum.SecurityConfigMultipleValuesMappedToSameValue.value: "two labels were made safe to the same value: {safe_label}",
         # restapi
-        ExceptionCodeEnum.SecurityNormaliseInvalidSecurity: "invalid security strings: {inner_exception}",
-        ExceptionCodeEnum.SecurityInvalidMaxSecurity: "invalid security strings or combination: {inner_exception}",
-        ExceptionCodeEnum.SecurityEmptyResultForMaxSecurity: "empty result",
-        ExceptionCodeEnum.SecurityUserInfoCannotBeAcquired: "user_info is not available on request.state",
+        ExceptionCodeEnum.SecurityNormaliseInvalidSecurity.value: "invalid security strings: {inner_exception}",
+        ExceptionCodeEnum.SecurityInvalidMaxSecurity.value: "invalid security strings or combination: {inner_exception}",
+        ExceptionCodeEnum.SecurityEmptyResultForMaxSecurity.value: "empty result",
+        ExceptionCodeEnum.SecurityUserInfoCannotBeAcquired.value: "user_info is not available on request.state",
+        ### azul-restapi-server
+        # oidc_modern_pat
+        ExceptionCodeEnum.RestapiOidcNoAuthProvided.value: "Not authenticated, must provided a header 'Authorization: Bearer <bearer>' or 'X-API-Key: <api-key-value>",
+        # pat
+        ExceptionCodeEnum.RestapiAllowedPATAction.value: "user '{username}' not superuser",
+        ExceptionCodeEnum.RestapiFailedToGetUserCredentials.value: "failed to get user credentials with error {inner_exception}",
+        ExceptionCodeEnum.RestapiCreatePatUserDoesntHaveRolesToAssignToPAT.value: "You do not have the provided role '{role}' (it may not exist). You can only give the PAT roles you have access to these are [{user_allowed_roles_string}]",
+        ExceptionCodeEnum.RestapiCreatePatCantGetAdminResults.value: "Cannot provide a PAT with the administrator roles [{admin_roles}]. You can only give the PAT roles you have access to these are [{user_allowed_roles_string}]",
+        ExceptionCodeEnum.RestapiCreatePatDoesntHaveMinimumRequiredAccess.value: "Provided roles don't encompass the minimum required access missing [{missing_labels}].",
+        ExceptionCodeEnum.RestapiCreatePatAlreadyExists.value: "PAT with name {pat_name} already exists for the current user.",
+        ExceptionCodeEnum.RestapiCreatePatFailedToStorePAT.value: "Failed to create PAT with inner exception {inner_exception}.",
+        ExceptionCodeEnum.RestapiCreatePatCreatedPATMissingId.value: "The creation of the PAT did not result in an id being created and needs to!",
+        ExceptionCodeEnum.RestapiDeletePATUnexpected.value: "unexpected error {inner_exception} occurred.",
+        # pat_core
+        ExceptionCodeEnum.RestapiPatInvalidFormat.value: "The provided PAT is in an invalid format it should be the base64 encoded 'pat_id:pat' e.g base64.b64encode(f:'{{id}}:{{pat}}'.encode())",
+        ExceptionCodeEnum.RestapiPatExpiredOrInvalidPAT.value: "The provided PAT is invalid or expired.",
+        ExceptionCodeEnum.RestapiValidPATSerialisationFailure.value: "PAT was authorised but is stored in an incorrect format.",
+        ExceptionCodeEnum.RestapiFailedToCreateSecurityIndex.value: "Unexpectedly couldn't create security index with error {inner_exception}",
     }
     return _create_catalog(translation_values)
 
