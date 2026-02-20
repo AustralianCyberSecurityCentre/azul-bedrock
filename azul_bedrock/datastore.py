@@ -12,6 +12,10 @@ from azul_bedrock.models_auth import CredentialFormat, Credentials
 
 def credentials_to_access(c: Credentials) -> dict:
     """Return credentials in format used to get access."""
+    if type(c) != Credentials:
+        raise exceptions_bedrock.AzulValueError(
+            internal=ExceptionCodeEnum.BedrockInvalidCredentialType, parameters={"type": str(type(c))}
+        )
     access = {}
     raise_bad_creds = True
     if c.format == CredentialFormat.basic and c.username and c.password:
@@ -26,7 +30,6 @@ def credentials_to_access(c: Credentials) -> dict:
 
     if c.format == CredentialFormat.none:
         raise exceptions_metastore.BadCredentialsException(
-            ref=f"unrecognised credential format: {c.format}",
             internal=ExceptionCodeEnum.MetastoreSearchDataBadCredentials,
             parameters={"credential_format": str(c.format)},
         )

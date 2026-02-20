@@ -51,6 +51,9 @@ class OpensearchSettings(BaseSettings):
     # can also be a load balancer
     opensearch_url: str = ""
 
+    # secret used for signing JWTs on behalf of PATs for Opensearch
+    jwt_signing_secret: str = ""
+
     # Opensearch
     opensearch_azul_security_username: str = "azul_security"
     opensearch_azul_security_password: str = ""  # noqa: S105

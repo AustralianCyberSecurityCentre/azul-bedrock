@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Azul 10\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-02-19 04:58+0000\n"
+"POT-Creation-Date: 2026-02-20 00:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,9 @@ msgstr ""
 
 msgid "DevelopmentCodeWithRawExceptionOnly"
 msgstr "{message}"
+
+msgid "BedrockInvalidCredentialType"
+msgstr "Invalid credential type expected type Credential but got {type}"
 
 msgid "DPGetEventsBadModelType"
 msgstr "Invalid model_type '{model_type}' to get events for"
@@ -285,7 +288,7 @@ msgstr "unrecognised credential format: {credential_format}"
 
 msgid "BedrockBadOpensearchCredential"
 msgstr ""
-"Missing a required value for auth method {method} (basic auth missing "
+"Missing a required value for auth method '{method}' (basic auth missing "
 "username/password other auth missing token)"
 
 msgid "MetastoreSearchQueryMissingToken"

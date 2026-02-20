@@ -36,6 +36,8 @@ def _get_english_catalog() -> BabCatalog:
     """Get all the values ready to write into the english catalog."""
     translation_values = {
         ExceptionCodeEnum.TODO.value: "{message}",
+        # datastore
+        ExceptionCodeEnum.BedrockInvalidCredentialType.value: "Invalid credential type expected type Credential but got {type}",
         # DP Get events
         ExceptionCodeEnum.DPGetEventsBadModelType.value: "Invalid model_type '{model_type}' to get events for",
         ExceptionCodeEnum.DPGetEventFailStatusCode.value: "Unable to get events from dispatcher with error: {response_text}",

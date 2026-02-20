@@ -7,7 +7,8 @@ class ExceptionCodeEnum(StrEnum):
     """String enum of possible exceptions from the API."""
 
     TODO = "DevelopmentCodeWithRawExceptionOnly"
-
+    # datastore
+    BedrockInvalidCredentialType = "BedrockInvalidCredentialType"
     # DP Get events
     DPGetEventsBadModelType = "DPGetEventsBadModelType"
     DPGetEventFailStatusCode = "DPGetEventFailStatusCode"

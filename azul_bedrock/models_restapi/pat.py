@@ -31,6 +31,8 @@ class PATIssue(PATView):
     """Issuing of a PAT token."""
 
     pat: Annotated[str, StringConstraints(min_length=4, max_length=100)]
+    # Base64 encoded pat_name:PAT put into the X-API-Key header for authentication to work.
+    ready_api_key: str
 
 
 class ListOfPAT(BaseModel):
