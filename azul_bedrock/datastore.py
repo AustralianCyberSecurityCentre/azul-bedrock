@@ -12,7 +12,7 @@ from azul_bedrock.models_auth import CredentialFormat, Credentials
 
 def credentials_to_access(c: Credentials) -> dict:
     """Return credentials in format used to get access."""
-    if type(c) != Credentials:
+    if type(c) is not Credentials:
         raise exceptions_bedrock.AzulValueError(
             internal=ExceptionCodeEnum.BedrockInvalidCredentialType, parameters={"type": str(type(c))}
         )
