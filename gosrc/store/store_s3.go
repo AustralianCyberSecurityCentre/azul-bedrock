@@ -82,7 +82,7 @@ func handleAutoAgeoff(client *minio.Client, bucket string, autoAgeoffSettings Au
 func NewS3Store(endpoint string, accessKey string, secretKey string, secure bool, bucket string, region string, promStreamsOperationDuration *prometheus.HistogramVec, autoAgeoffSettings AutomaticAgeOffSettings) (FileStorage, error) {
 	var client *minio.Client
 	var err error
-	
+
 	var creds *credentials.Credentials
 	// AWS_WEB_IDENTITY_TOKEN_FILE is the standard IRSA env var injected by the EKS pod identity webhook
 	if tokenFile := os.Getenv("AWS_WEB_IDENTITY_TOKEN_FILE"); tokenFile != "" {
