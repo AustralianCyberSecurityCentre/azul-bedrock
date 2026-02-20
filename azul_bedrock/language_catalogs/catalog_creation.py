@@ -314,6 +314,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.RestapiCreatePatCreatedPATMissingId.value: "The creation of the PAT did not result in an id being created and needs to!",
         ExceptionCodeEnum.RestapiDeletePATUnexpected.value: "unexpected error {inner_exception} occurred.",
         # pat_core
+        ExceptionCodeEnum.RestapiPatInvalidFormat.value: "The provided PAT is in an invalid format it should be the base64 encoded 'pat_id:pat' e.g base64.b64encode(f:'{id}:{pat}'.encode())",
         ExceptionCodeEnum.RestapiPatExpiredOrInvalidPAT.value: "The provided PAT is invalid or expired.",
         ExceptionCodeEnum.RestapiValidPATSerialisationFailure.value: "PAT was authorised but is stored in an incorrect format.",
         ExceptionCodeEnum.RestapiFailedToCreateSecurityIndex.value: "Unexpectedly couldn't create security index with error {inner_exception}",

@@ -301,5 +301,6 @@ class ExceptionCodeEnum(StrEnum):
     RestapiDeletePATUnexpected = "RestapiDeletePATUnexpected"
     # pat_core
     RestapiPatExpiredOrInvalidPAT = "RestapiPatExpiredOrInvalidPAT"
+    RestapiPatInvalidFormat = "RestapiPatInvalidFormat"
     RestapiValidPATSerialisationFailure = "RestapiValidPATSerialisationFailure"
     RestapiFailedToCreateSecurityIndex = "RestapiFailedToCreateSecurityIndex"
