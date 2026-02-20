@@ -10,6 +10,7 @@ class PATRequest(BaseModel):
     """Request for a PAT."""
 
     name: Annotated[str, StringConstraints(min_length=4, max_length=100)]
+    description: Annotated[str, StringConstraints(min_length=0, max_length=500)]
     roles: list[str]
 
 
