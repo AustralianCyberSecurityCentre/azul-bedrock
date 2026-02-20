@@ -311,7 +311,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.RestapiCreatePatDoesntHaveMinimumRequiredAccess.value: "Provided roles don't encompass the minimum required access missing [{missing_labels}].",
         ExceptionCodeEnum.RestapiCreatePatAlreadyExists.value: "PAT with id {pat_id} already exists.",
         ExceptionCodeEnum.RestapiCreatePatFailedToStorePAT.value: "Failed to create PAT with inner exception {inner_exception}.",
-        ExceptionCodeEnum.RestapiCreatePatCreatedPATMissingId.value: "The creation of the PAT did not result in the expected id, actual id {indexed_doc_id} != {actual_id} (expected)",
+        ExceptionCodeEnum.RestapiCreatePatCreatedPATMissingId.value: "The creation of the PAT did not result in an id being created and needs to!",
         ExceptionCodeEnum.RestapiDeletePATUnexpected.value: "unexpected error {inner_exception} occurred.",
         # pat_core
         ExceptionCodeEnum.RestapiPatExpiredOrInvalidPAT.value: "The provided PAT is invalid or expired.",
