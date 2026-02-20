@@ -20,7 +20,8 @@ class PATView(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     id: str
-    pat_description: str
+    pat_name: str
+    description: str
     owner_username: str
     roles: list[str]
     creation_date: Annotated[AwareDatetime, PlainSerializer(lambda v: v.isoformat(), return_type=str)]
