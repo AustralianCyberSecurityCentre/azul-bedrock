@@ -22,7 +22,7 @@ class PATView(BaseModel):
 
     id: str
     pat_name: str
-    description: str
+    description: str = ""
     owner_username: str
     roles: list[str]
     creation_date: Annotated[AwareDatetime, PlainSerializer(lambda v: v.isoformat(), return_type=str)]
