@@ -287,5 +287,19 @@ class ExceptionCodeEnum(StrEnum):
     SecurityUserInfoCannotBeAcquired = "SecurityUserInfoCannotBeAcquired"
 
     ### azul-restapi-server
+    # oidc_modern_pat
+    RestapiOidcNoAuthProvided = "RestapiOidcNoAuthProvided"
     # pat
     RestapiAllowedPATAction = "RestapiAllowedPATAction"
+    RestapiFailedToGetUserCredentials = "RestapiFailedToGetUserCredentials"
+    RestapiCreatePatUserDoesntHaveRolesToAssignToPAT = "RestapiCreatePatUserDoesntHaveRolesToAssignToPAT"
+    RestapiCreatePatCantGetAdminResults = "RestapiCreatePatCantGetAdminResults"
+    RestapiCreatePatDoesntHaveMinimumRequiredAccess = "RestapiCreatePatDoesntHaveMinimumRequiredAccess"
+    RestapiCreatePatAlreadyExists = "RestapiCreatePatAlreadyExists"
+    RestapiCreatePatFailedToStorePAT = "RestapiCreatePatFailedToStorePAT"
+    RestapiCreatePatCreatedPATMissingId = "RestapiCreatePatCreatedPATMissingId"
+    RestapiDeletePATUnexpected = "RestapiDeletePATUnexpected"
+    # pat_core
+    RestapiPatExpiredOrInvalidPAT = "RestapiPatExpiredOrInvalidPAT"
+    RestapiValidPATSerialisationFailure = "RestapiValidPATSerialisationFailure"
+    RestapiFailedToCreateSecurityIndex = "RestapiFailedToCreateSecurityIndex"
