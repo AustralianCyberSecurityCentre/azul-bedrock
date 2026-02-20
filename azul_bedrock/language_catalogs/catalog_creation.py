@@ -309,7 +309,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.RestapiCreatePatUserDoesntHaveRolesToAssignToPAT.value: "You do not have the provided role '{role}' (it may not exist). You can only give the PAT roles you have access to these are [{user_allowed_roles_string}]",
         ExceptionCodeEnum.RestapiCreatePatCantGetAdminResults.value: "Cannot provide a PAT with the administrator roles [{admin_roles}]. You can only give the PAT roles you have access to these are [{user_allowed_roles_string}]",
         ExceptionCodeEnum.RestapiCreatePatDoesntHaveMinimumRequiredAccess.value: "Provided roles don't encompass the minimum required access missing [{missing_labels}].",
-        ExceptionCodeEnum.RestapiCreatePatAlreadyExists.value: "PAT with id {pat_id} already exists.",
+        ExceptionCodeEnum.RestapiCreatePatAlreadyExists.value: "PAT with name {pat_name} already exists for the current user.",
         ExceptionCodeEnum.RestapiCreatePatFailedToStorePAT.value: "Failed to create PAT with inner exception {inner_exception}.",
         ExceptionCodeEnum.RestapiCreatePatCreatedPATMissingId.value: "The creation of the PAT did not result in an id being created and needs to!",
         ExceptionCodeEnum.RestapiDeletePATUnexpected.value: "unexpected error {inner_exception} occurred.",
