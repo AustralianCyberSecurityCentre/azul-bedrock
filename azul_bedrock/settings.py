@@ -6,7 +6,7 @@ from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-printed = False
+_printed = False
 
 
 class LanguageCatalogsEnum(StrEnum):
@@ -33,11 +33,11 @@ class OpensearchSettings(BaseSettings):
 
     def __init__(self):
         """Init function."""
-        global printed
+        global _printed
         super().__init__()
         logger = logging.getLogger(__name__)
         # prevent duplicate printing for each read of settings
-        if not printed:
+        if not _printed:
             if not self.opensearch_url:
                 logger.warning("no opensearch url set for metastore!")
             if not self.certificate_verification:
@@ -45,7 +45,7 @@ class OpensearchSettings(BaseSettings):
 
             if self.opensearch_url.startswith("http:"):
                 logger.warning(f"host not under ssl! {self.opensearch_url}")
-            printed = True
+            _printed = True
 
     # location of opensearch cluster that can be queried
     # can also be a load balancer
