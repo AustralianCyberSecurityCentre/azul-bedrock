@@ -6,6 +6,9 @@ from enum import StrEnum
 class ExceptionCodeEnum(StrEnum):
     """String enum of possible exceptions from the API."""
 
+    TODO = "DevelopmentCodeWithRawExceptionOnly"
+    # datastore
+    BedrockInvalidCredentialType = "BedrockInvalidCredentialType"
     # DP Get events
     DPGetEventsBadModelType = "DPGetEventsBadModelType"
     DPGetEventFailStatusCode = "DPGetEventFailStatusCode"
@@ -108,7 +111,7 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreOpensearchCantGetUserAccount = "MetastoreOpensearchCantGetUserAccount"
     # search_data
     MetastoreSearchDataBadCredentials = "MetastoreSearchDataBadCredentials"
-    MetastoreSearchDataMissingOrBadParameters = "MetastoreSearchDataMissingOrBadParameters"
+    BedrockBadOpensearchCredential = "BedrockBadOpensearchCredential"
     # search_query_parser
     MetastoreSearchQueryMissingToken = "MetastoreSearchQueryMissingToken"
     MetastoreSearchQueryInvalidUnescapeSequence = "MetastoreSearchQueryInvalidUnescapeSequence"
@@ -282,3 +285,22 @@ class ExceptionCodeEnum(StrEnum):
     SecurityInvalidMaxSecurity = "SecurityInvalidMaxSecurity"
     SecurityEmptyResultForMaxSecurity = "SecurityEmptyResultForMaxSecurity"
     SecurityUserInfoCannotBeAcquired = "SecurityUserInfoCannotBeAcquired"
+
+    ### azul-restapi-server
+    # oidc_modern_pat
+    RestapiOidcNoAuthProvided = "RestapiOidcNoAuthProvided"
+    # pat
+    RestapiAllowedPATAction = "RestapiAllowedPATAction"
+    RestapiFailedToGetUserCredentials = "RestapiFailedToGetUserCredentials"
+    RestapiCreatePatUserDoesntHaveRolesToAssignToPAT = "RestapiCreatePatUserDoesntHaveRolesToAssignToPAT"
+    RestapiCreatePatCantGetAdminResults = "RestapiCreatePatCantGetAdminResults"
+    RestapiCreatePatDoesntHaveMinimumRequiredAccess = "RestapiCreatePatDoesntHaveMinimumRequiredAccess"
+    RestapiCreatePatAlreadyExists = "RestapiCreatePatAlreadyExists"
+    RestapiCreatePatFailedToStorePAT = "RestapiCreatePatFailedToStorePAT"
+    RestapiCreatePatCreatedPATMissingId = "RestapiCreatePatCreatedPATMissingId"
+    RestapiDeletePATUnexpected = "RestapiDeletePATUnexpected"
+    # pat_core
+    RestapiPatExpiredOrInvalidPAT = "RestapiPatExpiredOrInvalidPAT"
+    RestapiPatInvalidFormat = "RestapiPatInvalidFormat"
+    RestapiValidPATSerialisationFailure = "RestapiValidPATSerialisationFailure"
+    RestapiFailedToCreateSecurityIndex = "RestapiFailedToCreateSecurityIndex"

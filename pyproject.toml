@@ -29,6 +29,7 @@ dependencies = [
     "fastapi>=0.128.0",
     "httpx>=0.28.1",
     "multipart>=1.3.0",
+    "opensearch-py>=3.1.0",
     "pendulum>=3.1.0",
     "pydantic>=2.12.5",
     "pydantic-settings>=2.12.0",

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Azul 10\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-02-15 22:27+0000\n"
+"POT-Creation-Date: 2026-02-20 04:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
+
+msgid "DevelopmentCodeWithRawExceptionOnly"
+msgstr "{message}"
+
+msgid "BedrockInvalidCredentialType"
+msgstr "Invalid credential type expected type Credential but got {type}"
 
 msgid "DPGetEventsBadModelType"
 msgstr "Invalid model_type '{model_type}' to get events for"
@@ -280,8 +286,10 @@ msgstr "could not get user account: {inner_exception}"
 msgid "MetastoreSearchDataBadCredentials"
 msgstr "unrecognised credential format: {credential_format}"
 
-msgid "MetastoreSearchDataMissingOrBadParameters"
-msgstr "missing/bad parameter: {inner_exception}"
+msgid "BedrockBadOpensearchCredential"
+msgstr ""
+"Missing a required value for auth method '{method}' (basic auth missing "
+"username/password other auth missing token)"
 
 msgid "MetastoreSearchQueryMissingToken"
 msgstr "Token missing start/end"
@@ -728,4 +736,60 @@ msgstr "empty result"
 
 msgid "SecurityUserInfoCannotBeAcquired"
 msgstr "user_info is not available on request.state"
+
+msgid "RestapiOidcNoAuthProvided"
+msgstr ""
+"Not authenticated, must provided a header 'Authorization: Bearer "
+"<bearer>' or 'X-API-Key: <api-key-value>"
+
+msgid "RestapiAllowedPATAction"
+msgstr "user '{username}' not superuser"
+
+msgid "RestapiFailedToGetUserCredentials"
+msgstr "failed to get user credentials with error {inner_exception}"
+
+msgid "RestapiCreatePatUserDoesntHaveRolesToAssignToPAT"
+msgstr ""
+"You do not have the provided role '{role}' (it may not exist). You can "
+"only give the PAT roles you have access to these are "
+"[{user_allowed_roles_string}]"
+
+msgid "RestapiCreatePatCantGetAdminResults"
+msgstr ""
+"Cannot provide a PAT with the administrator roles [{admin_roles}]. You "
+"can only give the PAT roles you have access to these are "
+"[{user_allowed_roles_string}]"
+
+msgid "RestapiCreatePatDoesntHaveMinimumRequiredAccess"
+msgstr ""
+"Provided roles don't encompass the minimum required access missing "
+"[{missing_labels}]."
+
+msgid "RestapiCreatePatAlreadyExists"
+msgstr "PAT with name {pat_name} already exists for the current user."
+
+msgid "RestapiCreatePatFailedToStorePAT"
+msgstr "Failed to create PAT with inner exception {inner_exception}."
+
+msgid "RestapiCreatePatCreatedPATMissingId"
+msgstr ""
+"The creation of the PAT did not result in an id being created and needs "
+"to!"
+
+msgid "RestapiDeletePATUnexpected"
+msgstr "unexpected error {inner_exception} occurred."
+
+msgid "RestapiPatInvalidFormat"
+msgstr ""
+"The provided PAT is in an invalid format it should be the base64 encoded "
+"'pat_id:pat' e.g base64.b64encode(f:'{{id}}:{{pat}}'.encode())"
+
+msgid "RestapiPatExpiredOrInvalidPAT"
+msgstr "The provided PAT is invalid or expired."
+
+msgid "RestapiValidPATSerialisationFailure"
+msgstr "PAT was authorised but is stored in an incorrect format."
+
+msgid "RestapiFailedToCreateSecurityIndex"
+msgstr "Unexpectedly couldn't create security index with error {inner_exception}"
 
