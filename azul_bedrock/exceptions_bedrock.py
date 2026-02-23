@@ -162,6 +162,13 @@ class DispatcherApiException(ApiException):
                 from azul_bedrock.models_api import DispatcherApiErrorModel
 
                 d_err = DispatcherApiErrorModel.model_validate_json(self.response.content)
+                if d_err.error_enum:
+                    error_params: dict[str, str] = dict()
+                    if d_err.error_params:
+                        error_params = d_err.error_params
+                    external_override = get_message_from_error_code(
+                        exceptionCodeEnum=d_err.error_enum, parameters=error_params
+                    )
                 if d_err.title and d_err.detail:
                     external_override = f"{d_err.title}: {d_err.detail}"
                 elif d_err.title:

@@ -304,3 +304,8 @@ class ExceptionCodeEnum(StrEnum):
     RestapiPatInvalidFormat = "RestapiPatInvalidFormat"
     RestapiValidPATSerialisationFailure = "RestapiValidPATSerialisationFailure"
     RestapiFailedToCreateSecurityIndex = "RestapiFailedToCreateSecurityIndex"
+
+    ### Dispatcher - note these map to golangs restapi.go "ErrorStringEnum"
+    ErrorStringEnumUnset = "ErrorStringEnumUnset"
+    ErrorStringEnumAllEventsAgedOffImmediately = "ErrorStringEnumAllEventsAgedOffImmediately"
+    ErrorStringEnumAllEventsFiltered = "ErrorStringEnumAllEventsFiltered"
