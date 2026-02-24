@@ -8,6 +8,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/models"
@@ -77,14 +78,37 @@ func handleAutoAgeoff(client *minio.Client, bucket string, autoAgeoffSettings Au
 	return err
 }
 
-/** Creates a new S3 store with static credentials. */
+/** Creates a new S3 store, using IRSA credentials if present in the environment, otherwise static credentials. */
 func NewS3Store(endpoint string, accessKey string, secretKey string, secure bool, bucket string, region string, promStreamsOperationDuration *prometheus.HistogramVec, autoAgeoffSettings AutomaticAgeOffSettings) (FileStorage, error) {
 	var client *minio.Client
 	var err error
+
+	var creds *credentials.Credentials
+	// AWS_WEB_IDENTITY_TOKEN_FILE is the standard IRSA env var injected by the EKS pod identity webhook
+	if tokenFile := os.Getenv("AWS_WEB_IDENTITY_TOKEN_FILE"); tokenFile != "" {
+		roleARN := os.Getenv("AWS_ROLE_ARN")
+		stsEndpoint := fmt.Sprintf("https://sts.%s.amazonaws.com", region)
+		creds, err = credentials.NewSTSWebIdentity(stsEndpoint, func() (*credentials.WebIdentityToken, error) {
+			token, err := os.ReadFile(tokenFile)
+			if err != nil {
+				return nil, err
+			}
+			return &credentials.WebIdentityToken{Token: string(token)}, nil
+		}, func(s *credentials.STSWebIdentity) {
+			s.RoleARN = roleARN
+		})
+		if err != nil {
+			return nil, err
+		}
+		st.Logger.Info().Msgf("Using IRSA credentials for S3 (role: %s)", roleARN)
+	} else {
+		creds = credentials.NewStaticV4(accessKey, secretKey, "")
+	}
+
 	opts := minio.Options{
 		Secure:    secure,
 		Region:    region,
-		Creds:     credentials.NewStaticV4(accessKey, secretKey, ""),
+		Creds:     creds,
 		Transport: getS3DefaultTransport(),
 	}
 	// accessKey, secretKey
