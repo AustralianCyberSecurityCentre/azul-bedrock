@@ -25,7 +25,7 @@ func TestEventBinary1(t *testing.T) {
 	ev.UpdateTrackingFields()
 	require.Equal(t, ev.TrackSourceReferences, "virustotal.5a0cc3b7a38feb282d8ae928eca68f5d")
 	require.Equal(t, ev.TrackLinks, []string{
-		"b9debe8afbdc6d0f552ca4d41fc8a5760778f2724d1560f6b4b0fc28bd837a82.ee303d3c6d7cfa24d42e6348bdd1103a26de77a887e9dbee3dd1fe6304414f69.plugin.MimeDecoder.2021.02.14",
+		"b9debe8afbdc6d0f552ca4d41fc8a5760778f2724d1560f6b4b0fc28bd837a82.ee303d3c6d7cfa24d42e6348bdd1103a26de77a887e9dbee3dd1fe6304414f69.2021_02_14T12_12_21Z_00.plugin.MimeDecoder.2021.02.14",
 	})
 	require.Equal(t, ev.TrackAuthors, []string{
 		"plugin.vtdownload.1.1",
