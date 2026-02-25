@@ -286,9 +286,10 @@ func genTrackAuthor(node *EventSourcePathNode) string {
 	return node.Author.Category + "." + node.Author.Name + "." + node.Author.Version
 }
 
+// TODO - here is where track links get generated
 func genTrackLink(node *EventSourcePathNode, parentId string) string {
 	// parent.child.plugin_category.plugin_name.plugin_version
-	return parentId + "." + node.Sha256 + "." + genTrackAuthor(node)
+	return parentId + "." + node.Sha256 + "." + node.Timestamp.Format("2006_01_02T15_04_05Z07_00") + "." + genTrackAuthor(node)
 }
 
 type ValidationOptions struct {
