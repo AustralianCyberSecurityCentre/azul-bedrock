@@ -1,6 +1,7 @@
 """Models representing dispatcher api requests and responses."""
 
 from azul_bedrock import models_network as azm
+from azul_bedrock.exception_enums import ExceptionCodeEnum
 from azul_bedrock.models_network import BaseModelStrict
 
 
@@ -73,13 +74,15 @@ class EventSimulate(BaseModelStrict):
     consumers: list[EventSimulateConsumer] = []
 
 
-# Note linked to models/restapi.go
+# Note linked to models/restapi.go - `type Error struct``
 class DispatcherApiErrorModel(BaseModelStrict):
     """Json error format returned from some of the dispatcher API endpoints."""
 
     status: str | None = None
     title: str | None = None
     detail: str | None = None
+    error_enum: ExceptionCodeEnum | None = None
+    error_params: dict[str, str] | None = None
 
 
 class ResponsePostEventFailure(BaseModelStrict):

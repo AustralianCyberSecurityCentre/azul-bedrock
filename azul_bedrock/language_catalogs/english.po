@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Azul 10\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-02-20 04:54+0000\n"
+"POT-Creation-Date: 2026-02-23 22:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -792,4 +792,19 @@ msgstr "PAT was authorised but is stored in an incorrect format."
 
 msgid "RestapiFailedToCreateSecurityIndex"
 msgstr "Unexpectedly couldn't create security index with error {inner_exception}"
+
+msgid "ErrorStringEnumUnset"
+msgstr "no translation for the encountered dispatcher error"
+
+msgid "ErrorStringEnumAllEventsAgedOffImmediately"
+msgstr ""
+"All events to be published were filtered out: failed to produce any of "
+"the provided events as they were all filtered out by the following "
+"filters [{filters}], with {total_failures} response failures which are: "
+"{response_failures}"
+
+msgid "ErrorStringEnumAllEventsFiltered"
+msgstr ""
+"All events to be published were filtered out: all submitted events aged "
+"off immediately, is the submission time older than ageoff?"
 

@@ -318,6 +318,10 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.RestapiPatExpiredOrInvalidPAT.value: "The provided PAT is invalid or expired.",
         ExceptionCodeEnum.RestapiValidPATSerialisationFailure.value: "PAT was authorised but is stored in an incorrect format.",
         ExceptionCodeEnum.RestapiFailedToCreateSecurityIndex.value: "Unexpectedly couldn't create security index with error {inner_exception}",
+        ### Dispatcher - note these map to golangs restapi.go "ErrorStringEnum"
+        ExceptionCodeEnum.ErrorStringEnumUnset.value: "no translation for the encountered dispatcher error",
+        ExceptionCodeEnum.ErrorStringEnumAllEventsAgedOffImmediately.value: "All events to be published were filtered out: failed to produce any of the provided events as they were all filtered out by the following filters [{filters}], with {total_failures} response failures which are: {response_failures}",
+        ExceptionCodeEnum.ErrorStringEnumAllEventsFiltered.value: "All events to be published were filtered out: all submitted events aged off immediately, is the submission time older than ageoff?",
     }
     return _create_catalog(translation_values)
 
