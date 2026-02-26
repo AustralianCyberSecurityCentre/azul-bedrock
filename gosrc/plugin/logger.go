@@ -5,6 +5,7 @@ package plugin
 
 import (
 	"os"
+	"strings"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -21,12 +22,14 @@ func RecreateLogger(level string) {
 	internal = internal.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	logmap := map[string]zerolog.Level{
-		"TRACE": zerolog.TraceLevel,
-		"DEBUG": zerolog.DebugLevel,
-		"INFO":  zerolog.InfoLevel,
-		"WARN":  zerolog.WarnLevel,
-		"ERROR": zerolog.ErrorLevel,
+		"TRACE":   zerolog.TraceLevel,
+		"DEBUG":   zerolog.DebugLevel,
+		"INFO":    zerolog.InfoLevel,
+		"WARN":    zerolog.WarnLevel,
+		"WARNING": zerolog.WarnLevel,
+		"ERROR":   zerolog.ErrorLevel,
 	}
+	level = strings.ToUpper(level)
 	internal = internal.Level(logmap[level])
 
 	Logger = internal
@@ -35,5 +38,6 @@ func RecreateLogger(level string) {
 
 func init() {
 	// load settings v2
-	RecreateLogger("info")
+	pluginSettings := parsePluginSettings(NewDefaultPluginSettings())
+	RecreateLogger(pluginSettings.RunnerLogLevel)
 }
