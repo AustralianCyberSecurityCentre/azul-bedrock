@@ -13,6 +13,7 @@ import (
 )
 
 type PluginSettings struct {
+	RunnerLogLevel string `koanf:"runner_log_level"`
 	// dispatcher to use for event interaction
 	PluginEventsUrl string `koanf:"plugin_events_url"`
 	// dispatcher to use for file data interaction
@@ -54,6 +55,7 @@ type PluginSettings struct {
 }
 
 var defaults = PluginSettings{
+	RunnerLogLevel:           "warning",
 	PluginEventsUrl:          "",
 	PluginDataUrl:            "",
 	HeartbeatIntervalSeconds: 30,

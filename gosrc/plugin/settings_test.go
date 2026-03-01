@@ -27,6 +27,7 @@ func TestConvertSettingsToMap(t *testing.T) {
 	defaultSettings := PluginSettings{}
 	result := defaultSettings.convertToMap()
 	require.Equal(t, map[string]string{
+		"runner_log_level":         "\"\"",
 		"data_url":                 "\"\"",
 		"deployment_key":           "\"\"",
 		"depth_limit":              "0",
