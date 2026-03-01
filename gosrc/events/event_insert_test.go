@@ -23,7 +23,7 @@ func TestEventInsert1(t *testing.T) {
 	// check tracking fields
 	ev.UpdateTrackingFields()
 	require.Equal(t, ev.TrackAuthor, "plugin.some_enhancer.111")
-	require.Equal(t, ev.TrackLink, "1111111111111111111111111111.2222222222222222222222222222222222222222222222222.plugin.some_enhancer.111")
+	require.Equal(t, ev.TrackLink, "1111111111111111111111111111.2222222222222222222222222222222222222222222222222.2021_03_29T03_24_08Z_00.plugin.some_enhancer.111")
 }
 
 // Data Label Validation tests.

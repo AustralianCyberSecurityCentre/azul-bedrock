@@ -287,8 +287,8 @@ func genTrackAuthor(node *EventSourcePathNode) string {
 }
 
 func genTrackLink(node *EventSourcePathNode, parentId string) string {
-	// parent.child.plugin_category.plugin_name.plugin_version
-	return parentId + "." + node.Sha256 + "." + genTrackAuthor(node)
+	// parent.child.timestamp.plugin_category.plugin_name.plugin_version
+	return parentId + "." + node.Sha256 + "." + node.Timestamp.Format("2006_01_02T15_04_05Z07_00") + "." + genTrackAuthor(node)
 }
 
 type ValidationOptions struct {
