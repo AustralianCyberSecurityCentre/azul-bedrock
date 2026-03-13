@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/events"
 )
 
 // NewMsgInFlightFromAvro converts event bytes into MsgInFlight.
