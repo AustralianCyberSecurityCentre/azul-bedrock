@@ -6,7 +6,7 @@ import (
 	"path"
 	"testing"
 
-	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/testdata"
+	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/testdata"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -7,7 +7,7 @@ import (
 	"log"
 	"slices"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/models"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/models"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/lifecycle"
 )

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/testdata"
+	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/testdata"
 	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/require"
 )
