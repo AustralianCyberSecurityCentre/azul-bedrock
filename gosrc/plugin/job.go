@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/client"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v10/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/client"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/events"
 )
 
 // Method for building up the result.
