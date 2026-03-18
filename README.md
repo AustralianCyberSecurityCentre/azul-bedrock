@@ -47,7 +47,7 @@ file --version
 ```bash
 sudo apt-get install automake libtool make gcc pkg-config git flex bison -y
 mkdir -p ./yara
-git clone --branch v4.5.5 https://github.com/VirusTotal/yara ./yara
+git clone --branch v4.3.2 https://github.com/VirusTotal/yara ./yara
 cd ./yara
 ./bootstrap.sh
 ./configure
