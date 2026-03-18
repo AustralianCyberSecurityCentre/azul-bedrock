@@ -30,7 +30,7 @@ api.send_thingo(mapi.Thingo())
 contains a number of bugs for office and archive file types
 
 ```bash
-git clone --depth 1 --branch FILE5_46 https://github.com/file/file
+git clone --depth 1 --branch FILE5_47 https://github.com/file/file
 cd file/
 autoreconf -f -i
 ./configure --disable-silent-rules
@@ -47,7 +47,7 @@ file --version
 ```bash
 sudo apt-get install automake libtool make gcc pkg-config git flex bison -y
 mkdir -p ./yara
-git clone --branch v4.3.2 https://github.com/VirusTotal/yara ./yara
+git clone --branch v4.5.5 https://github.com/VirusTotal/yara ./yara
 cd ./yara
 ./bootstrap.sh
 ./configure
