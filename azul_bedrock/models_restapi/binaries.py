@@ -321,6 +321,19 @@ class SimilarFuzzyMatch(BaseModelRepr):
     matches: list[SimilarFuzzyMatchRow]
 
 
+class SimilarEntropyMatchRow(BaseModelRepr):
+    """Entropy match result row."""
+
+    sha256: str
+    score: int | float
+
+
+class SimilarEntropyMatch(BaseModelRepr):
+    """Ssdeep similarity calculation result."""
+
+    matches: list[SimilarEntropyMatchRow]
+
+
 class SimilarMatchRow(BaseModelRepr):
     """Similarity result row."""
 
