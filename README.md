@@ -30,7 +30,7 @@ api.send_thingo(mapi.Thingo())
 contains a number of bugs for office and archive file types
 
 ```bash
-git clone --depth 1 --branch FILE5_46 https://github.com/file/file
+git clone --depth 1 --branch FILE5_47 https://github.com/file/file
 cd file/
 autoreconf -f -i
 ./configure --disable-silent-rules
