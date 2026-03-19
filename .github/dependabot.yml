@@ -12,3 +12,15 @@ updates:
     open-pull-requests-limit: 1
     cooldown:
       default-days: 7
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "automated"
+    commit-message:
+      prefix: "chore"
+    open-pull-requests-limit: 1
+    cooldown:
+      default-days: 7
