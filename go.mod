@@ -11,12 +11,12 @@ require (
 	github.com/allegro/bigcache/v3 v3.1.0
 	github.com/fatih/structs v1.1.0
 	github.com/go-viper/mapstructure/v2 v2.5.0
-	github.com/goccy/go-json v0.10.5
+	github.com/goccy/go-json v0.10.6
 	github.com/hamba/avro/v2 v2.31.0
 	github.com/hillu/go-yara/v4 v4.3.4
 	github.com/knadh/koanf/providers/env v1.1.0
 	github.com/knadh/koanf/providers/structs v1.0.0
-	github.com/knadh/koanf/v2 v2.3.3
+	github.com/knadh/koanf/v2 v2.3.4
 	github.com/minio/minio-go/v7 v7.0.99
 	github.com/rakyll/magicmime v0.1.0
 	github.com/rs/zerolog v1.34.0
