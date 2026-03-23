@@ -8,7 +8,7 @@ import (
 	"text/tabwriter"
 
 	"github.com/go-viper/mapstructure/v2"
-	kenv "github.com/knadh/koanf/providers/env"
+	kenv "github.com/knadh/koanf/providers/env/v2"
 	kstructs "github.com/knadh/koanf/providers/structs"
 	"github.com/knadh/koanf/v2"
 )
@@ -28,10 +28,13 @@ func ParseSettings[GenericSettings any](defaults GenericSettings, settingPrefix 
 	if len(settingPrefix) > 0 {
 		dotPrefix = fmt.Sprintf("%s.", settingPrefix)
 	}
-	f := kenv.Provider(dotPrefix, ".", func(s string) string {
-		return strings.ReplaceAll(strings.ToLower(
-			strings.TrimPrefix(s, dotPrefix)), ".", ".")
-	})
+	kenvOps := kenv.Opt{
+		Prefix: dotPrefix,
+		TransformFunc: func(envKey, envVal string) (string, any) {
+			return strings.ReplaceAll(strings.ToLower(strings.TrimPrefix(envKey, dotPrefix)), ".", "."), envVal
+		},
+	}
+	f := kenv.Provider(".", kenvOps)
 	err = k.Load(f, nil)
 	if err != nil {
 		log.Fatalf("env bad config load 1: %s", err.Error())
@@ -42,10 +45,13 @@ func ParseSettings[GenericSettings any](defaults GenericSettings, settingPrefix 
 	if len(settingPrefix) > 0 {
 		doubleUnderscorePrefix = fmt.Sprintf("%s__", settingPrefix)
 	}
-	f = kenv.Provider(doubleUnderscorePrefix, "__", func(s string) string {
-		return strings.ReplaceAll(strings.ToLower(
-			strings.TrimPrefix(s, doubleUnderscorePrefix)), "__", "__")
-	})
+	kenvOps = kenv.Opt{
+		Prefix: doubleUnderscorePrefix,
+		TransformFunc: func(envKey, envVal string) (string, any) {
+			return strings.ReplaceAll(strings.ToLower(strings.TrimPrefix(envKey, doubleUnderscorePrefix)), "__", "__"), envVal
+		},
+	}
+	f = kenv.Provider("__", kenvOps)
 	err = k.Load(f, nil)
 	if err != nil {
 		log.Fatalf("env bad config load 2: %s", err.Error())
