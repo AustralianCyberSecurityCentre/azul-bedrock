@@ -28,12 +28,12 @@ func ParseSettings[GenericSettings any](defaults GenericSettings, settingPrefix 
 	if len(settingPrefix) > 0 {
 		dotPrefix = fmt.Sprintf("%s.", settingPrefix)
 	}
-  kenvOps := kenv.Opt{
-    Prefix: dotPrefix,
-    TransformFunc: func(envKey, envVal string) (string, any) {
-      return strings.ReplaceAll(strings.ToLower(strings.TrimPrefix(envKey, dotPrefix)), ".", "."), envVal
-    },
-  }
+	kenvOps := kenv.Opt{
+		Prefix: dotPrefix,
+		TransformFunc: func(envKey, envVal string) (string, any) {
+			return strings.ReplaceAll(strings.ToLower(strings.TrimPrefix(envKey, dotPrefix)), ".", "."), envVal
+		},
+	}
 	f := kenv.Provider(".", kenvOps)
 	err = k.Load(f, nil)
 	if err != nil {
@@ -45,12 +45,12 @@ func ParseSettings[GenericSettings any](defaults GenericSettings, settingPrefix 
 	if len(settingPrefix) > 0 {
 		doubleUnderscorePrefix = fmt.Sprintf("%s__", settingPrefix)
 	}
-  kenvOps = kenv.Opt{
-    Prefix: doubleUnderscorePrefix,
-    TransformFunc: func(envKey, envVal string) (string, any) {
-      return strings.ReplaceAll(strings.ToLower(strings.TrimPrefix(envKey, doubleUnderscorePrefix)), "__", "__"), envVal
-    },
-  }
+	kenvOps = kenv.Opt{
+		Prefix: doubleUnderscorePrefix,
+		TransformFunc: func(envKey, envVal string) (string, any) {
+			return strings.ReplaceAll(strings.ToLower(strings.TrimPrefix(envKey, doubleUnderscorePrefix)), "__", "__"), envVal
+		},
+	}
 	f = kenv.Provider("__", kenvOps)
 	err = k.Load(f, nil)
 	if err != nil {
