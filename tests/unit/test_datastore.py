@@ -52,4 +52,4 @@ class TestUtil(TestCase):
 
         _cta.side_effect = None
         _cta.return_value = {"http_auth": ("user", "pass")}
-        datastore.credentials_to_es({"unique": "blah"})
+        datastore.credentials_to_es({"unique": "blah"})  # type: ignore
