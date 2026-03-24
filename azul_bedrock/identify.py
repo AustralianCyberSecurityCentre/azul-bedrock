@@ -16,10 +16,10 @@ from typing import Any, Callable
 import magic
 import pydantic
 import yaml
-import yara
+import yara  # type: ignore[import]
 
 from azul_bedrock.exception_enums import ExceptionCodeEnum
-from azul_bedrock.exceptions_bedrock import AzulValueError, BaseAzulException  # ty: ignore[unresolved-import]
+from azul_bedrock.exceptions_bedrock import AzulValueError, BaseAzulException
 
 cfg = None
 cmagic = magic.Magic(keep_going=True, raw=True)

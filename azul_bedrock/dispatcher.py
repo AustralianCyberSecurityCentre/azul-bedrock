@@ -122,25 +122,25 @@ class DispatcherAPI:
         if not is_task:
             endpoint = DPP.GET_EVENTS_ENDPOINT_PASSIVE
 
-        params_opt: dict[DPP.GetEvent, str | int | bool | list[str]] = {
-            DPP.GetEvent.Name: self._author_name,
-            DPP.GetEvent.Version: self._author_version,
-            DPP.GetEvent.Count: count,
-            DPP.GetEvent.Deadline: deadline,
-            DPP.GetEvent.DeploymentKey: self._deployment_key,
+        params_opt: dict[DPP.GetEvent | str, str | int | bool | list[str]] = {
+            DPP.GetEvent.Name.value: self._author_name,
+            DPP.GetEvent.Version.value: self._author_version,
+            DPP.GetEvent.Count.value: count,
+            DPP.GetEvent.Deadline.value: deadline,
+            DPP.GetEvent.DeploymentKey.value: self._deployment_key,
             # python client can't handle avro
             # this gets dropped in params because falsey is default
-            DPP.GetEvent.AvroFormat: False,
-            DPP.GetEvent.DenyActions: deny_actions,
-            DPP.GetEvent.DenySelf: deny_self,
-            DPP.GetEvent.RequireExpedite: require_expedite,
-            DPP.GetEvent.RequireLive: require_live,
-            DPP.GetEvent.RequireHistoric: require_historic,
-            DPP.GetEvent.RequireContent: require_content,
-            DPP.GetEvent.RequireUnderContentSize: require_under_content_size,
-            DPP.GetEvent.RequireOverContentSize: require_over_content_size,
-            DPP.GetEvent.RequireActions: require_actions,
-            DPP.GetEvent.RequireStreams: require_streams,
+            DPP.GetEvent.AvroFormat.value: False,
+            DPP.GetEvent.DenyActions.value: deny_actions,
+            DPP.GetEvent.DenySelf.value: deny_self,
+            DPP.GetEvent.RequireExpedite.value: require_expedite,
+            DPP.GetEvent.RequireLive.value: require_live,
+            DPP.GetEvent.RequireHistoric.value: require_historic,
+            DPP.GetEvent.RequireContent.value: require_content,
+            DPP.GetEvent.RequireUnderContentSize.value: require_under_content_size,
+            DPP.GetEvent.RequireOverContentSize.value: require_over_content_size,
+            DPP.GetEvent.RequireActions.value: require_actions,
+            DPP.GetEvent.RequireStreams.value: require_streams,
         }
         for k in list(params_opt):
             if not params_opt[k]:
@@ -161,7 +161,7 @@ class DispatcherAPI:
 
         filecontent = None  # needs to exist for certain exceptions
         try:
-            content_type, options = multipart.parse_options_header(resp.headers["Content-Type"])
+            content_type, options = multipart.parse_options_header(resp.headers["Content-Type"])  # type: ignore
             if content_type != "multipart/form-data":
                 raise DispatcherApiException(
                     response=resp,
@@ -179,10 +179,10 @@ class DispatcherAPI:
 
             boundary = options["boundary"]
             stream = io.BytesIO(resp.content)
-            parser = multipart.MultipartParser(stream, boundary)
+            parser = multipart.MultipartParser(stream, boundary)  # type: ignore
             respInfo = None
             respEvents = None
-            for part in parser:
+            for part in parser:  # ty: ignore[not-iterable]
                 filecontent = part.raw
                 if part.name == DPP.GET_EVENTS_RESP_INFO:
                     respInfo = azapi.GetEventsInfo.model_validate_json(filecontent)
@@ -432,6 +432,8 @@ class DispatcherAPI:
         :param end_pos: bytes to take up to, if None uses EOF
         """
         req_header = {}
+        start_pos: int | str | None = start_pos
+        end_pos: int | str | None = end_pos
         # take range
         if start_pos is None and end_pos is None:
             # Don't add a range header if there is no start or end range provided.
@@ -501,6 +503,8 @@ class DispatcherAPI:
         :param end_pos: bytes to take up to, if None uses EOF
         """
         req_header = {}
+        start_pos: int | str | None = start_pos
+        end_pos: int | str | None = end_pos
         # take range
         if start_pos is None and end_pos is None:
             # Don't add a range header if there is no start or end range provided.
@@ -634,7 +638,10 @@ class DispatcherAPI:
             )
 
         # prepare query params
-        params_opt = {DPP.PostStream.SkipIdentify: skip_identify, DPP.PostStream.ExpectedSha256: expected_sha256}
+        params_opt = {
+            DPP.PostStream.SkipIdentify.value: skip_identify,
+            DPP.PostStream.ExpectedSha256.value: expected_sha256,
+        }
         for k in list(params_opt):
             if not params_opt[k]:
                 params_opt.pop(k)
@@ -707,7 +714,10 @@ class DispatcherAPI:
             )
 
         # prepare query params
-        params_opt = {DPP.PostStream.SkipIdentify: skip_identify, DPP.PostStream.ExpectedSha256: expected_sha256}
+        params_opt = {
+            DPP.PostStream.SkipIdentify.value: skip_identify,
+            DPP.PostStream.ExpectedSha256.value: expected_sha256,
+        }
         for k in list(params_opt):
             if not params_opt[k]:
                 params_opt.pop(k)

@@ -3,6 +3,7 @@
 import contextlib
 import uuid
 from collections import defaultdict
+from typing import Any
 
 import httpx
 from fastapi import HTTPException
@@ -15,7 +16,7 @@ from azul_bedrock.settings import BedrockSettings, LanguageCatalogsEnum
 
 settings = BedrockSettings()
 
-PARAMETER_TYPE = dict[str, str | int | float | bool] | None
+PARAMETER_TYPE = dict[str, str | int | float | bool] | dict[str, Any] | None
 
 
 class BaseAzulException(Exception):
