@@ -696,6 +696,8 @@ class RetrohuntEvent(BaseEvent):
     class RetrohuntEntity(BaseModel):
         """Retrohunt Data Model."""
 
+        model_config = ConfigDict(use_enum_values=True)
+
         # The Id of the retrohunt submission e.g "hunt_" + now.strftime("%Y%m%d%H%M%S")
         id: str = ""
         # The query type Yara or BigGrep
