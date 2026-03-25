@@ -163,3 +163,5 @@ line-ending = "auto"
 docstring-code-format = false
 docstring-code-line-length = "dynamic"
 
+[tool.ty.rules]
+unused-ignore-comment = "ignore"
