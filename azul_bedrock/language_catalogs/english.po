@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Azul 10\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-02-23 22:01+0000\n"
+"POT-Creation-Date: 2026-03-25 21:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,6 +208,9 @@ msgstr ""
 "When using --no-input, both METASTORE_OPENSEARCH_ADMIN_USERNAME and "
 "METASTORE_OPENSEARCH_ADMIN_PASSWORD must be set."
 
+msgid "MetastoreIngestorEventTypeNotSet"
+msgstr "event type not set for {class_name}"
+
 msgid "MetastoreIngestorBadStatusDocument"
 msgstr ""
 "bad status {status_code}\n"
@@ -226,6 +229,9 @@ msgstr "source={source}: missing fields= {fields_missing}"
 
 msgid "MetastoreSettingsExtraFieldsAreMissing"
 msgstr "source={source}: has extra fields {fields_extra}"
+
+msgid "MetastoreFailedToParseFeatureValues"
+msgstr "unhandled type: {type} with value {value}"
 
 msgid "MetastoreFeatureEnrichmentFailed"
 msgstr ""
@@ -385,7 +391,13 @@ msgid "MetastoreKnnTooManySearchTerms"
 msgstr "kNN filters only supported for one search term"
 
 msgid "MetastoreUnknownDocType"
-msgstr "unknown doc type to handle error in {doc_type}"
+msgstr "Unknown doc type to handle error in {doc_type}"
+
+msgid "MetastoreInvalidGetStringsQuantity"
+msgstr "Cannot request 0 or less strings when getting strings."
+
+msgid "MetastoreInvalidGetHexQuantity"
+msgstr "Cannot request 0 or less hex values when getting hex_hits."
 
 msgid "MetastoreUnknownAnnotation"
 msgstr "unknown annotation {event_type}"

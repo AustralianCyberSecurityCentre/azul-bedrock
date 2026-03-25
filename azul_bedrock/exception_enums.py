@@ -83,6 +83,7 @@ class ExceptionCodeEnum(StrEnum):
     # entry
     MetastoreEntryBadInputParameters = "MetastoreEntryBadInputParameters"
     # ingestor
+    MetastoreIngestorEventTypeNotSet = "MetastoreIngestorEventTypeNotSet"
     MetastoreIngestorBadStatusDocument = "MetastoreIngestorBadStatusDocument"
     MetastoreIngestorGetDataNetworkError = "MetastoreIngestorGetDataNetworkError"
     # settings
@@ -90,6 +91,7 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreSettingsFieldsAreMissing = "MetastoreSettingsFieldsAreMissing"
     MetastoreSettingsExtraFieldsAreMissing = "MetastoreSettingsExtraFieldsAreMissing"
     # feature
+    MetastoreFailedToParseFeatureValues = "MetastoreFailedToParseFeatureValues"
     MetastoreFeatureEnrichmentFailed = "MetastoreFeatureEnrichmentFailed"
     # fileformat
     MetastoreFileFormatTooLargeForUnzip = "MetastoreFileFormatTooLargeForUnzip"
@@ -148,6 +150,8 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreBadSecurityConversionInclude = "MetastoreBadSecurityConversionInclude"
     MetastoreKnnTooManySearchTerms = "MetastoreKnnTooManySearchTerms"
     MetastoreUnknownDocType = "MetastoreUnknownDocType"
+    MetastoreInvalidGetStringsQuantity = "MetastoreInvalidGetStringsQuantity"
+    MetastoreInvalidGetHexQuantity = "MetastoreInvalidGetHexQuantity"
     # annotation
     MetastoreUnknownAnnotation = "MetastoreUnknownAnnotation"
     MetastoreAnnotationBadCharacterInTag = "MetastoreAnnotationBadCharacterInTag"
