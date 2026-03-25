@@ -16,7 +16,7 @@ from typing import Any, Callable
 import magic
 import pydantic
 import yaml
-import yara  # type: ignore[import]
+import yara  # type: ignore
 
 from azul_bedrock.exception_enums import ExceptionCodeEnum
 from azul_bedrock.exceptions_bedrock import AzulValueError, BaseAzulException
