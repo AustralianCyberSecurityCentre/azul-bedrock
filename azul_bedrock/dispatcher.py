@@ -5,7 +5,7 @@ import json
 import logging
 import typing
 from collections.abc import AsyncIterable
-from typing import Any, Callable
+from typing import Any, Callable, Sequence
 
 import httpx
 import multipart
@@ -260,7 +260,7 @@ class DispatcherAPI:
 
     def submit_events(
         self,
-        events: list[azm.BaseEvent],
+        events: Sequence[azm.BaseEvent],
         *,
         model: str,
         sync: bool = False,

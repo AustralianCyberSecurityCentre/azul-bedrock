@@ -105,6 +105,7 @@ def _get_english_catalog() -> BabCatalog:
         # entry
         ExceptionCodeEnum.MetastoreEntryBadInputParameters.value: "When using --no-input, both METASTORE_OPENSEARCH_ADMIN_USERNAME and METASTORE_OPENSEARCH_ADMIN_PASSWORD must be set.",
         # ingestor
+        ExceptionCodeEnum.MetastoreIngestorEventTypeNotSet.value: "event type not set for {class_name}",
         ExceptionCodeEnum.MetastoreIngestorBadStatusDocument.value: "bad status {status_code}\n{content_text}",
         ExceptionCodeEnum.MetastoreIngestorGetDataNetworkError.value: "connection error",
         # settings
@@ -112,6 +113,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreSettingsFieldsAreMissing.value: "source={source}: missing fields= {fields_missing}",
         ExceptionCodeEnum.MetastoreSettingsExtraFieldsAreMissing.value: "source={source}: has extra fields {fields_extra}",
         # feature
+        ExceptionCodeEnum.MetastoreFailedToParseFeatureValues.value: "unhandled type: {type} with value {value}",
         ExceptionCodeEnum.MetastoreFeatureEnrichmentFailed.value: "failed to parse and enrich feature: {feature} with error message: {inner_exception}",
         # fileformat
         ExceptionCodeEnum.MetastoreFileFormatTooLargeForUnzip.value: "Can't extract file larger than {max_bundled_pre_extract_size}",
@@ -167,7 +169,9 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreBadSecurityConversionExclude.value: "Bad security provided in security_exclude {security_exclude}. Exception: {inner_exception}",
         ExceptionCodeEnum.MetastoreBadSecurityConversionInclude.value: "Bad security provided in security_include {security_include}. Exception: {inner_exception}",
         ExceptionCodeEnum.MetastoreKnnTooManySearchTerms.value: "kNN filters only supported for one search term",
-        ExceptionCodeEnum.MetastoreUnknownDocType.value: "unknown doc type to handle error in {doc_type}",
+        ExceptionCodeEnum.MetastoreUnknownDocType.value: "Unknown doc type to handle error in {doc_type}",
+        ExceptionCodeEnum.MetastoreInvalidGetStringsQuantity.value: "Cannot request 0 or less strings when getting strings.",
+        ExceptionCodeEnum.MetastoreInvalidGetHexQuantity.value: "Cannot request 0 or less hex values when getting hex_hits.",
         # annotation
         ExceptionCodeEnum.MetastoreUnknownAnnotation.value: "unknown annotation {event_type}",
         ExceptionCodeEnum.MetastoreAnnotationBadCharacterInTag.value: "bad characters in tag: {event_tag}",
