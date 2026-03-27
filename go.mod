@@ -19,7 +19,7 @@ require (
 	github.com/knadh/koanf/v2 v2.3.4
 	github.com/minio/minio-go/v7 v7.0.99
 	github.com/rakyll/magicmime v0.1.0
-	github.com/rs/zerolog v1.34.0
+	github.com/rs/zerolog v1.35.0
 	github.com/sanity-io/litter v1.5.8
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/exp v0.0.0-20260312153236-7ab1446f8b90
