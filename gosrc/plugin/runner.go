@@ -417,6 +417,11 @@ func (pr *PluginRunner) RunTest(t *testing.T, runOptions *RunTestOptions, fileDe
 	}
 	defer job.Close()
 
+	if pr.config.EnableLivenessProbe {
+		if f, touchErr := os.Create(filepath.Join(os.TempDir(), ".runner-keepalive")); touchErr == nil {
+			f.Close()
+		}
+	}
 	pluginError := pr.runEvent(&job)
 	return NewTestJobResult(&job, pluginError, &TestJobResultOptions{IncludeRawBytes: runOptions.IncludeStreamsInResult})
 }
