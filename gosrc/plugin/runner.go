@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strings"
 	"syscall"
 	"testing"
@@ -205,7 +206,7 @@ func (pr *PluginRunner) Run() string {
 		}
 
 		if pr.config.EnableLivenessProbe {
-			if f, touchErr := os.Create("/tmp/.runner-keepalive"); touchErr == nil {
+			if f, touchErr := os.Create(filepath.Join(os.TempDir(), ".runner-keepalive")); touchErr == nil {
 				f.Close()
 			}
 		}
