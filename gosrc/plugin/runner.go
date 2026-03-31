@@ -204,6 +204,12 @@ func (pr *PluginRunner) Run() string {
 			pr.logger.Fatal().Err(err).Msg("couldn't get events from dispatcher")
 		}
 
+		if pr.config.EnableLivenessProbe {
+			if f, touchErr := os.Create("/tmp/.runner-keepalive"); touchErr == nil {
+				f.Close()
+			}
+		}
+
 		if eventResponseInfo.Filtered > 0 {
 			pr.logger.Info().Msgf("%d  uninteresting events filtered by dispatcher", eventResponseInfo.Filtered)
 			// No event found but some were filtered look for more events.

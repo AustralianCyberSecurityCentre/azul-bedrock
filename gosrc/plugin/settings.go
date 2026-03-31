@@ -52,6 +52,8 @@ type PluginSettings struct {
 	FilterSelf bool `koanf:"plugin_filter_self"`
 	// Filter to only accept data streams with specific labels.
 	FilterDataTypes map[string][]string `koanf:"plugin_filter_data_types"`
+	// Touch /tmp/.runner-keepalive on each successful dispatcher poll to support liveness probes.
+	EnableLivenessProbe bool `koanf:"enable_liveness_probe"`
 }
 
 var defaults = PluginSettings{
@@ -75,6 +77,7 @@ var defaults = PluginSettings{
 	FilterAllowEventTypes:    []events.BinaryAction{events.ActionSourced, events.ActionExtracted},
 	FilterSelf:               false,
 	FilterDataTypes:          map[string][]string{},
+	EnableLivenessProbe:      false,
 }
 
 // --- Most common selection of pluginSettings people modify.
