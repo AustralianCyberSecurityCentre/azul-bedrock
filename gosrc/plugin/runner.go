@@ -206,7 +206,8 @@ func (pr *PluginRunner) Run() string {
 		}
 
 		if pr.config.EnableLivenessProbe {
-			if f, touchErr := os.Create(filepath.Join(os.TempDir(), ".runner-keepalive")); touchErr == nil {
+			// Touch the keepalive file so Kubernetes knows the plugin is still alive via livenessProbe
+			if f, touchErr := os.Create(filepath.Join(os.TempDir(), KEEPALIVE_FILENAME)); touchErr == nil {
 				f.Close()
 			}
 		}
@@ -418,7 +419,8 @@ func (pr *PluginRunner) RunTest(t *testing.T, runOptions *RunTestOptions, fileDe
 	defer job.Close()
 
 	if pr.config.EnableLivenessProbe {
-		if f, touchErr := os.Create(filepath.Join(os.TempDir(), ".runner-keepalive")); touchErr == nil {
+		// Touch the keepalive file so Kubernetes knows the plugin is still alive via livenessProbe
+		if f, touchErr := os.Create(filepath.Join(os.TempDir(), KEEPALIVE_FILENAME)); touchErr == nil {
 			f.Close()
 		}
 	}

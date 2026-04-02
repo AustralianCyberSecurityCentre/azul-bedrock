@@ -12,6 +12,9 @@ import (
 	"github.com/go-viper/mapstructure/v2"
 )
 
+// name of the keepalive file used for liveness probe functionality, should match the file used in azul-app/azul/templates/helpers/plugin-liveness-probe.yaml
+const KEEPALIVE_FILENAME = ".runner-keepalive"
+
 type PluginSettings struct {
 	RunnerLogLevel string `koanf:"runner_log_level"`
 	// dispatcher to use for event interaction
