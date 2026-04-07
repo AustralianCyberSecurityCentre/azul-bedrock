@@ -8,10 +8,11 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-03-31T04:41:10.780564716Z"
+exclude-newer = "2026-03-31T05:30:43.298625687Z"
 exclude-newer-span = "P1W"
 
 [options.exclude-newer-package]
+azul-nsrl-lookup-server = false
 azul-bedrock = false
 azul-security = false
 azul-runner = false
