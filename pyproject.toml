@@ -46,9 +46,28 @@ Repository = "https://github.com/AustralianCyberSecurityCentre/azul-bedrock"
 [tool.hatch.version]
 source = "vcs"
 
+[tool.uv]
+package = true
+exclude-newer = "1 week"
+exclude-newer-package = { azul-bedrock = false, azul-runner = false, azul-security=false, azul-metastore = false, azul-nsrl-lookup-serve=false, azul-plugin-retrohunt = false }
+
+[tool.uv.sources]
+azul-bedrock = { index="cache"}
+azul-runner = { index="cache" }
+azul-metastore = { index="cache"}
+azul-security = { index="cache"}
+azul-nsrl-lookup-server = { index="cache"}
+azul-plugin-retrohunt = { index="cache" }
+
 [[tool.uv.index]]
-url = "https://devpi.acsc.internal/azul/stable/+simple"
+name = "pypi"
+url = "https://pypi.org/simple"
 default = true
+
+[[tool.uv.index]]
+name = "cache"
+url = "https://devpi.acsc.internal/azul/stable/"
+explicit = true
 
 [tool.hatch.version.raw-options]
 version_scheme = "only-version"
