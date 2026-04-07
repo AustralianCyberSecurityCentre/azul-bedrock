@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strings"
 	"syscall"
 	"testing"
@@ -202,6 +203,13 @@ func (pr *PluginRunner) Run() string {
 		// Something stopped us getting events from dispatcher (either a bad event that couldn't be decoded or dispatcher is unavailable.)
 		if err != nil {
 			pr.logger.Fatal().Err(err).Msg("couldn't get events from dispatcher")
+		}
+
+		if pr.config.EnableLivenessProbe {
+			// Touch the keepalive file so Kubernetes knows the plugin is still alive via livenessProbe
+			if f, touchErr := os.Create(filepath.Join(os.TempDir(), KEEPALIVE_FILENAME)); touchErr == nil {
+				f.Close()
+			}
 		}
 
 		if eventResponseInfo.Filtered > 0 {
@@ -410,6 +418,12 @@ func (pr *PluginRunner) RunTest(t *testing.T, runOptions *RunTestOptions, fileDe
 	}
 	defer job.Close()
 
+	if pr.config.EnableLivenessProbe {
+		// Touch the keepalive file so Kubernetes knows the plugin is still alive via livenessProbe
+		if f, touchErr := os.Create(filepath.Join(os.TempDir(), KEEPALIVE_FILENAME)); touchErr == nil {
+			f.Close()
+		}
+	}
 	pluginError := pr.runEvent(&job)
 	return NewTestJobResult(&job, pluginError, &TestJobResultOptions{IncludeRawBytes: runOptions.IncludeStreamsInResult})
 }

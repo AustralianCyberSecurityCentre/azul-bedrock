@@ -12,6 +12,9 @@ import (
 	"github.com/go-viper/mapstructure/v2"
 )
 
+// name of the keepalive file used for liveness probe functionality, should match the file used in azul-app/azul/templates/helpers/plugin-liveness-probe.yaml
+const KEEPALIVE_FILENAME = ".runner-keepalive"
+
 type PluginSettings struct {
 	RunnerLogLevel string `koanf:"runner_log_level"`
 	// dispatcher to use for event interaction
@@ -52,6 +55,8 @@ type PluginSettings struct {
 	FilterSelf bool `koanf:"plugin_filter_self"`
 	// Filter to only accept data streams with specific labels.
 	FilterDataTypes map[string][]string `koanf:"plugin_filter_data_types"`
+	// Touch /tmp/.runner-keepalive on each successful dispatcher poll to support liveness probes.
+	EnableLivenessProbe bool `koanf:"plugin_enable_liveness_probe"`
 }
 
 var defaults = PluginSettings{
@@ -75,6 +80,7 @@ var defaults = PluginSettings{
 	FilterAllowEventTypes:    []events.BinaryAction{events.ActionSourced, events.ActionExtracted},
 	FilterSelf:               false,
 	FilterDataTypes:          map[string][]string{},
+	EnableLivenessProbe:      false,
 }
 
 // --- Most common selection of pluginSettings people modify.

@@ -3,6 +3,8 @@ package plugin
 import (
 	"context"
 	"encoding/json"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/events"
@@ -235,4 +237,16 @@ func TestPluginAddMixed(t *testing.T) {
 		},
 	})
 
+}
+
+func TestLivenessProbeCreatesFile(t *testing.T) {
+	keepaliveFile := filepath.Join(os.TempDir(), ".runner-keepalive")
+	os.Remove(keepaliveFile)
+
+	pr := NewPluginRunner(NewDummyPlugin(nil))
+	pr.config.EnableLivenessProbe = true
+	pr.RunTest(t, defaultRunTestOption(), "Benign text file.")
+
+	_, err := os.Stat(keepaliveFile)
+	require.NoError(t, err, "liveness probe file should exist after RunTest with EnableLivenessProbe=true")
 }
