@@ -64,13 +64,13 @@ name = "pypi"
 url = "https://pypi.org/simple"
 default = true
 
+[tool.hatch.version.raw-options]
+version_scheme = "only-version"
+
 [[tool.uv.index]]
 name = "cache"
 url = "https://devpi.acsc.internal/azul/stable/"
 explicit = true
-
-[tool.hatch.version.raw-options]
-version_scheme = "only-version"
 
 [tool.hatch.version.fallback]
 version = "0.0.0"
@@ -84,7 +84,9 @@ dev = [
     "cart>=1.2.3",
     "fastapi[all]>=0.60.0",
     "pytest>=9.0.2",
+    "ruff>=0.15.8",
     "tox>=4.34.1",
+    "ty>=0.0.27",
     "urllib3>=2.6.3",
 ]
 
