@@ -230,6 +230,7 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreTagBinaryInvalidSecurity = "MetastoreTagBinaryInvalidSecurity"
     MetastoreInvalidAnnotationForCreate = "MetastoreInvalidAnnotationForCreate"
     MetastoreCantDeleteTagFromBinary = "MetastoreCantDeleteTagFromBinary"
+    MetastoreApiDisabled = "MetastoreApiDisabled"
     # features
     MetastoreInvalidDeleteTag = "MetastoreInvalidDeleteTag"
     MetastoreNoFeatureValuesFound = "MetastoreNoFeatureValuesFound"
