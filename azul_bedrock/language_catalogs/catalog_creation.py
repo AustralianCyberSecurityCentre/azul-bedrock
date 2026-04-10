@@ -251,6 +251,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreTagBinaryInvalidSecurity.value: "security being applied by the user is greater than the current users security. because user: {inner_exception}",
         ExceptionCodeEnum.MetastoreInvalidAnnotationForCreate.value: "{inner_exception}",
         ExceptionCodeEnum.MetastoreCantDeleteTagFromBinary.value: "Cannot delete tag {tag} from the sha256 {sha256}, because it is not found.",
+        ExceptionCodeEnum.MetastoreApiDisabled.value: "API is currently disabled due to current configuration.",
         # features
         ExceptionCodeEnum.MetastoreInvalidDeleteTag.value: "Cannot delete tag {tag} because it doesn't exist.",
         ExceptionCodeEnum.MetastoreNoFeatureValuesFound.value: "No feature values found for feature '{feature}'",
