@@ -2,7 +2,7 @@ module github.com/AustralianCyberSecurityCentre/azul-bedrock/v11
 
 go 1.26.0
 
-toolchain go1.26.1
+toolchain go1.26.2
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.21.0
@@ -17,7 +17,7 @@ require (
 	github.com/knadh/koanf/providers/env/v2 v2.0.0
 	github.com/knadh/koanf/providers/structs v1.0.0
 	github.com/knadh/koanf/v2 v2.3.4
-	github.com/minio/minio-go/v7 v7.0.99
+	github.com/minio/minio-go/v7 v7.0.100
 	github.com/rakyll/magicmime v0.1.0
 	github.com/rs/zerolog v1.35.0
 	github.com/sanity-io/litter v1.5.8
