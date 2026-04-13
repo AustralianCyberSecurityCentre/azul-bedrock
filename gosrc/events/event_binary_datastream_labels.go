@@ -60,6 +60,8 @@ func IsDataLabelValid(dataLabel DatastreamLabel) bool {
 		fallthrough
 	case DataLabelDecompiledC:
 		fallthrough
+	case DataLabelDecompiledJava:
+		fallthrough
 	case DataLabelDeobJs:
 		fallthrough
 	case DataLabelPasswordDictionary:
