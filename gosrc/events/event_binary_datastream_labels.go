@@ -21,6 +21,8 @@ const (
 	DataLabelDecompiledCs DatastreamLabel = "decompiled_cs"
 	// Decompiled C content.
 	DataLabelDecompiledC DatastreamLabel = "decompiled_c"
+	// Decompiled Java content.
+	DataLabelDecompiledJava DatastreamLabel = "decompiled_java"
 	// Deobfuscated Javascript content.
 	DataLabelDeobJs DatastreamLabel = "deob_js"
 	// Words extracted from a file that can potentially be used for extracting related zip files.
@@ -57,6 +59,8 @@ func IsDataLabelValid(dataLabel DatastreamLabel) bool {
 	case DataLabelDecompiledCs:
 		fallthrough
 	case DataLabelDecompiledC:
+		fallthrough
+	case DataLabelDecompiledJava:
 		fallthrough
 	case DataLabelDeobJs:
 		fallthrough
