@@ -3,6 +3,7 @@
 # rules identify a file type and are processed in order
 # once a file is identified, no further magic rules are checked
 #
+# Note - some regex rules have been inspired by https://github.com/CybercentreCanada/assemblyline-base/blob/master/assemblyline/common/identify_defaults.py
 # version of this rules file
 # if rules are changed, this must be incremented!
 # if other metadata attributes calculated for a stream are changed, you'll also need to increment this number!
@@ -76,6 +77,9 @@ id_mappings:
   - id: archive/rpm
     legacy: Linux RPM package
     extension: rpm
+  - id: archive/squashfs
+    legacy: Data
+    extension: squashfs
   - id: archive/szdd
     legacy: Data
     extension: ""
@@ -565,6 +569,8 @@ rules:
     magic: "^LZMA compressed data"
   - id: archive/rar
     magic: "^rar archive data"
+  - id: archive/squashfs
+    magic: "^Squashfs filesystem"
   - id: archive/tar
     magic: "^(GNU|POSIX) tar archive"
   - id: archive/xz
@@ -653,6 +659,10 @@ rules:
     magic: "^MS Windows shortcut"
   - id: document/email
     magic: "Mime entity text"
+  - id: document/email
+    magic: "MIME entity, ASCII text"
+  - id: document/email
+    magic: "^message/rfc822"
   - id: document/email
     magic: "^SMTP mail"
   - id: document/email
