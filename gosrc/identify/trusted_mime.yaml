@@ -1,5 +1,6 @@
 # LibMagic mimetypes that we blindly trust to assign an Assemblyline type
 # Dictionary of values in yaml - taken from assemblyline-base -> assemblyline -> common -> identify_defaults.py
+# https://github.com/CybercentreCanada/assemblyline-base/blob/master/assemblyline/common/identify_defaults.py
 trusted_mimes:
   # Mpeg Audio
   audio/mp2: audio/mp2
@@ -49,6 +50,7 @@ trusted_mimes:
   text/x-python: code/python
   text/x-script.python: code/python
   application/x-bytecode.python: python/bytecode
+  text/x-bytecode.python: python/bytecode
   # PHP
   text/x-php: code/php
   # XML file
@@ -72,9 +74,10 @@ trusted_mimes:
   text/x-msdos-batch: code/batch
   # Registry file
   text/x-ms-regedit: text/windows/registry
+  # Sysmon EVTX file
+  application/x-ms-evtx: metadata/sysmon/evt
   # JSON file
   application/json: text/json
-
   # Autorun files
   application/x-setupscript: code/autorun
   # Bittorrent files
@@ -86,7 +89,6 @@ trusted_mimes:
   # Font
   application/vnd.ms-opentype: resource/font/opentype
   application/x-font-sfn: resource/font/x11
-
   # Image Icon
   image/vnd.microsoft.icon: image/icon
   application/ico: image/icon
@@ -121,7 +123,6 @@ trusted_mimes:
   image/tiff: image/tiff
   # Image Cursor
   image/x-win-bitmap: image/cursor
-
   # Office Outlook email
   application/vnd.ms-outlook: document/office/email
   # Office Powerpoint
@@ -163,7 +164,6 @@ trusted_mimes:
   application/vnd.oasis.opendocument.text-master: document/odt/text
   application/vnd.oasis.opendocument.text-master-template: document/odt/text
   application/vnd.oasis.opendocument.web: document/odt/web
-
   # Archives
   application/x-7z-compressed: archive/7-zip
   application/x-tar: archive/tar
@@ -186,17 +186,14 @@ trusted_mimes:
   application/vnd.ms-cab-compressed: archive/cabinet
   application/zstd: archive/zstd
   application/x-zstd: archive/zstd
-
-  # Inspired by https://github.com/CAPESandbox/sflock/blob/1fe3cf32d01d66c4ad38696c609b13d4f4bc9ea3/sflock/ident.py#L116
   application/x-bzip2: archive/bzip2
   application/java-archive: java/jar
-
   # JAVA Class
   application/x-java-applet: java/class
-
+  # EPUB
+  application/epub+zip: document/epub
   # Packet capture
   application/vnd.tcpdump.pcap: network/tcpdump
-
   message/rfc822: document/email
   text/calendar: text/calendar
   application/x-mach-binary: executable/mach-o
@@ -204,11 +201,9 @@ trusted_mimes:
   application/x-hwp: document/office/hwp
   application/vnd.iccprofile: metadata/iccprofile
   application/vnd.lotus-1-2-3: document/lotus/spreadsheet
-
   # Firefox modules
   application/x-xpinstall: application/mozilla/extension
   # Chrome extensions
   application/x-chrome-extension: application/chrome/extension
-
   # Android
   application/vnd.android.package-archive: android/apk
