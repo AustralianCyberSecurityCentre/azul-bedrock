@@ -266,6 +266,7 @@ class ExceptionCodeEnum(StrEnum):
     SecurityInvalidSecurityStringWhileNormalising = "SecurityInvalidSecurityStringWhileNormalising"
     SecurityInvalidReleasabilitiesConvertFromLabels = "SecurityInvalidReleasabilitiesConvertFromLabels"
     SecurityInvalidLabelConvertingFromLabels = "SecurityInvalidLabelConvertingFromLabels"
+    SecurityClassificationIncompatibleCaveats = "SecurityClassificationIncompatibleCaveats"
 
     # security
     SecurityMinRequiredAccessNotFound = "SecurityMinRequiredAccessNotFound"
