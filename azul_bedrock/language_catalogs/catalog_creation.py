@@ -284,6 +284,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.SecurityInvalidSecurityStringWhileNormalising.value: "{inner_exception}: raw_security={raw_security}",
         ExceptionCodeEnum.SecurityInvalidReleasabilitiesConvertFromLabels.value: "security has invalid groups: {group_diff}",
         ExceptionCodeEnum.SecurityInvalidLabelConvertingFromLabels.value: "security has invalid label {security_label}",
+        ExceptionCodeEnum.SecurityClassificationIncompatibleCaveats.value: "Caveats '{bad_caveats}' are not compatible with the provided classification in the string '{clsfs}'.",
         # security
         ExceptionCodeEnum.SecurityMinRequiredAccessNotFound.value: "minimum required access level ({security_label}) not found in inclusive or exclusive sets",
         ExceptionCodeEnum.SecuritySecurityDefaultNotSet.value: "must set security_default to valid security option",
