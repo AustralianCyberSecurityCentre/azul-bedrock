@@ -249,6 +249,8 @@ class DataLabel(StrEnum):
     TEST = "test"
     # Plain text file that provides a large amount of information about a binary.
     TEXT = "text"
+    # Yara rule hit
+    YARA_RULE_HIT = "yara_rule_hit"
 
 
 class FileInfo(BaseModelStrict):

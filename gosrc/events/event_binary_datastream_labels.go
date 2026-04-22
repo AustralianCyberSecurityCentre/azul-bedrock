@@ -39,6 +39,8 @@ const (
 	DataLabelTest DatastreamLabel = "test"
 	// Plain text file that provides a large amount of information about a binary.
 	DataLabelText DatastreamLabel = "text"
+	// Yara rule hit
+	DataLabelYaraRuleHit DatastreamLabel = "yara_rule_hit"
 )
 
 func (b DatastreamLabel) Str() string {
@@ -77,6 +79,8 @@ func IsDataLabelValid(dataLabel DatastreamLabel) bool {
 	case DataLabelTest:
 		fallthrough
 	case DataLabelText:
+		fallthrough
+	case DataLabelYaraRuleHit:
 		return true
 	default:
 		return false
