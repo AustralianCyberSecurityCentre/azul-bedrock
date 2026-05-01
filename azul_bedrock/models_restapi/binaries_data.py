@@ -8,6 +8,13 @@ from azul_bedrock import models_network as azm
 from azul_bedrock.models_restapi.basic import BaseModelRepr
 
 
+class CommonBinaryStrings(BaseModel):
+    """Binary string return format."""
+
+    strings: list[str]
+    incomplete: bool
+
+
 class BinaryData(azm.FileInfo):
     """Bedrock FileInfo with further enrichment."""
 
