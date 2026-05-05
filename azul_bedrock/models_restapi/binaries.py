@@ -334,7 +334,7 @@ class SimilarEntropyMatch(BaseModelRepr):
     matches: list[SimilarEntropyMatchRow]
 
 
-class SimilarMatchRow(BaseModelRepr):
+class SimilarFeatureMatchRow(BaseModelRepr):
     """Similarity result row."""
 
     sha256: str
@@ -343,11 +343,11 @@ class SimilarMatchRow(BaseModelRepr):
     contributions: list[list[str | int]]
 
 
-class SimilarMatch(BaseModelRepr):
+class SimilarFeatureMatch(BaseModelRepr):
     """Similarity calculation result."""
 
     num_feature_values: int
-    matches: list[SimilarMatchRow]
+    matches: list[SimilarFeatureMatchRow]
     timestamp: str
     status: str
 
