@@ -601,6 +601,7 @@ class DownloadAction(StrEnum):
     Requested = "requested"
     Success = "success"
     Failed = "failed"
+    FailedNotFound = "failed-not-found"
 
 
 class DownloadEvent(BaseEvent):
