@@ -256,9 +256,12 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreInvalidDeleteTag.value: "Cannot delete tag {tag} because it doesn't exist.",
         ExceptionCodeEnum.MetastoreNoFeatureValuesFound.value: "No feature values found for feature '{feature}'",
         ExceptionCodeEnum.MetastoreFeaturesInvalidPivotFeatures.value: "No feature values provided, feature values must be a valid list of tuples containing feature_name, feature_value",
+        # Plugins
         ExceptionCodeEnum.MetastoreNoPluginsInAzul.value: "There are no plugins registered in Azul.",
         ExceptionCodeEnum.MetastoreNoPluginStatusesInAzul.value: "There are no plugin statuses in Azul.",
         ExceptionCodeEnum.MetastorePluginNotInAzul.value: "The requested plugin version does was not found.",
+        ExceptionCodeEnum.MetastoreNoDownloadPluginsInAzul.value: "There are no plugins that perform downloads registered in Azul.",
+        # Purge
         ExceptionCodeEnum.MetastoreUserNotAllowedToPurge.value: "user '{username}' not superuser",
         ExceptionCodeEnum.MetastoreInvalidTimestampForPurge.value: "The timestamp provided '{timestamp}' has an invalid format.",
         ExceptionCodeEnum.MetastoreInvalidPurgeExceptionApi.value: "{inner_exception}",

@@ -482,6 +482,8 @@ class StatusEnum(StrEnum):
     HEARTBEAT = "heartbeat"
     # Event has been dequeued from kafka by dispatcher - not for use by plugins!
     DEQUEUED = "dequeued"
+    # Event has been requested for download - not for use by plugins!
+    DOWNLOAD_REQUESTED = "download-requested"
 
     # Errors
     # Plugin-specific code raised an unhandled exception

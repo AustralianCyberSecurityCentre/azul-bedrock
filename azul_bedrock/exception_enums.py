@@ -239,6 +239,7 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreNoPluginsInAzul = "MetastoreNoPluginsInAzul"
     MetastoreNoPluginStatusesInAzul = "MetastoreNoPluginStatusesInAzul"
     MetastorePluginNotInAzul = "MetastorePluginNotInAzul"
+    MetastoreNoDownloadPluginsInAzul = "MetastoreNoDownloadPluginsInAzul"
     # purge
     MetastoreUserNotAllowedToPurge = "MetastoreUserNotAllowedToPurge"
     MetastoreInvalidTimestampForPurge = "MetastoreInvalidTimestampForPurge"
