@@ -57,6 +57,8 @@ type PluginSettings struct {
 	FilterDataTypes map[string][]string `koanf:"plugin_filter_data_types"`
 	// Touch /tmp/.runner-keepalive on each successful dispatcher poll to support liveness probes.
 	EnableLivenessProbe bool `koanf:"plugin_enable_liveness_probe"`
+	// Is using download events (this excludes using the normal plugin execution model)
+	IsProcessingDownloadEvents bool `koanf:"is_processing_download_events"`
 }
 
 var defaults = PluginSettings{
@@ -81,6 +83,7 @@ var defaults = PluginSettings{
 	FilterSelf:               false,
 	FilterDataTypes:          map[string][]string{},
 	EnableLivenessProbe:      false,
+	IsProcessingDownloadEvents: false,
 }
 
 // --- Most common selection of pluginSettings people modify.
@@ -160,6 +163,13 @@ func (ps *PluginSettings) WithFilterMinContentSize(minSize settings.HumanReadabl
 // Enable or disable filter out input events published by this plugin
 func (ps *PluginSettings) WithFilterSelf(filterOutSelf bool) *PluginSettings {
 	ps.FilterSelf = filterOutSelf
+	return ps
+}
+
+// Enable the plugin as a downloader plugin.
+func (ps *PluginSettings) WithIsProcessingDownloadEvents(isProcessingDownloads bool) *PluginSettings {
+	ps.IsProcessingDownloadEvents = isProcessingDownloads
+	ps.FilterAllowEventTypes = []events.BinaryAction{}
 	return ps
 }
 
