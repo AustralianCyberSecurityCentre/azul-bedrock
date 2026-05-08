@@ -212,7 +212,7 @@ func parsePluginSettings(defaultSettings *PluginSettings) *PluginSettings {
 }
 
 /*Convert setting into a map, similar to what azul-runner would have.*/
-func (s *PluginSettings) convertToMap() map[string]string {
+func (s *PluginSettings) ConvertToMap() map[string]string {
 	result := map[string]string{}
 	mappedSettings := structs.Map(s)
 	pluginSettingType := reflect.TypeOf(*s)

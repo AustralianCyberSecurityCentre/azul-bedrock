@@ -25,7 +25,7 @@ func TestFluentSetSettingsApis(t *testing.T) {
 // Test that verifies the plugin settings are converted to a map with their konaf keys.
 func TestConvertSettingsToMap(t *testing.T) {
 	defaultSettings := PluginSettings{}
-	result := defaultSettings.convertToMap()
+	result := defaultSettings.ConvertToMap()
 	require.Equal(t, map[string]string{
 		"runner_log_level":         "\"\"",
 		"data_url":                 "\"\"",
