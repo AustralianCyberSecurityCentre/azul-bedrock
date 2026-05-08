@@ -69,6 +69,11 @@ func (es *EventSource) CheckValid() error {
 		if len(node.Action) == 0 {
 			return fmt.Errorf("source is missing the `path.%d.Action` field", i)
 		}
+		// Ensure the action is valid.
+		_, ok := ActionsMap[node.Action]
+		if !ok {
+			return fmt.Errorf("source have an invalid `path.%d.Action` field, value is %v which is invalid", i, node.Action)
+		}
 		if len(node.Author.Name) == 0 {
 			return fmt.Errorf("source is missing the `path.%d.Author.Name` field", i)
 		}
