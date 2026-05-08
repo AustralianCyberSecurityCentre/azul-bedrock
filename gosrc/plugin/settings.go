@@ -85,6 +85,12 @@ var defaults = PluginSettings{
 
 // --- Most common selection of pluginSettings people modify.
 
+// Allow changing the event type to allow into the plugin
+func (ps *PluginSettings) WithFilterAllowEventTypes(eventTypes []events.BinaryAction) *PluginSettings {
+	ps.FilterAllowEventTypes = eventTypes
+	return ps
+}
+
 // Max seconds between heartbeat status messages.
 func (ps *PluginSettings) WithHeartbeatInterval(seconds int) *PluginSettings {
 	ps.HeartbeatIntervalSeconds = seconds
