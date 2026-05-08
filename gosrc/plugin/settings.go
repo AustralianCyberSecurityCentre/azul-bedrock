@@ -57,7 +57,7 @@ type PluginSettings struct {
 	FilterDataTypes map[string][]string `koanf:"plugin_filter_data_types"`
 	// Touch /tmp/.runner-keepalive on each successful dispatcher poll to support liveness probes.
 	EnableLivenessProbe bool `koanf:"plugin_enable_liveness_probe"`
-	// Is using download events (this excludes using the normal plugin execution model)
+	// Is using download events (this excludes using the normal plugin execution model and is used by the webui)
 	IsProcessingDownloadEvents bool `koanf:"is_processing_download_events"`
 }
 
