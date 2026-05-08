@@ -24,10 +24,10 @@ const (
 
 // This ensures we can check a given action is valid.
 var DownloadActionsMap = map[DownloadAction]bool{
-	DownloadActionRequested:   true,
-	DownloadActionSuccess: true,
-	DownloadActionFailed:    true,
-	DownloadActionFailedNotFound:  true,
+	DownloadActionRequested:      true,
+	DownloadActionSuccess:        true,
+	DownloadActionFailed:         true,
+	DownloadActionFailedNotFound: true,
 }
 
 // Entity struct for download event
@@ -110,11 +110,11 @@ func (b *DownloadEvent) CheckValid() error {
 		return errors.New("event is missing 'author' field")
 	}
 	_, ok := DownloadActionsMap[b.Action]
-	if !ok{
+	if !ok {
 		return fmt.Errorf("event has an invalid 'action' field with the value `%v` which is not allowed", b.Action)
 	}
 	srcErr := b.Source.CheckValid()
-	if srcErr != nil{
+	if srcErr != nil {
 		return fmt.Errorf("event has an invalid 'source' field with inner error %s", srcErr.Error())
 	}
 	return nil

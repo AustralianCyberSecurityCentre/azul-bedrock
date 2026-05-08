@@ -197,7 +197,7 @@ func (b *BinaryEvent) CheckValid() error {
 		return errors.New("event is missing 'source.path' entries")
 	}
 	srcErr := b.Source.CheckValid()
-	if srcErr != nil{
+	if srcErr != nil {
 		return fmt.Errorf("event has an invalid 'source' field with inner error %s", srcErr.Error())
 	}
 
@@ -208,10 +208,10 @@ func (b *BinaryEvent) CheckValid() error {
 		}
 		labels[curData.Label] = true
 	}
-	
+
 	// Ensure the action is valid.
 	_, ok := ActionsMap[b.Action]
-	if !ok{
+	if !ok {
 		return fmt.Errorf("event has invalid action '%v' which is not in the allowed list of binary actions", b.Action)
 	}
 
