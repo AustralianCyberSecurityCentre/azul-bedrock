@@ -239,6 +239,8 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreDownloadingBadStreamType.value: "Stream of file tpe '{file_format}' is not allowed for direct download",
         ExceptionCodeEnum.MetastoreInvalidStringsRegexProvided.value: "Invalid regex pattern '{regex}' provided",
         ExceptionCodeEnum.MetastoreInvalidHexPatternProvided.value: "Invalid hex filter provided '{filter}'",
+        # binaries_download
+        ExceptionCodeEnum.MetastoreDownloadRequestNotMade.value: "No download request could be found, either the request hasn't been made or the event is still loading into opensearch.",
         # binaries_submit
         ExceptionCodeEnum.MetastoreCannotParseTimestampToUTC.value: "a bad timestamp was provided {inner_exception}",
         ExceptionCodeEnum.MetastoreInvalidJson.value: "Bad json for the field {field_name} was provided, value was {field_value}",

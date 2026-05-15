@@ -218,6 +218,8 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreDownloadingBadStreamType = "MetastoreDownloadingBadStreamType"
     MetastoreInvalidStringsRegexProvided = "MetastoreInvalidStringsRegexProvided"
     MetastoreInvalidHexPatternProvided = "MetastoreInvalidHexPatternProvided"
+    # binaries_download
+    MetastoreDownloadRequestNotMade = "MetastoreDownloadRequestNotMade"
     # binaries_submit
     MetastoreCannotParseTimestampToUTC = "MetastoreCannotParseTimestampToUTC"
     MetastoreInvalidJson = "MetastoreInvalidJson"
