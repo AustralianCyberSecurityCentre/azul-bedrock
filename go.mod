@@ -22,7 +22,7 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/sanity-io/litter v1.5.8
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f
+	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a
 	gopkg.in/yaml.v3 v3.0.1
 )
 
