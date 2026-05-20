@@ -48,8 +48,8 @@ def convert_download_action_to_message(action: DownloadAction) -> str:
         download_message = "The download request has failed with an error."
     elif action == DownloadAction.FailedNotFound:
         download_message = "Download was attempted but the requested sha256 was not found."
-    elif action == DownloadAction.FailedNotFound:
-        download_message = "Download was attempted but the requested sha256 was not found."
+    elif action == DownloadAction.SkippedAlreadyPresent:
+        download_message = "Download was skipped because the sha256 is already in Azul."
     elif action == DownloadAction.Requested:
         download_message = "Download was requested and is pending."
     elif action == DownloadAction.Success:
