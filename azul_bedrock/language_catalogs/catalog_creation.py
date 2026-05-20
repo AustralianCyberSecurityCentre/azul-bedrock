@@ -208,6 +208,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreBinaryFindFaildToParseSearchTerm.value: "Failed to parse term '{term}': {inner_exception}",
         # binary_read
         ExceptionCodeEnum.MetastoreSha256NotProvidedForFindingStreamRefs.value: "Sha256 was not provided and is required.",
+        ExceptionCodeEnum.MetastoreInvalidDataLabel.value: "An invalid data label was found on a stream in Opensearch.",
         # binary_similar
         ExceptionCodeEnum.MetastoreLibFuzzyFailedToInitalise.value: "could not find libfuzzy-dev; check that it is installed.",
         ExceptionCodeEnum.MetastoreReadSimilarSSDeepBadFuzzyHash.value: "ssdeep fuzzy hash could not be parsed {fuzzy_hash}",

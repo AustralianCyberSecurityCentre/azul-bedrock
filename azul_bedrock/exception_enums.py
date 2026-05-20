@@ -187,6 +187,7 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreBinaryFindFaildToParseSearchTerm = "MetastoreBinaryFindFaildToParseSearchTerm"
     # binary_read
     MetastoreSha256NotProvidedForFindingStreamRefs = "MetastoreSha256NotProvidedForFindingStreamRefs"
+    MetastoreInvalidDataLabel = "MetastoreInvalidDataLabel"
     # binary_similar
     MetastoreLibFuzzyFailedToInitalise = "MetastoreLibFuzzyFailedToInitalise"
     MetastoreReadSimilarSSDeepBadFuzzyHash = "MetastoreReadSimilarSSDeepBadFuzzyHash"
