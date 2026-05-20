@@ -604,6 +604,7 @@ class DownloadAction(StrEnum):
     Success = "success"
     Failed = "failed"
     FailedNotFound = "failed-not-found"
+    SkippedAlreadyPresent = "skipped-already-present"
 
 
 class DownloadEvent(BaseEvent):

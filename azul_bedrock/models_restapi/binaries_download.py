@@ -30,8 +30,28 @@ def convert_download_action_to_status(action: DownloadAction) -> StatusEnum:
         return StatusEnum.ERROR_EXCEPTION
     elif action == DownloadAction.FailedNotFound:
         return StatusEnum.OPT_OUT
+    elif action == DownloadAction.SkippedAlreadyPresent:
+        return StatusEnum.OPT_OUT
     elif action == DownloadAction.Requested:
         return StatusEnum.DOWNLOAD_REQUESTED
     elif action == DownloadAction.Success:
         return StatusEnum.COMPLETED
     return StatusEnum.ERROR_EXCEPTION
+
+
+def convert_download_action_to_message(action: DownloadAction) -> str:
+    """Get a message for a download action."""
+    # Add a message associated with the download status.
+    # FUTURE: could get this through the runner framework and allow plugins to override message.
+    download_message = ""
+    if action == DownloadAction.Failed:
+        download_message = "The download request has failed with an error."
+    elif action == DownloadAction.FailedNotFound:
+        download_message = "Download was attempted but the requested sha256 was not found."
+    elif action == DownloadAction.FailedNotFound:
+        download_message = "Download was attempted but the requested sha256 was not found."
+    elif action == DownloadAction.Requested:
+        download_message = "Download was requested and is pending."
+    elif action == DownloadAction.Success:
+        download_message = "Download has successfully found the file and completed."
+    return download_message
