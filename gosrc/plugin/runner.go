@@ -82,7 +82,7 @@ func NewPluginRunner(inPlugin Plugin) *PluginRunner {
 		Category:    "plugin",
 		Description: inPlugin.GetDescription(),
 		Features:    inPlugin.GetFeatures(),
-		Config:      settings.convertToMap(),
+		Config:      settings.ConvertToMap(),
 	}
 
 	dpClient := client.NewClient(settings.PluginEventsUrl, settings.PluginDataUrl, author, settings.DeploymentKey)

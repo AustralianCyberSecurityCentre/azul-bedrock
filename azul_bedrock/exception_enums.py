@@ -187,6 +187,7 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreBinaryFindFaildToParseSearchTerm = "MetastoreBinaryFindFaildToParseSearchTerm"
     # binary_read
     MetastoreSha256NotProvidedForFindingStreamRefs = "MetastoreSha256NotProvidedForFindingStreamRefs"
+    MetastoreInvalidDataLabel = "MetastoreInvalidDataLabel"
     # binary_similar
     MetastoreLibFuzzyFailedToInitalise = "MetastoreLibFuzzyFailedToInitalise"
     MetastoreReadSimilarSSDeepBadFuzzyHash = "MetastoreReadSimilarSSDeepBadFuzzyHash"
@@ -218,6 +219,8 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreDownloadingBadStreamType = "MetastoreDownloadingBadStreamType"
     MetastoreInvalidStringsRegexProvided = "MetastoreInvalidStringsRegexProvided"
     MetastoreInvalidHexPatternProvided = "MetastoreInvalidHexPatternProvided"
+    # binaries_download
+    MetastoreDownloadRequestNotMade = "MetastoreDownloadRequestNotMade"
     # binaries_submit
     MetastoreCannotParseTimestampToUTC = "MetastoreCannotParseTimestampToUTC"
     MetastoreInvalidJson = "MetastoreInvalidJson"
@@ -239,6 +242,7 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreNoPluginsInAzul = "MetastoreNoPluginsInAzul"
     MetastoreNoPluginStatusesInAzul = "MetastoreNoPluginStatusesInAzul"
     MetastorePluginNotInAzul = "MetastorePluginNotInAzul"
+    MetastoreNoDownloadPluginsInAzul = "MetastoreNoDownloadPluginsInAzul"
     # purge
     MetastoreUserNotAllowedToPurge = "MetastoreUserNotAllowedToPurge"
     MetastoreInvalidTimestampForPurge = "MetastoreInvalidTimestampForPurge"

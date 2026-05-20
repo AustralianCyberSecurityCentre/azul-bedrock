@@ -57,33 +57,42 @@ type PluginSettings struct {
 	FilterDataTypes map[string][]string `koanf:"plugin_filter_data_types"`
 	// Touch /tmp/.runner-keepalive on each successful dispatcher poll to support liveness probes.
 	EnableLivenessProbe bool `koanf:"plugin_enable_liveness_probe"`
+	// Is using download events (this excludes using the normal plugin execution model and is used by the webui)
+	IsProcessingDownloadEvents bool `koanf:"is_processing_download_events"`
 }
 
 var defaults = PluginSettings{
-	RunnerLogLevel:           "warning",
-	PluginEventsUrl:          "",
-	PluginDataUrl:            "",
-	HeartbeatIntervalSeconds: 30,
-	PluginRunTimeout:         600,
-	RequestTimeout:           15,
-	RequestRetryCount:        3,
-	MaxValuesPerFeature:      1000,
-	MaxValueLength:           4000,
-	DepthLimit:               10,
-	NotReadyBackoffSeconds:   5,
-	DeploymentKey:            "",
-	RequireExpedite:          true,
-	RequireLive:              true,
-	RequireHistoric:          true,
-	FilterMaxContentSize:     0,
-	FilterMinContentSize:     0,
-	FilterAllowEventTypes:    []events.BinaryAction{events.ActionSourced, events.ActionExtracted},
-	FilterSelf:               false,
-	FilterDataTypes:          map[string][]string{},
-	EnableLivenessProbe:      false,
+	RunnerLogLevel:             "warning",
+	PluginEventsUrl:            "",
+	PluginDataUrl:              "",
+	HeartbeatIntervalSeconds:   30,
+	PluginRunTimeout:           600,
+	RequestTimeout:             15,
+	RequestRetryCount:          3,
+	MaxValuesPerFeature:        1000,
+	MaxValueLength:             4000,
+	DepthLimit:                 10,
+	NotReadyBackoffSeconds:     5,
+	DeploymentKey:              "",
+	RequireExpedite:            true,
+	RequireLive:                true,
+	RequireHistoric:            true,
+	FilterMaxContentSize:       0,
+	FilterMinContentSize:       0,
+	FilterAllowEventTypes:      []events.BinaryAction{events.ActionSourced, events.ActionExtracted},
+	FilterSelf:                 false,
+	FilterDataTypes:            map[string][]string{},
+	EnableLivenessProbe:        false,
+	IsProcessingDownloadEvents: false,
 }
 
 // --- Most common selection of pluginSettings people modify.
+
+// Allow changing the event type to allow into the plugin
+func (ps *PluginSettings) WithFilterAllowEventTypes(eventTypes []events.BinaryAction) *PluginSettings {
+	ps.FilterAllowEventTypes = eventTypes
+	return ps
+}
 
 // Max seconds between heartbeat status messages.
 func (ps *PluginSettings) WithHeartbeatInterval(seconds int) *PluginSettings {
@@ -157,6 +166,13 @@ func (ps *PluginSettings) WithFilterSelf(filterOutSelf bool) *PluginSettings {
 	return ps
 }
 
+// Enable the plugin as a downloader plugin.
+func (ps *PluginSettings) WithIsProcessingDownloadEvents(isProcessingDownloads bool) *PluginSettings {
+	ps.IsProcessingDownloadEvents = isProcessingDownloads
+	ps.FilterAllowEventTypes = []events.BinaryAction{}
+	return ps
+}
+
 /*
 Filter labels expected values is something like this:
 
@@ -212,7 +228,7 @@ func parsePluginSettings(defaultSettings *PluginSettings) *PluginSettings {
 }
 
 /*Convert setting into a map, similar to what azul-runner would have.*/
-func (s *PluginSettings) convertToMap() map[string]string {
+func (s *PluginSettings) ConvertToMap() map[string]string {
 	result := map[string]string{}
 	mappedSettings := structs.Map(s)
 	pluginSettingType := reflect.TypeOf(*s)

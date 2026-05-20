@@ -34,7 +34,7 @@
                   "version": "1.1",
                   "category": "plugin"
                 },
-                "action": "binary_downloaded",
+                "action": "sourced",
                 "size": 343964
               },
               {
@@ -149,7 +149,7 @@
                   "version": "1.1",
                   "category": "plugin"
                 },
-                "action": "binary_downloaded",
+                "action": "sourced",
                 "size": 343964
               },
               {
@@ -249,7 +249,7 @@
                     "version": "1.1",
                     "category": "plugin"
                   },
-                  "action": "binary_downloaded",
+                  "action": "sourced",
                   "size": 343964
                 },
                 {

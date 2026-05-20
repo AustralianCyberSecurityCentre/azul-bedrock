@@ -13,6 +13,8 @@ const (
 	StatusTypeHeartbeat string = "heartbeat"
 	// Event has been dequeued from kafka by dispatcher - not for use by plugins!
 	StatusTypeDequeued string = "dequeued"
+	// Download has been requested by a user or plugin.
+	StatusTypeDownloadRequested string = "download-requested"
 	// Plugin-specific code raised an unhandled exception
 	StatusTypeErrorException string = "error-exception"
 	// Plugin could not communicate with some required service
@@ -71,6 +73,8 @@ func IsStatusTypeProcess(status string) bool {
 	case StatusTypeHeartbeat:
 		fallthrough
 	case StatusTypeDequeued:
+		fallthrough
+	case StatusTypeDownloadRequested:
 		return true
 	default:
 		return false

@@ -2,6 +2,7 @@ package events
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 )
@@ -53,6 +54,31 @@ func (es *EventSource) DeepCopy() (EventSource, error) {
 	outputSource := EventSource{}
 	err = json.Unmarshal(jsonSource, &outputSource)
 	return outputSource, err
+}
+
+func (es *EventSource) CheckValid() error {
+	// Verify source is valid.
+	if len(es.Name) == 0 {
+		return errors.New("source is missing 'Name' field")
+	}
+	// Verify the Paths are all valid.
+	for i, node := range es.Path {
+		if len(node.Sha256) == 0 {
+			return fmt.Errorf("source is missing the `path.%d.Sha256` field", i)
+		}
+		if len(node.Action) == 0 {
+			return fmt.Errorf("source is missing the `path.%d.Action` field", i)
+		}
+		// Ensure the action is valid.
+		_, ok := ActionsMap[node.Action]
+		if !ok {
+			return fmt.Errorf("source have an invalid `path.%d.Action` field, value is %v which is invalid", i, node.Action)
+		}
+		if len(node.Author.Name) == 0 {
+			return fmt.Errorf("source is missing the `path.%d.Author.Name` field", i)
+		}
+	}
+	return nil
 }
 
 type BaseEvent struct {

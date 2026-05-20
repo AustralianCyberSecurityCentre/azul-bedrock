@@ -18,7 +18,20 @@ const (
 	DownloadActionSuccess DownloadAction = "success"
 	// unable to download requested file
 	DownloadActionFailed DownloadAction = "failed"
+	// unable to download the requested file because it wasn't found.
+	DownloadActionFailedNotFound DownloadAction = "failed-not-found"
+	// Didn't attempt download as the file already exists
+	DownloadActionSkippedAlreadyPresent DownloadAction = "skipped-already-present"
 )
+
+// This ensures we can check a given action is valid.
+var DownloadActionsMap = map[DownloadAction]bool{
+	DownloadActionRequested:             true,
+	DownloadActionSuccess:               true,
+	DownloadActionFailed:                true,
+	DownloadActionFailedNotFound:        true,
+	DownloadActionSkippedAlreadyPresent: true,
+}
 
 // Entity struct for download event
 type DownloadEntity struct {
@@ -98,6 +111,14 @@ func (b *DownloadEvent) GetBase() *BaseEvent {
 func (b *DownloadEvent) CheckValid() error {
 	if len(b.Author.Name) == 0 {
 		return errors.New("event is missing 'author' field")
+	}
+	_, ok := DownloadActionsMap[b.Action]
+	if !ok {
+		return fmt.Errorf("event has an invalid 'action' field with the value `%v` which is not allowed", b.Action)
+	}
+	srcErr := b.Source.CheckValid()
+	if srcErr != nil {
+		return fmt.Errorf("event has an invalid 'source' field with inner error %s", srcErr.Error())
 	}
 	return nil
 }

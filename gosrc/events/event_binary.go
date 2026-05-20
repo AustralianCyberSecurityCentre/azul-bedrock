@@ -196,6 +196,10 @@ func (b *BinaryEvent) CheckValid() error {
 	if len(b.Source.Path) == 0 {
 		return errors.New("event is missing 'source.path' entries")
 	}
+	srcErr := b.Source.CheckValid()
+	if srcErr != nil {
+		return fmt.Errorf("event has an invalid 'source' field with inner error %s", srcErr.Error())
+	}
 
 	labels := map[DatastreamLabel]bool{}
 	for _, curData := range b.Entity.Datastreams {
@@ -203,6 +207,12 @@ func (b *BinaryEvent) CheckValid() error {
 			return fmt.Errorf("the provided label '%s' is invalid, please use a valid label", curData.Label)
 		}
 		labels[curData.Label] = true
+	}
+
+	// Ensure the action is valid.
+	_, ok := ActionsMap[b.Action]
+	if !ok {
+		return fmt.Errorf("event has invalid action '%v' which is not in the allowed list of binary actions", b.Action)
 	}
 
 	// enriched, mapped means no entity.datastreams

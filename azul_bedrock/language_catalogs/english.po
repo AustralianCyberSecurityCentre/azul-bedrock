@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Azul 10\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-04-20 05:40+0000\n"
+"POT-Creation-Date: 2026-05-20 02:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -480,6 +480,9 @@ msgstr "Failed to parse term '{term}': {inner_exception}"
 msgid "MetastoreSha256NotProvidedForFindingStreamRefs"
 msgstr "Sha256 was not provided and is required."
 
+msgid "MetastoreInvalidDataLabel"
+msgstr "An invalid data label '{label}' was found on a stream in Opensearch."
+
 msgid "MetastoreLibFuzzyFailedToInitalise"
 msgstr "could not find libfuzzy-dev; check that it is installed."
 
@@ -569,6 +572,11 @@ msgstr "Invalid regex pattern '{regex}' provided"
 msgid "MetastoreInvalidHexPatternProvided"
 msgstr "Invalid hex filter provided '{filter}'"
 
+msgid "MetastoreDownloadRequestNotMade"
+msgstr ""
+"No download request could be found, either the request hasn't been made "
+"or the event is still loading into opensearch."
+
 msgid "MetastoreCannotParseTimestampToUTC"
 msgstr "a bad timestamp was provided {inner_exception}"
 
@@ -628,6 +636,9 @@ msgstr "There are no plugin statuses in Azul."
 
 msgid "MetastorePluginNotInAzul"
 msgstr "The requested plugin version does was not found."
+
+msgid "MetastoreNoDownloadPluginsInAzul"
+msgstr "There are no plugins that perform downloads registered in Azul."
 
 msgid "MetastoreUserNotAllowedToPurge"
 msgstr "user '{username}' not superuser"

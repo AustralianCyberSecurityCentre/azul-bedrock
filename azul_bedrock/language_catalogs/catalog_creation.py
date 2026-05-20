@@ -208,6 +208,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreBinaryFindFaildToParseSearchTerm.value: "Failed to parse term '{term}': {inner_exception}",
         # binary_read
         ExceptionCodeEnum.MetastoreSha256NotProvidedForFindingStreamRefs.value: "Sha256 was not provided and is required.",
+        ExceptionCodeEnum.MetastoreInvalidDataLabel.value: "An invalid data label '{label}' was found on a stream in Opensearch.",
         # binary_similar
         ExceptionCodeEnum.MetastoreLibFuzzyFailedToInitalise.value: "could not find libfuzzy-dev; check that it is installed.",
         ExceptionCodeEnum.MetastoreReadSimilarSSDeepBadFuzzyHash.value: "ssdeep fuzzy hash could not be parsed {fuzzy_hash}",
@@ -239,6 +240,8 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreDownloadingBadStreamType.value: "Stream of file tpe '{file_format}' is not allowed for direct download",
         ExceptionCodeEnum.MetastoreInvalidStringsRegexProvided.value: "Invalid regex pattern '{regex}' provided",
         ExceptionCodeEnum.MetastoreInvalidHexPatternProvided.value: "Invalid hex filter provided '{filter}'",
+        # binaries_download
+        ExceptionCodeEnum.MetastoreDownloadRequestNotMade.value: "No download request could be found, either the request hasn't been made or the event is still loading into opensearch.",
         # binaries_submit
         ExceptionCodeEnum.MetastoreCannotParseTimestampToUTC.value: "a bad timestamp was provided {inner_exception}",
         ExceptionCodeEnum.MetastoreInvalidJson.value: "Bad json for the field {field_name} was provided, value was {field_value}",
@@ -256,9 +259,12 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreInvalidDeleteTag.value: "Cannot delete tag {tag} because it doesn't exist.",
         ExceptionCodeEnum.MetastoreNoFeatureValuesFound.value: "No feature values found for feature '{feature}'",
         ExceptionCodeEnum.MetastoreFeaturesInvalidPivotFeatures.value: "No feature values provided, feature values must be a valid list of tuples containing feature_name, feature_value",
+        # Plugins
         ExceptionCodeEnum.MetastoreNoPluginsInAzul.value: "There are no plugins registered in Azul.",
         ExceptionCodeEnum.MetastoreNoPluginStatusesInAzul.value: "There are no plugin statuses in Azul.",
         ExceptionCodeEnum.MetastorePluginNotInAzul.value: "The requested plugin version does was not found.",
+        ExceptionCodeEnum.MetastoreNoDownloadPluginsInAzul.value: "There are no plugins that perform downloads registered in Azul.",
+        # Purge
         ExceptionCodeEnum.MetastoreUserNotAllowedToPurge.value: "user '{username}' not superuser",
         ExceptionCodeEnum.MetastoreInvalidTimestampForPurge.value: "The timestamp provided '{timestamp}' has an invalid format.",
         ExceptionCodeEnum.MetastoreInvalidPurgeExceptionApi.value: "{inner_exception}",
