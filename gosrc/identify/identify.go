@@ -16,7 +16,7 @@ import (
 
 	embeded_files "github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc"
 	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/settings"
-	"github.com/hillu/go-yara/v4"
+	yarax "github.com/VirusTotal/yara-x/go"
 	"golang.org/x/exp/slices"
 	"gopkg.in/yaml.v3"
 )
@@ -78,7 +78,7 @@ type Identify struct {
 	Id_Mappings     []IdMapping
 	Id_Mappings_Map map[string]IdMapping
 
-	Yara_Scanner *yara.Scanner
+	Yara_Scanner *yarax.Scanner
 
 	Rules []struct {
 		Id        string
@@ -138,32 +138,26 @@ func NewIdentify() (*Identify, error) {
 	}
 
 	// Compile Yara
-	compiler, err := yara.NewCompiler()
+	compiler, err := yarax.NewCompiler()
 	if err != nil {
 		st.Logger.Fatal().Err(err).Msg("Couldn't build a yara compiler skipping yara identification.")
 	}
-	_ = compiler.DefineVariable("mime", "default-mime")
-	_ = compiler.DefineVariable("magic", "default-magic")
-	_ = compiler.DefineVariable("type", "default-type")
+	// Define global variables
+	_ = compiler.DefineGlobal("mime", "default-mime")
+	_ = compiler.DefineGlobal("magic", "default-magic")
+	_ = compiler.DefineGlobal("type", "default-type")
 
-	err = compiler.AddString(string(raw_yara_rules[:]), "default")
+	err = compiler.AddSource(string(raw_yara_rules[:]))
 	if err != nil {
-		for _, errs := range compiler.Errors {
-			st.Logger.Error().Msgf("Failed to compile yara rule '%s' with error %s", errs.Rule, errs.Text)
+		for _, errs := range compiler.Errors() {
+			st.Logger.Error().Msgf("Failed to compile yara rule '%s' with error %s", errs.Title, errs.Text)
 		}
 		st.Logger.Fatal().Err(err).Msg("Yara compiler experienced error can't identify.")
 	}
-	rules, err := compiler.GetRules()
-	if err != nil {
-		st.Logger.Fatal().Err(err).Msg("Yara compiler couldn't compile rules can't identify.")
-	}
-	scanner, err := yara.NewScanner(rules)
-	if err != nil {
-		st.Logger.Fatal().Err(err).Msg("Yara Scanner - Couldn't create a scanner can't identify.")
-	}
+	rules := compiler.Build()
+	scanner := yarax.NewScanner(rules)
 	cfg.Yara_Scanner = scanner
 	cfg.Yara_Scanner.SetTimeout(30 * time.Second)
-	cfg.Yara_Scanner.SetFlags(yara.ScanFlagsFastMode)
 
 	// Return config.
 	cfg.RefineRulesMapping = map[string]refineFunction{
@@ -565,43 +559,6 @@ func pdfIdent(bufStartOfFile []byte, contentPath string, magic string, mime stri
 	return fallback
 }
 
-type YaraScanCallback struct {
-	highestScore int
-	hitType      string
-}
-
-func (ysc *YaraScanCallback) RuleMatching(curCtx *yara.ScanContext, rule *yara.Rule) (bool, error) {
-	/// Callback function that fires on a yara match and stores the highest scoring hit's type.
-	currentType := ""
-	var currentScore int
-	currentScore = 1 // Default score of 1 for rules that don't have scores.
-	for _, meta := range rule.Metas() {
-		switch meta.Identifier {
-		case "score":
-			newCurrentScore, ok := meta.Value.(int)
-			if ok {
-				currentScore = newCurrentScore
-			} else {
-				st.Logger.Warn().Msgf("a yara rule isn't working because it's metadata.score can't be coerced into an int value: '%v'", meta.Value)
-			}
-		case "type":
-			newCurrentType, ok := meta.Value.(string)
-			if ok {
-				currentType = newCurrentType
-			} else {
-				st.Logger.Warn().Msgf("a yara rule isn't working because it's metadata.type can't be coerced into an string value: '%v'", meta.Value)
-			}
-		}
-	}
-
-	if ysc.highestScore < currentScore && currentType != "" {
-		ysc.highestScore = currentScore
-		ysc.hitType = currentType
-	}
-
-	return false, nil
-}
-
 // FUTURE if json identification fails use this. - was required but might not be anymore.
 // Stream a file and confirm whether or not it is valid json.
 // func streamValidJson(contentPath string) bool {
@@ -636,30 +593,57 @@ func (cfg *Identify) yaraIdent(bufStartOfFile []byte, contentPath string, magic 
 	// }
 
 	// Add rules from string
-	err := cfg.Yara_Scanner.DefineVariable("mime", mime)
+	err := cfg.Yara_Scanner.SetGlobal("mime", mime)
 	if err != nil {
 		st.Logger.Error().Err(err).Msg("Couldn't compile yara rules (with mime var) skipping yara identification")
 		return fallback
 	}
-	err = cfg.Yara_Scanner.DefineVariable("magic", magic)
+	err = cfg.Yara_Scanner.SetGlobal("magic", magic)
 	if err != nil {
 		st.Logger.Error().Err(err).Msg("Couldn't compile yara rules (with magic var) skipping yara identification")
 		return fallback
 	}
-	err = cfg.Yara_Scanner.DefineVariable("type", currentType)
+	err = cfg.Yara_Scanner.SetGlobal("type", currentType)
 	if err != nil {
 		st.Logger.Error().Err(err).Msg("Couldn't compile yara rules (with type var) skipping yara identification")
 		return fallback
 	}
+	cfg.Yara_Scanner.SetTimeout(time.Second * MAX_YARA_SCAN_TIME_SECONDS)
 
 	// Run yara rules.
-	yscb := YaraScanCallback{highestScore: 0, hitType: fallback}
-	cfg.Yara_Scanner.SetCallback(&yscb)
-	err = cfg.Yara_Scanner.SetTimeout(time.Second * MAX_YARA_SCAN_TIME_SECONDS).ScanFile(contentPath)
-
+	results, err := cfg.Yara_Scanner.ScanFile(contentPath)
 	if err != nil {
 		st.Logger.Warn().Msg("yara failed to scan a supplied file.")
 	}
 
-	return yscb.hitType
+	potentialNewType := ""
+	var currentScore int64
+	var highestScore int64
+	highestScoreType := fallback
+	currentScore = 1 // Default score of 1 for rules that don't have scores.
+	for _, r := range results.MatchingRules() {
+		for _, meta := range r.Metadata() {
+			switch meta.Identifier() {
+			case "score":
+				if v, ok := meta.Value().(int64); ok {
+					currentScore = v
+				} else {
+					st.Logger.Warn().Msgf("a yara rule isn't working because it's metadata.score can't be coerced into an int value: '%v'", meta.Value())
+				}
+			case "type":
+
+				if v, ok := meta.Value().(string); ok {
+					potentialNewType = v
+				} else {
+					st.Logger.Warn().Msgf("a yara rule isn't working because it's metadata.type can't be coerced into an string value: '%v'", meta.Value())
+				}
+			}
+		}
+		if highestScore < currentScore && potentialNewType != "" {
+			highestScore = currentScore
+			highestScoreType = potentialNewType
+		}
+	}
+
+	return highestScoreType
 }

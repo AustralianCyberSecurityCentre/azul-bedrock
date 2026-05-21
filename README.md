@@ -42,25 +42,20 @@ cd -
 file --version
 ```
 
-### yara
+### yara-x
+
+Library required for identify to work, must be manually installed for golang not for python.
 
 ```bash
-sudo apt-get install automake libtool make gcc pkg-config git flex bison -y
-mkdir -p ./yara
-git clone --branch v4.3.2 https://github.com/VirusTotal/yara ./yara
-cd ./yara
-./bootstrap.sh
-./configure
-make
-sudo make install
-cd -
-## check it worked
-yara -v
-```
-
-```bash
-# you should put this in bashrc
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
+sudo apt update
+sudo apt install rustc
+rustup update
+cargo install cargo-c
+git clone https://github.com/VirusTotal/yara-x.git
+cd yara-x
+cargo cinstall -p yara-x-capi --release
+# Add the following to .bashrc
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib/x86_64-linux-gnu/"
 ```
 
 ## Install

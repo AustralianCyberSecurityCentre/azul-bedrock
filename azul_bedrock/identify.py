@@ -16,7 +16,7 @@ from typing import Any, Callable
 import magic
 import pydantic
 import yaml
-import yara  # type: ignore
+import yara_x
 
 from azul_bedrock.exception_enums import ExceptionCodeEnum
 from azul_bedrock.exceptions_bedrock import AzulValueError, BaseAzulException
@@ -198,6 +198,16 @@ def pdf_ident(buf_start_of_file: bytes, file_path: str, fallback: str = "unknown
         return fallback
 
 
+def _yara_get_metadata_field(rule: yara_x.Rule, metadata_field: str, default: Any) -> Any:
+    """Find a metadata field or return the default if it can't be found."""
+    for md in rule.metadata:
+        identifier = md[0]
+        value = md[1]
+        if identifier == metadata_field:
+            return value
+    return default
+
+
 def yara_ident(
     buf_start_of_file: bytes,
     file_path: str,
@@ -221,12 +231,16 @@ def yara_ident(
     if not cfg.yara_rules:
         return fallback
 
-    externals = {"magic": magic, "mime": mime, "current_type": current_type}
     try:
-        matches = cfg.yara_rules.match(file_path, externals=externals, fast=True)
-        matches.sort(key=lambda x: x.meta.get("score", 0), reverse=True)
+        scanner = yara_x.Scanner(cfg.yara_rules)
+        scanner.set_global("magic", magic)
+        scanner.set_global("mime", mime)
+        scanner.set_global("type", current_type)
+        result = scanner.scan_file(file_path)
+        matches = list(result.matching_rules)
+        matches.sort(key=lambda x: _yara_get_metadata_field(x, "score", 0), reverse=True)
         for match in matches:
-            ftype = match.meta.get("type", None)
+            ftype = _yara_get_metadata_field(match, "type", None)
             if ftype:
                 return ftype
     except Exception as e:
@@ -292,7 +306,7 @@ class Config(pydantic.BaseModel):
 
     trusted_mimes: dict[str, str]
 
-    yara_rules: Any | None = None
+    yara_rules: Any | None = None  #  yara_x.Rules
 
 
 def _load_config():
@@ -320,9 +334,13 @@ def _load_config():
             indicator.re_weakC.append(re.compile(reraw.encode()))
 
     YARA_RULES_PATH = os.path.join(os.path.dirname(__file__), "yara_rules.yar")
-    _cfg.yara_rules = yara.compile(
-        filepaths={"default": YARA_RULES_PATH}, externals={"mime": "", "magic": "", "type": ""}
-    )
+    compiler = yara_x.Compiler()
+    compiler.define_global("mime", "")
+    compiler.define_global("magic", "")
+    compiler.define_global("type", "")
+    with open(YARA_RULES_PATH, "r") as f:
+        compiler.add_source(f.read())
+    _cfg.yara_rules = compiler.build()
 
     return _cfg
 
