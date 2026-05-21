@@ -53,7 +53,7 @@ rustup update
 cargo install cargo-c
 git clone https://github.com/VirusTotal/yara-x.git
 cd yara-x
-cargo cinstall -p yara-x-capi --release
+cargo cinstall --jobs 1 -p yara-x-capi --release --libdir /usr/local/lib
 # Add the following to .bashrc
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib/x86_64-linux-gnu/"
 ```
