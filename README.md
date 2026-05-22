@@ -47,15 +47,40 @@ file --version
 Library required for identify to work, must be manually installed for golang not for python.
 
 ```bash
-sudo apt update
-sudo apt install rustc
-rustup update
-cargo install cargo-c
-git clone https://github.com/VirusTotal/yara-x.git
+# Install yara-x for identify - needed for golang bedrock
+# Install Rust and yara-x
+RUST_VERSION=1.95.0
+gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 85AB96E6FA1BE5FE
+# Download Rust tarball + signature
+curl -O https://static.rust-lang.org/dist/rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz \
+    && curl -O https://static.rust-lang.org/dist/rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz.asc
+# Verify signature
+gpg --verify rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz.asc
+
+# perform rust install
+tar xzf rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz
+sudo rust-${RUST_VERSION}-x86_64-unknown-linux-gnu/install.sh --prefix=/usr/local --without=rust-docs
+rm -rf rust-${RUST_VERSION}-*
+
+sudo cargo install cargo-c
+git clone -b v1.16.0 https://github.com/VirusTotal/yara-x.git && \
 cd yara-x
-cargo cinstall --jobs 1 -p yara-x-capi --release --libdir /usr/local/lib
-# Add the following to .bashrc
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib/x86_64-linux-gnu/"
+sudo cargo cinstall -p yara-x-capi --release --libdir /usr/local/lib/
+cd ..
+rm -rf yara-x
+
+# Verify that yara-x install was successfull
+cat <<'EOF' > test.c
+#include <yara_x.h>
+int main() {
+    YRX_RULES* rules;
+    yrx_compile("rule dummy { condition: true }", &rules);
+    yrx_rules_destroy(rules);
+}
+EOF
+gcc `pkg-config --cflags yara_x_capi` test.c `pkg-config --libs yara_x_capi`
+rm test.c
+# End of yara-x/rust install
 ```
 
 ## Install
