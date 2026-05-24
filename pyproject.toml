@@ -36,7 +36,7 @@ dependencies = [
     "python-magic>=0.4.15",
     "pyyaml>=6.0.3",
     "starlette>=0.50.0",
-    "yara-python>=4.5.4",
+    "yara-x>=1.16.0",
 ]
 
 [project.urls]
@@ -59,24 +59,24 @@ azul-security = { index="cache"}
 azul-nsrl-lookup-server = { index="cache"}
 azul-plugin-retrohunt = { index="cache" }
 
+[tool.hatch.version.raw-options]
+version_scheme = "only-version"
+
+[tool.hatch.version.fallback]
+version = "0.0.0"
+
 [[tool.uv.index]]
 name = "pypi"
 url = "https://pypi.org/simple"
 default = true
 
-[tool.hatch.version.raw-options]
-version_scheme = "only-version"
+[tool.hatch.build.targets.wheel]
+packages = ["azul_bedrock", "azul_bedrock.models_restapi"]
 
 [[tool.uv.index]]
 name = "cache"
 url = "https://devpi.acsc.internal/azul/stable/"
 explicit = true
-
-[tool.hatch.version.fallback]
-version = "0.0.0"
-
-[tool.hatch.build.targets.wheel]
-packages = ["azul_bedrock", "azul_bedrock.models_restapi"]
 
 [dependency-groups]
 dev = [
