@@ -63,6 +63,8 @@ class UserSecurity(BaseModel):
     unique: str = ""
     # users max security as a string
     max_access: str = ""
+    # users max security string formatted for display rather than database usage.
+    max_access_display: str = ""
     # azul-security presets the user is able to use
     allowed_presets: list[str] = []
 
