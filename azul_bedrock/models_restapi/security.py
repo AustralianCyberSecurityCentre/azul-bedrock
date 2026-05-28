@@ -3,7 +3,7 @@
 NOTE - it's important that this stays in a seperate file to enable lazy imports in azul-security.
 """
 
-from azul_bedrock.models_restapi.basic import BaseModel
+from pydantic import BaseModel
 
 
 class UserSecurity(BaseModel):
