@@ -81,10 +81,6 @@ from azul_bedrock.models_restapi.plugins import (
     StatusGroup,
 )
 from azul_bedrock.models_restapi.purge import PurgeResults, PurgeSimulation
-from azul_bedrock.models_restapi.security import (
-    UserAccess,
-    UserSecurity,
-)
 from azul_bedrock.models_restapi.sources import (
     EventSource,
     References,
@@ -92,6 +88,10 @@ from azul_bedrock.models_restapi.sources import (
     Source,
 )
 from azul_bedrock.models_restapi.statistics import StatisticContainer, StatisticSummary
+from azul_bedrock.restapi_security import (
+    UserAccess,
+    UserSecurity,
+)
 
 __all__ = [
     # Basic
