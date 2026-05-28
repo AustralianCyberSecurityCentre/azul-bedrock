@@ -3,8 +3,6 @@ from azul_bedrock.models_restapi.basic import (
     Meta,
     QueryInfo,
     Response,
-    UserAccess,
-    UserSecurity,
 )
 from azul_bedrock.models_restapi.binaries import (
     AnnotationUpdated,
@@ -83,6 +81,10 @@ from azul_bedrock.models_restapi.plugins import (
     StatusGroup,
 )
 from azul_bedrock.models_restapi.purge import PurgeResults, PurgeSimulation
+from azul_bedrock.models_restapi.security import (
+    UserAccess,
+    UserSecurity,
+)
 from azul_bedrock.models_restapi.sources import (
     EventSource,
     References,
