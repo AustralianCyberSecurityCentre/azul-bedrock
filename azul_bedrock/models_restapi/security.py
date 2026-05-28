@@ -1,6 +1,6 @@
 """Security API models.
 
-NOTE - it's important that this stays in a seperate file to enable lazy imports in azul-security.
+NOTE - it's important that this stays in a separate file to enable lazy imports in azul-security.
 """
 
 from pydantic import BaseModel
