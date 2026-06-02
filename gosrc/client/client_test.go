@@ -158,11 +158,12 @@ func TestGetBinaryEvents(t *testing.T) {
 		DenyActions:             []events.BinaryAction{events.ActionExtracted},
 		DenySelf:                true,
 		RequireStreams:          []string{"content,windows/exe"},
+		MaxSecurity:             "MEDIUM",
 	})
 	require.Nil(t, err)
 	require.Equal(t, info, &models.EventResponseInfo{Filtered: 200, Fetched: 2, Ready: true, ConsumersNotReady: "", Filters: map[string]int{"blah": 7}})
 	require.Equal(t, len(data.Events), 2)
-	require.Equal(t, lastReqURL, "/api/v2/event/binary/passive?avro-format=true&count=10&d-action=extracted&d-self=true&deadline=1&deployment_key=my-plugin-key&name=MyPlugin&r-action=enriched&r-expedite=true&r-live=true&r-streams=content%2Cwindows%2Fexe&r-under-content-size=100&version=1")
+	require.Equal(t, lastReqURL, "/api/v2/event/binary/passive?avro-format=true&count=10&d-action=extracted&d-self=true&deadline=1&deployment_key=my-plugin-key&max-security=MEDIUM&name=MyPlugin&r-action=enriched&r-expedite=true&r-live=true&r-streams=content%2Cwindows%2Fexe&r-under-content-size=100&version=1")
 
 	// use source filter
 	respCode = 200

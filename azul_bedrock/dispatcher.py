@@ -102,6 +102,7 @@ class DispatcherAPI:
         require_over_content_size: int = 0,
         require_actions: typing.Optional[list[str]] = None,
         require_streams: typing.Optional[list[str]] = None,
+        max_security: str = "",
     ) -> tuple[azapi.GetEventsInfo, list[Any]]:
         """Get azul events from dispatcher."""
         if model not in azm.ModelType:
@@ -141,6 +142,7 @@ class DispatcherAPI:
             DPP.GetEvent.RequireOverContentSize.value: require_over_content_size,
             DPP.GetEvent.RequireActions.value: require_actions,
             DPP.GetEvent.RequireStreams.value: require_streams,
+            DPP.GetEvent.MaxSecurity.value: max_security,
         }
         for k in list(params_opt):
             if not params_opt[k]:

@@ -39,6 +39,7 @@ type FetchEventsStruct struct {
 	RequireStreams          []string              // only model=binary
 	DenyActions             []events.BinaryAction // only model=binary,status
 	DenySelf                bool                  // only model=binary,status
+	MaxSecurity             string                // only model=binary,download
 }
 
 // Pulls a list of raw messages and related info or an error.
@@ -67,6 +68,11 @@ func (c *Client) GetEventsBytes(query *FetchEventsStruct) ([]byte, *models.Event
 	q.Set(getevents.Deadline, fmt.Sprint(query.Deadline))
 	q.Set(getevents.Count, fmt.Sprint(query.Count))
 	q.Set(getevents.AvroFormat, strconv.FormatBool(query.AvroFormat))
+
+	// Set max security if provided.
+	if len(query.MaxSecurity) > 0 {
+		q.Set(getevents.MaxSecurity, query.MaxSecurity)
+	}
 
 	// custom filters
 	if query.RequireExpedite {

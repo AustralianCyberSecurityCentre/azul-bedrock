@@ -59,6 +59,8 @@ type PluginSettings struct {
 	EnableLivenessProbe bool `koanf:"plugin_enable_liveness_probe"`
 	// Is using download events (this excludes using the normal plugin execution model and is used by the webui)
 	IsProcessingDownloadEvents bool `koanf:"is_processing_download_events"`
+	// Maximum Security plugin will accept
+	MaxSecurity string `koanf:"plugin_max_security"`
 }
 
 var defaults = PluginSettings{

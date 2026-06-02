@@ -39,6 +39,8 @@ class GetEvent(StrEnum):
     # e.g. "content,executable/windows/pe32,executable/windows/dll32"
     # Multiple stream labels means each event must have all stream labels.
     RequireStreams = "r-streams"
+    # Maximum security the requesting client can accept, reject anything higher.
+    MaxSecurity = "max-security"
 
 
 class PostStream(StrEnum):
