@@ -113,7 +113,7 @@ func (c *Client) GetEventsBytes(query *FetchEventsStruct) ([]byte, *models.Event
 	q[getevents.RequireStreams] = query.RequireStreams
 
 	u.RawQuery = q.Encode()
-	settings.Logger.Debug().Msgf("Getting events from dispatcher with url %s", u.String())
+	settings.Logger.Error().Msgf("Getting events from dispatcher with url %s", u.String())
 
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
