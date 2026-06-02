@@ -20,6 +20,7 @@ import (
 	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/client/postevents"
 	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/events"
 	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/models"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/settings"
 )
 
 type FetchEventsStruct struct {
@@ -112,6 +113,7 @@ func (c *Client) GetEventsBytes(query *FetchEventsStruct) ([]byte, *models.Event
 	q[getevents.RequireStreams] = query.RequireStreams
 
 	u.RawQuery = q.Encode()
+	settings.Logger.Debug().Msgf("Getting events from dispatcher with url %s", u.String())
 
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -258,6 +260,7 @@ func (c *Client) PostEventsBytes(evs []byte, opts *PublishBytesOptions) (*models
 	q.Set(postevents.IncludeOk, strconv.FormatBool(opts.IncludeOk))
 	q.Set(postevents.PausePlugins, strconv.FormatBool(opts.PausePlugins))
 	u.RawQuery = q.Encode()
+	settings.Logger.Debug().Msgf("Posting events to dispatcher with url %s", u.String())
 	req, err := http.NewRequest("POST", u.String(), bytes.NewReader(evs))
 	if err != nil {
 		return nil, err
