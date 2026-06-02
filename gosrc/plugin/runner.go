@@ -199,6 +199,7 @@ func (pr *PluginRunner) Run() string {
 			RequireLive:             pr.config.RequireLive,
 			RequireHistoric:         pr.config.RequireHistoric,
 			DenySelf:                pr.config.FilterSelf,
+			MaxSecurity:             pr.config.MaxSecurity,
 		})
 		// Something stopped us getting events from dispatcher (either a bad event that couldn't be decoded or dispatcher is unavailable.)
 		if err != nil {

@@ -49,6 +49,7 @@ func TestConvertSettingsToMap(t *testing.T) {
 		"require_live":                  "false",
 		"run_timeout":                   "0",
 		"enable_liveness_probe":         "false",
+		"max_security":                  "\"\"",
 	},
 		result,
 	)
