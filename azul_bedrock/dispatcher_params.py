@@ -44,6 +44,7 @@ class GetEvent(StrEnum):
     Debug = "debug"
     Reset = "reset"
 
+
 class PostStream(StrEnum):
     """Parameters for POST stream endpoint."""
 
