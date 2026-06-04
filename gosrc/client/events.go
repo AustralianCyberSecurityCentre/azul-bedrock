@@ -28,6 +28,8 @@ type FetchEventsStruct struct {
 	Count                   int
 	Deadline                int
 	IsTask                  bool
+	Debug                   bool
+	Reset                   bool
 	RequireExpedite         bool
 	RequireLive             bool
 	RequireHistoric         bool
@@ -72,6 +74,15 @@ func (c *Client) GetEventsBytes(query *FetchEventsStruct) ([]byte, *models.Event
 	// Set max security if provided.
 	if len(query.MaxSecurity) > 0 {
 		q.Set(getevents.MaxSecurity, query.MaxSecurity)
+	}
+
+	// for debugging purpose
+	if query.Debug {
+		q.Set(getevents.Debug, strconv.FormatBool(query.Debug))
+	}
+
+	if query.Reset {
+		q.Set(getevents.Reset, strconv.FormatBool(query.Reset))
 	}
 
 	// custom filters

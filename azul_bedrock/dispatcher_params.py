@@ -41,7 +41,8 @@ class GetEvent(StrEnum):
     RequireStreams = "r-streams"
     # Maximum security the requesting client can accept, reject anything higher.
     MaxSecurity = "max-security"
-
+    Debug = "debug"
+    Reset = "reset"
 
 class PostStream(StrEnum):
     """Parameters for POST stream endpoint."""
