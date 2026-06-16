@@ -161,7 +161,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreInvalidTLSHFormat.value: "Invalid TLSH version in: '{tlsh_hash}'",
         ExceptionCodeEnum.MetastoreInvalidTLSHLength.value: "Invalid TLSH length in: '{tlsh_str}'",
         # common/wrapper
-        ExceptionCodeEnum.MetastoreOpensearchAuthFailure.value: "Failed to get templates from Opensearch for index: {alias}, with error: {e.error}",
+        ExceptionCodeEnum.MetastoreOpensearchAuthFailure.value: "Failed to get templates from Opensearch for index: {alias}, with error: {inner_error}",
         ExceptionCodeEnum.MetastoreOpensearchFailedToCreateIndex.value: "Failure creating index '{index}'",
         ExceptionCodeEnum.MetastoreOpensearchTemplateOldVersion.value: "{index} template ({existing_template_version}) does not match metastore ({new_version}). Consider using a new metastore partition and reindexing data.",
         ExceptionCodeEnum.MetastoreOpensearchKnnMisconfigured.value: "kNN filters only supported for one search term",
@@ -169,7 +169,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreBadSecurityConversionExclude.value: "Bad security provided in security_exclude {security_exclude}. Exception: {inner_exception}",
         ExceptionCodeEnum.MetastoreBadSecurityConversionInclude.value: "Bad security provided in security_include {security_include}. Exception: {inner_exception}",
         ExceptionCodeEnum.MetastoreKnnTooManySearchTerms.value: "kNN filters only supported for one search term",
-        ExceptionCodeEnum.MetastoreUnknownDocType.value: "Unknown doc type to handle error in {doc_type}",dr;
+        ExceptionCodeEnum.MetastoreUnknownDocType.value: "Unknown doc type to handle error in {doc_type}",
         ExceptionCodeEnum.MetastoreInvalidGetStringsQuantity.value: "Cannot request 0 or less strings when getting strings.",
         ExceptionCodeEnum.MetastoreInvalidGetHexQuantity.value: "Cannot request 0 or less hex values when getting hex_hits.",
         # annotation
