@@ -66,7 +66,7 @@ rm -rf rust-${RUST_VERSION}-*
 cargo install cargo-c
 git clone -b v1.18.0 https://github.com/VirusTotal/yara-x.git && \
 cd yara-x
-cargo cinstall -p yara-x-capi --release --prefix /usr/local
+cargo cinstall -p yara-x-capi --release --prefix /tmp/yara-build
 sudo cp -r /tmp/yara-build/lib/x86_64-linux-gnu/* /usr/local/lib
 sudo cp -r /tmp/yara-build/include/yara_x.h /usr/include/yara_x.h
 cd ..
