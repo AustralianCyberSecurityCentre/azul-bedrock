@@ -30,6 +30,7 @@ api.send_thingo(mapi.Thingo())
 contains a number of bugs for office and archive file types
 
 ```bash
+sudo apt install autoconf automake autotools-dev gcc libtool make zlib1g-dev
 git clone --depth 1 --branch FILE5_47 https://github.com/file/file
 cd file/
 autoreconf -f -i
@@ -49,7 +50,7 @@ Library required for identify to work, must be manually installed for golang not
 ```bash
 # Install yara-x for identify - needed for golang bedrock
 # Install Rust and yara-x
-RUST_VERSION=1.95.0
+export RUST_VERSION=1.96.0
 gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 85AB96E6FA1BE5FE
 # Download Rust tarball + signature
 curl -O https://static.rust-lang.org/dist/rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz \
@@ -59,13 +60,15 @@ gpg --verify rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz.asc
 
 # perform rust install
 tar xzf rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz
-sudo rust-${RUST_VERSION}-x86_64-unknown-linux-gnu/install.sh --prefix=/usr/local --without=rust-docs
+rust-${RUST_VERSION}-x86_64-unknown-linux-gnu/install.sh --prefix=/usr/local --without=rust-docs
 rm -rf rust-${RUST_VERSION}-*
 
-sudo cargo install cargo-c
-git clone -b v1.16.0 https://github.com/VirusTotal/yara-x.git && \
+cargo install cargo-c
+git clone -b v1.18.0 https://github.com/VirusTotal/yara-x.git && \
 cd yara-x
-sudo cargo cinstall -p yara-x-capi --release --libdir /usr/local/lib/
+cargo cinstall -p yara-x-capi --release --prefix /usr/local
+sudo cp -r /tmp/yara-build/lib/x86_64-linux-gnu/* /usr/lib
+sudo cp -r /tmp/yara-build/include/yara_x.h /usr/include/yara_x.h
 cd ..
 rm -rf yara-x
 
