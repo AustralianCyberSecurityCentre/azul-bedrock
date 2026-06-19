@@ -161,7 +161,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreInvalidTLSHFormat.value: "Invalid TLSH version in: '{tlsh_hash}'",
         ExceptionCodeEnum.MetastoreInvalidTLSHLength.value: "Invalid TLSH length in: '{tlsh_str}'",
         # common/wrapper
-        ExceptionCodeEnum.MetastoreOpensearchAuthFailure.value: "Failed to get templates from Opensearch for index: {self.alias}, with error: {e.error}",
+        ExceptionCodeEnum.MetastoreOpensearchAuthFailure.value: "Failed to get templates from Opensearch for index: {alias}, with error: {inner_error}",
         ExceptionCodeEnum.MetastoreOpensearchFailedToCreateIndex.value: "Failure creating index '{index}'",
         ExceptionCodeEnum.MetastoreOpensearchTemplateOldVersion.value: "{index} template ({existing_template_version}) does not match metastore ({new_version}). Consider using a new metastore partition and reindexing data.",
         ExceptionCodeEnum.MetastoreOpensearchKnnMisconfigured.value: "kNN filters only supported for one search term",
