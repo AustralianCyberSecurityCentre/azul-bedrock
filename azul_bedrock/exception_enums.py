@@ -210,6 +210,7 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreUnableToExtractProvidedArchive = "MetastoreUnableToExtractProvidedArchive"
     MetastoreDatalessSubmissionBinaryDoesNotExist = "MetastoreDatalessSubmissionBinaryDoesNotExist"
     MetastoreUnableToExtractAnyFiles = "MetastoreUnableToExtractAnyFiles"
+    MetastoreReadOnlyMode = "MetastoreReadOnlyMode"
     # binaries_data
     MetastoreBinaryNotFound = "MetastoreCheckedBinaryNotFound"
     MetastoreBinaryStreamNotFound = "MetastoreBinaryStreamNotFound"

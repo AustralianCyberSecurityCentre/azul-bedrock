@@ -161,7 +161,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreInvalidTLSHFormat.value: "Invalid TLSH version in: '{tlsh_hash}'",
         ExceptionCodeEnum.MetastoreInvalidTLSHLength.value: "Invalid TLSH length in: '{tlsh_str}'",
         # common/wrapper
-        ExceptionCodeEnum.MetastoreOpensearchAuthFailure.value: "Failed to get templates from Opensearch for index: {self.alias}, with error: {e.error}",
+        ExceptionCodeEnum.MetastoreOpensearchAuthFailure.value: "Failed to get templates from Opensearch for index: {alias}, with error: {inner_error}",
         ExceptionCodeEnum.MetastoreOpensearchFailedToCreateIndex.value: "Failure creating index '{index}'",
         ExceptionCodeEnum.MetastoreOpensearchTemplateOldVersion.value: "{index} template ({existing_template_version}) does not match metastore ({new_version}). Consider using a new metastore partition and reindexing data.",
         ExceptionCodeEnum.MetastoreOpensearchKnnMisconfigured.value: "kNN filters only supported for one search term",
@@ -216,6 +216,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreDispatcherRejectedEvents.value: "Dispatcher rejected the submitted events, with response {response}",
         ExceptionCodeEnum.MetastoreSubmissionsCantCreateInsertionEvents.value: "Unable to propagate insert events to metastore",
         # binary_submit
+        ExceptionCodeEnum.MetastoreReadOnlyMode.value: "Azul is currently in readonly mode and no files can be uploaded or expedited.",
         ExceptionCodeEnum.MetastoreNoSourcesForBinarySubmission.value: "Attempting to upload a binary to no sources!",
         ExceptionCodeEnum.MetastoreBadAugmentedStreamLabel.value: "augmented stream label cannot be 'content'",
         ExceptionCodeEnum.MetastoreInvalidSourceForBinarySubmission.value: "Source does not exist: {source}",
