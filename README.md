@@ -50,18 +50,8 @@ Library required for identify to work, must be manually installed for golang not
 ```bash
 # Install yara-x for identify - needed for golang bedrock
 # Install Rust and yara-x
-export RUST_VERSION=1.96.0
-gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 85AB96E6FA1BE5FE
-# Download Rust tarball + signature
-curl -O https://static.rust-lang.org/dist/rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz \
-    && curl -O https://static.rust-lang.org/dist/rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz.asc
-# Verify signature
-gpg --verify rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz.asc
-
-# perform rust install
-tar xzf rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz
-rust-${RUST_VERSION}-x86_64-unknown-linux-gnu/install.sh --prefix=/usr/local --without=rust-docs
-rm -rf rust-${RUST_VERSION}-*
+# easy rust install
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 cargo install cargo-c
 git clone -b v1.18.0 https://github.com/VirusTotal/yara-x.git && \
