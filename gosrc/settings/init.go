@@ -31,6 +31,10 @@ type StreamsS3 struct {
 	Region string `koanf:"region"`
 	// S3 bucket name to store to (will attempt to create if not exists)
 	Bucket string `koanf:"bucket"`
+	// Secret key for aes encryption, only required if aes-256 encryption is required.
+	// Length of the key must be exactly 24 characters long or 0.
+	// When set AES encryption is enabled.
+	AesKey string `koanf:"aes_key"`
 }
 
 type Streams struct {
