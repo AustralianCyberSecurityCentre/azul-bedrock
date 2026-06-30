@@ -149,8 +149,25 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 				offsetToFind := int64(8192)
 				// Get a partial file with a specific larger non-MiB offset
 				ds, err = fs.Fetch("source", events.DataLabelContent.Str(), inBinSha256, WithOffsetAndSize(0, offsetToFind))
-				assert.NoError(err, fmt.Sprintf("Error returned when trying to fetch a fixed offset of '%d'", offsetToFind))
+				assert.NoError(err, fmt.Sprintf("Error returned when trying to fetch a size of '%d'", offsetToFind))
 				assert.Equal(test.input[0:offsetToFind], getDataSliceBytesInterfaceTest(t, ds), "Fetched precisely %d bytes from store", offsetToFind)
+
+				// Get a partial file with a specific larger non-MiB offset
+				ds, err = fs.Fetch("source", events.DataLabelContent.Str(), inBinSha256, WithOffsetAndSize(offsetToFind, 0))
+				assert.NoError(err, fmt.Sprintf("Error returned when trying to fetch a fixed offset of '%d'", offsetToFind))
+				assert.Equal(test.input[offsetToFind:], getDataSliceBytesInterfaceTest(t, ds), "Failed to fetch rest of file from offset %d", offsetToFind)
+
+				// Get a partial file with a specific larger non-MiB offset
+				ds, err = fs.Fetch("source", events.DataLabelContent.Str(), inBinSha256, WithOffsetAndSize(10, offsetToFind))
+				assert.NoError(err, fmt.Sprintf("Error returned when trying to fetch a large number of bytes with a small fixed offset of 10, and size '%d'", offsetToFind))
+				assert.Equal(test.input[10:offsetToFind+10], getDataSliceBytesInterfaceTest(t, ds), "Fetched precisely %d bytes from store", offsetToFind)
+
+				// Get a partial file with a specific larger non-MiB offset
+				ds, err = fs.Fetch("source", events.DataLabelContent.Str(), inBinSha256, WithOffsetAndSize(-offsetToFind, 1))
+				assert.NoError(err, fmt.Sprintf("Error returned when trying to fetch a fixed offset of '%d'", offsetToFind))
+				startOfFoundText := int64(len(test.input)) - offsetToFind
+				assert.Equal(test.input[startOfFoundText:startOfFoundText+1], getDataSliceBytesInterfaceTest(t, ds), "Fetched precisely %d bytes from store", offsetToFind)
+
 				largeFileTestDoneOnce = true
 			}
 
