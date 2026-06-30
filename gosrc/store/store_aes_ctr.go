@@ -124,7 +124,7 @@ func NewAESCtrDecoder(contentBackend DataSlice, headerBackend DataSlice, key []b
 	}
 	block, err := aes.NewCipher(saltedKey)
 	if err != nil {
-		return &AESCtrDecoder{}, fmt.Errorf("failed to initalise the aes block cipher with error %v", err)
+		return &AESCtrDecoder{}, fmt.Errorf("failed to initialise the aes block cipher with error %v", err)
 	}
 
 	// Counter cipher object
