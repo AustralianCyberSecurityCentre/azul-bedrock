@@ -61,7 +61,7 @@ func NewAESCtrEncoder(backend io.ReadCloser, key []byte) (*AESCtrEncoder, error)
 	// 32 bytes for AES-256
 	saltedKey := append(key, salt...)
 	if len(saltedKey) != KEY_LENGTH+KEY_SALT_LENGTH {
-		return &AESCtrEncoder{}, fmt.Errorf("Adding the key and salt together resulted in a key length (%d) not the expected length (%d)", len(saltedKey), KEY_LENGTH+KEY_SALT_LENGTH)
+		return &AESCtrEncoder{}, fmt.Errorf("adding the key and salt together resulted in a key length (%d) not the expected length (%d)", len(saltedKey), KEY_LENGTH+KEY_SALT_LENGTH)
 	}
 	cipherBlock, err := aes.NewCipher(saltedKey)
 	if err != nil {
@@ -120,11 +120,11 @@ func NewAESCtrDecoder(contentBackend DataSlice, headerBackend DataSlice, key []b
 	// 32 bytes for AES-256
 	saltedKey := append(key, salt...)
 	if len(saltedKey) != KEY_LENGTH+KEY_SALT_LENGTH {
-		return &AESCtrDecoder{}, fmt.Errorf("Adding the key and salt together resulted in a key length (%d) not the expected length (%d)", len(saltedKey), KEY_LENGTH+KEY_SALT_LENGTH)
+		return &AESCtrDecoder{}, fmt.Errorf("adding the key and salt together resulted in a key length (%d) not the expected length (%d)", len(saltedKey), KEY_LENGTH+KEY_SALT_LENGTH)
 	}
 	block, err := aes.NewCipher(saltedKey)
 	if err != nil {
-		return &AESCtrDecoder{}, fmt.Errorf("failed to initalise the aes block cipher with error %v.", err)
+		return &AESCtrDecoder{}, fmt.Errorf("failed to initalise the aes block cipher with error %v", err)
 	}
 
 	// Counter cipher object
