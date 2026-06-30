@@ -165,8 +165,8 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 				// Get a partial file with a specific larger non-MiB offset
 				ds, err = fs.Fetch("source", events.DataLabelContent.Str(), inBinSha256, WithOffsetAndSize(-offsetToFind, 1))
 				assert.NoError(err, fmt.Sprintf("Error returned when trying to fetch a fixed offset of '%d'", offsetToFind))
-				startOfFoundText := int64(len(test.input))-offsetToFind
-				assert.Equal(test.input[startOfFoundText:startOfFoundText + 1], getDataSliceBytesInterfaceTest(t, ds), "Fetched precisely %d bytes from store", offsetToFind)
+				startOfFoundText := int64(len(test.input)) - offsetToFind
+				assert.Equal(test.input[startOfFoundText:startOfFoundText+1], getDataSliceBytesInterfaceTest(t, ds), "Fetched precisely %d bytes from store", offsetToFind)
 
 				largeFileTestDoneOnce = true
 			}

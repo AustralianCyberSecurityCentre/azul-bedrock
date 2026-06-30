@@ -12,8 +12,6 @@ import (
 	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/settings"
 )
 
-// TODO - need to garuntee the backing streams are closed during errors.
-
 // Extension (including version) of the aes encoding.
 const HEADER_VERSION = "1"
 
@@ -165,14 +163,14 @@ type StoreAESCtr struct {
 	enabled bool
 }
 
-func NewAESCtrStore(backend FileStorage, aesKey string) FileStorage {
+func NewAESCtrStore(backend FileStorage, aesKey string, enabled bool) FileStorage {
 	if len(aesKey) != KEY_LENGTH {
 		panic(fmt.Sprintf("The provided AES key is not 0 bytes and is not exactly %d bytes long it was %d bytes long instead and cannot be used.", KEY_LENGTH, len(aesKey)))
 	}
 	return &StoreAESCtr{
 		Backend: backend,
 		key:     []byte(aesKey),
-		enabled: true,
+		enabled: enabled,
 	}
 }
 
@@ -278,17 +276,17 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 	var correctedStart int64
 
 	/*
-	cases (SIZE)
-	-ve or 0 size (read all content)
-	+ve size + offset greater than length of the file, then read just to end of file.
+		cases (SIZE)
+		-ve or 0 size (read all content)
+		+ve size + offset greater than length of the file, then read just to end of file.
 
-	cases (OFFSETS)
-	-ve - (read the end of the file)
-	-ve that is greater than whole file (read whole file). - weird case where you could end up reading the header as part of file.
-	+ve and larger than the whole file size (error out)
+		cases (OFFSETS)
+		-ve - (read the end of the file)
+		-ve that is greater than whole file (read whole file). - weird case where you could end up reading the header as part of file.
+		+ve and larger than the whole file size (error out)
 
 	*/
-	
+
 	// trivial case where the offset is at the start of the file
 	if originalOffset == 0 {
 		newSize := fetchOptions.Size
@@ -305,9 +303,10 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		correctedSize = contentBackingStream.Size - HEADER_BYTE_LENGTH
 		decoder, err = NewAESCtrDecoder(contentBackingStream, contentBackingStream, s.key)
 		if err != nil {
+			contentBackingStream.DataReader.Close()
 			return empty, err
 		}
-	// offset is negative
+		// offset is negative
 	} else if originalOffset < 0 {
 		// Need to ensure the whole starting block of content is fetched and as offset is negative need to fetch
 		// (blocksize -1) additional bytes and then discard based on total bytes in file (available) once known.
@@ -315,7 +314,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		adjustedOffset := originalOffset - fetchDiff
 		newSize := fetchOptions.Size
 		// If size is less than 0 whole file is being fetched anyway.
-		if newSize > 0{
+		if newSize > 0 {
 			newSize += fetchDiff
 		}
 
@@ -327,6 +326,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		contentBackingStream, err = s.Backend.Fetch(source, label, id+AES_CTR_FILE_EXT, append(opts, WithOffsetAndSize(adjustedOffset, newSize))...)
 		if err != nil {
 			st.Logger.Error().Msgf("Failed to fetch content with a negative offset with error %v", err)
+			headerBackingStream.DataReader.Close()
 			return empty, err
 		}
 
@@ -337,35 +337,39 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		bytesOffBlockSize := int64(0)
 
 		// Original request was inside the header so the offset is 0 and all header bytes should be discarded to start the stream.
-		if positiveOriginalRequestedStart < HEADER_BYTE_LENGTH{
+		if positiveOriginalRequestedStart < HEADER_BYTE_LENGTH {
 			discardHeaderLength := int64(HEADER_BYTE_LENGTH - contentBackingStream.Start)
 			discardedHeader := make([]byte, discardHeaderLength)
 			_, err = contentBackingStream.DataReader.Read(discardedHeader)
-			if err != nil{
+			if err != nil {
 				st.Logger.Error().Msgf("Failed to discard header when reading with a negative offset with error %v", err)
+				headerBackingStream.DataReader.Close()
+				contentBackingStream.DataReader.Close()
 				return empty, err
 			}
 			correctedStart = 0
 			correctedSize = contentBackingStream.Size - discardHeaderLength
-		// Adjust the requested content to start at the nearest block.
-		// Ready for the un-needed content to be discarded into the decoder to ensure appropriate decoding.
-		} else{
+			// Adjust the requested content to start at the nearest block.
+			// Ready for the un-needed content to be discarded into the decoder to ensure appropriate decoding.
+		} else {
 			correctedStart = positiveOriginalRequestedStart - HEADER_BYTE_LENGTH
 			correctedSize = contentBackingStream.Size - fetchDiff
 			// Bytes to discard into the decoder
 			bytesOffBlockSize = correctedStart % aes.BlockSize
 			// Bytes to discard that were never needed but were got just in case they would be part of bytesOffBlockSize.
 			overReadBytesToDiscard := fetchDiff - bytesOffBlockSize
-			if overReadBytesToDiscard > 0{
-				discardedUnNeededBytes := make([]byte, overReadBytesToDiscard) // TODO why -1
+			if overReadBytesToDiscard > 0 {
+				discardedUnNeededBytes := make([]byte, overReadBytesToDiscard)
 				_, err = contentBackingStream.DataReader.Read(discardedUnNeededBytes[:])
-				if err != nil{
+				if err != nil {
+					headerBackingStream.DataReader.Close()
+					contentBackingStream.DataReader.Close()
 					return empty, err
 				}
 			}
-			
+
 		}
-		
+
 		decoder, err = NewAESCtrDecoder(contentBackingStream, headerBackingStream, s.key)
 		if err != nil {
 			return empty, fmt.Errorf("Failed to create AES -ve decoder for file %s with error: %v", id, err)
@@ -376,6 +380,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 			discardedBytes := make([]byte, bytesOffBlockSize)
 			_, err := decoder.Read(discardedBytes)
 			if err != nil {
+				decoder.Close()
 				return empty, fmt.Errorf("Failed to discard un-needed byte from offset when reading file %s with error: %v", id, err)
 			}
 		}
@@ -386,7 +391,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		newOffset = newOffset - bytesOffBlockSize
 		newSize := fetchOptions.Size
 		// Adds the additional block bytes that will need to be discarded to the size, unless the size is less than 0 and whole file is being read anyway.
-		if newSize > 0{
+		if newSize > 0 {
 			newSize += bytesOffBlockSize
 		}
 
@@ -394,16 +399,19 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		if err != nil {
 			return empty, err
 		}
-		if originalOffset + HEADER_BYTE_LENGTH >= contentBackingStream.Avail{
-			defer contentBackingStream.DataReader.Close()
+		if originalOffset+HEADER_BYTE_LENGTH >= contentBackingStream.Avail {
+			contentBackingStream.DataReader.Close()
 			return empty, fmt.Errorf("%w", &OffsetAfterEnd{msg: fmt.Sprintf("offset after EOF: %d", contentBackingStream.Avail)})
 		}
 		headerBackingStream, err := s.Backend.Fetch(source, label, id+AES_CTR_FILE_EXT, WithOffsetAndSize(0, HEADER_BYTE_LENGTH))
 		if err != nil {
+			contentBackingStream.DataReader.Close()
 			return empty, err
 		}
 		decoder, err = NewAESCtrDecoder(contentBackingStream, headerBackingStream, s.key)
 		if err != nil {
+			contentBackingStream.DataReader.Close()
+			headerBackingStream.DataReader.Close()
 			return empty, fmt.Errorf("Failed to create AES decoder for file %s with error: %v", id, err)
 		}
 		// Discard bytes that were read just to read to make the first block complete.
@@ -411,6 +419,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 			discardedBytes := make([]byte, bytesOffBlockSize)
 			_, err := decoder.Read(discardedBytes)
 			if err != nil {
+				decoder.Close()
 				return empty, fmt.Errorf("Failed to discard un-needed byte from offset when reading file %s with error: %v", id, err)
 			}
 		}
