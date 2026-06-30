@@ -51,11 +51,11 @@ func NewAESCtrEncoder(backend io.ReadCloser, key []byte) (*AESCtrEncoder, error)
 	salt := make([]byte, KEY_SALT_LENGTH)
 	_, err := rand.Read(iv)
 	if err != nil {
-		return &AESCtrEncoder{}, fmt.Errorf("Failed to generate random bytes for AES iv vector. Error: %v", err)
+		return &AESCtrEncoder{}, fmt.Errorf("failed to generate random bytes for AES iv vector. Error: %v", err)
 	}
 	_, err = rand.Read(salt)
 	if err != nil {
-		return &AESCtrEncoder{}, fmt.Errorf("Failed to generate random bytes for AES salt. Error: %v", err)
+		return &AESCtrEncoder{}, fmt.Errorf("failed to generate random bytes for AES salt. Error: %v", err)
 	}
 
 	// 32 bytes for AES-256
@@ -109,12 +109,12 @@ func NewAESCtrDecoder(contentBackend DataSlice, headerBackend DataSlice, key []b
 	salt := make([]byte, KEY_SALT_LENGTH)
 	_, err := headerBackend.DataReader.Read(salt)
 	if err != nil {
-		return &AESCtrDecoder{}, fmt.Errorf("Failed to read Salt when decoding file with error: %v", err)
+		return &AESCtrDecoder{}, fmt.Errorf("failed to read Salt when decoding file with error: %v", err)
 	}
 	iv := make([]byte, aes.BlockSize)
 	_, err = headerBackend.DataReader.Read(iv)
 	if err != nil {
-		return &AESCtrDecoder{}, fmt.Errorf("Failed to read IV when decoding file with error: %v", err)
+		return &AESCtrDecoder{}, fmt.Errorf("failed to read IV when decoding file with error: %v", err)
 	}
 
 	// 32 bytes for AES-256
@@ -124,7 +124,7 @@ func NewAESCtrDecoder(contentBackend DataSlice, headerBackend DataSlice, key []b
 	}
 	block, err := aes.NewCipher(saltedKey)
 	if err != nil {
-		return &AESCtrDecoder{}, fmt.Errorf("Failed to initalise the aes block cipher with error %v.", err)
+		return &AESCtrDecoder{}, fmt.Errorf("failed to initalise the aes block cipher with error %v.", err)
 	}
 
 	// Counter cipher object
@@ -372,7 +372,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 
 		decoder, err = NewAESCtrDecoder(contentBackingStream, headerBackingStream, s.key)
 		if err != nil {
-			return empty, fmt.Errorf("Failed to create AES -ve decoder for file %s with error: %v", id, err)
+			return empty, fmt.Errorf("failed to create AES -ve decoder for file %s with error: %v", id, err)
 		}
 
 		// Read bytes that are needed in block cipher but aren't being requested.
@@ -381,7 +381,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 			_, err := decoder.Read(discardedBytes)
 			if err != nil {
 				decoder.Close()
-				return empty, fmt.Errorf("Failed to discard un-needed byte from offset when reading file %s with error: %v", id, err)
+				return empty, fmt.Errorf("failed to discard un-needed byte from offset when reading file %s with error: %v", id, err)
 			}
 		}
 	} else {
@@ -412,7 +412,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		if err != nil {
 			contentBackingStream.DataReader.Close()
 			headerBackingStream.DataReader.Close()
-			return empty, fmt.Errorf("Failed to create AES decoder for file %s with error: %v", id, err)
+			return empty, fmt.Errorf("failed to create AES decoder for file %s with error: %v", id, err)
 		}
 		// Discard bytes that were read just to read to make the first block complete.
 		if bytesOffBlockSize != 0 {
@@ -420,7 +420,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 			_, err := decoder.Read(discardedBytes)
 			if err != nil {
 				decoder.Close()
-				return empty, fmt.Errorf("Failed to discard un-needed byte from offset when reading file %s with error: %v", id, err)
+				return empty, fmt.Errorf("failed to discard un-needed byte from offset when reading file %s with error: %v", id, err)
 			}
 		}
 		// Corrected values
