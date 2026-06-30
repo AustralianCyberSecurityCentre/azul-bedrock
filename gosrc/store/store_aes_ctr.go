@@ -36,7 +36,6 @@ type AESCtrDecoder struct {
 	contentBackend DataSlice
 	headerBackend  DataSlice
 	aesKey         []byte
-	offset         uint64
 	iv             []byte
 	salt           []byte
 	cipherStream   cipher.Stream
