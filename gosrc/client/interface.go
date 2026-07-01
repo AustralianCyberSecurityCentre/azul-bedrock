@@ -5,8 +5,8 @@ import (
 	"io"
 	"time"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/events"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/models"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/models"
 )
 
 // client interface necessary for mocking/testing

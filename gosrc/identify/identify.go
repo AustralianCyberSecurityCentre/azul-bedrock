@@ -14,8 +14,8 @@ import (
 	"time"
 	"unicode"
 
-	embeded_files "github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc"
-	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/settings"
+	embeded_files "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc"
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/settings"
 	yarax "github.com/VirusTotal/yara-x/go"
 	"golang.org/x/exp/slices"
 	"gopkg.in/yaml.v3"
