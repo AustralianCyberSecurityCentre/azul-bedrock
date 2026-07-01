@@ -10,7 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
-	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/settings"
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/settings"
 )
 
 /* Store file on local filesystem. */

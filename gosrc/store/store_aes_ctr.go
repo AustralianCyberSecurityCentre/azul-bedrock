@@ -9,7 +9,7 @@ import (
 	"io"
 	"os"
 
-	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/settings"
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/settings"
 )
 
 // Extension (including version) of the aes encoding.

@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v11/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/events"
 )
 
 type ResultStream struct {
