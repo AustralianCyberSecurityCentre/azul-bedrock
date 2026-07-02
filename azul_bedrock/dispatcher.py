@@ -103,6 +103,8 @@ class DispatcherAPI:
         require_actions: typing.Optional[list[str]] = None,
         require_streams: typing.Optional[list[str]] = None,
         max_security: str = "",
+        debug: bool = False,
+        reset: bool = False,
     ) -> tuple[azapi.GetEventsInfo, list[Any]]:
         """Get azul events from dispatcher."""
         if model not in azm.ModelType:
@@ -143,6 +145,8 @@ class DispatcherAPI:
             DPP.GetEvent.RequireActions.value: require_actions,
             DPP.GetEvent.RequireStreams.value: require_streams,
             DPP.GetEvent.MaxSecurity.value: max_security,
+            DPP.GetEvent.Debug.value: debug,  # for debugging purposes, add "D" to consumer group id to allow separate consumer groups
+            DPP.GetEvent.Reset.value: reset,  # reset offsets to reprocess events from the start of the queue, or only receive new events from now on if false
         }
         for k in list(params_opt):
             if not params_opt[k]:
