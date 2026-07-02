@@ -76,7 +76,7 @@ func (c *Client) GetEventsBytes(query *FetchEventsStruct) ([]byte, *models.Event
 		q.Set(getevents.MaxSecurity, query.MaxSecurity)
 	}
 
-	// for debugging purpose
+	// for debugging purposes
 	if query.Debug {
 		q.Set(getevents.Debug, strconv.FormatBool(query.Debug))
 	}
