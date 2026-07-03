@@ -8,7 +8,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.22.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.13.1
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.7.0
-	github.com/VirusTotal/yara-x/go v1.17.0
+	github.com/VirusTotal/yara-x/go v1.19.0
 	github.com/allegro/bigcache/v3 v3.1.0
 	github.com/fatih/structs v1.1.0
 	github.com/go-viper/mapstructure/v2 v2.5.0
@@ -17,7 +17,7 @@ require (
 	github.com/knadh/koanf/providers/env/v2 v2.0.0
 	github.com/knadh/koanf/providers/structs v1.0.0
 	github.com/knadh/koanf/v2 v2.3.5
-	github.com/minio/minio-go/v7 v7.2.0
+	github.com/minio/minio-go/v7 v7.2.1
 	github.com/rakyll/magicmime v0.1.0
 	github.com/rs/zerolog v1.35.1
 	github.com/sanity-io/litter v1.5.8
