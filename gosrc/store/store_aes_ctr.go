@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-
-	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/settings"
 )
 
 // Extension (including version) of the aes encoding.
@@ -89,8 +87,7 @@ func (w *AESCtrEncoder) Encode(buffer []byte) (int, error) {
 	if err != nil {
 		return count, err
 	}
-	outputEncryptedText := make([]byte, len(buffer))
-	w.cipherStream.XORKeyStream(outputEncryptedText, buffer)
+	w.cipherStream.XORKeyStream(buffer, buffer)
 	return count, nil
 }
 
@@ -98,9 +95,18 @@ func (w *AESCtrEncoder) Close() error {
 	return w.backend.Close()
 }
 
+// Shifts an IV to a specific block.
+func shiftIvToBlock(counter []byte, n uint64) {
+	for i := len(counter) - 1; i >= 0 && n > 0; i-- {
+		sum := uint64(counter[i]) + (n & 0xff)
+		counter[i] = byte(sum)
+		n = (n >> 8) + (sum >> 8)
+	}
+}
+
 // Two separate readers once for the content and the other for the header, these could be the same reader.
 // But are allowed to be different in the case where there is a file offset.
-func NewAESCtrDecoder(contentBackend DataSlice, headerBackend DataSlice, key []byte) (*AESCtrDecoder, error) {
+func NewAESCtrDecoder(contentBackend DataSlice, headerBackend DataSlice, key []byte, offset uint64) (*AESCtrDecoder, error) {
 	if len(key) != KEY_LENGTH {
 		panic(fmt.Sprintf("The provided AES key is not exactly %d bytes long it was %d bytes long instead and cannot be used.", KEY_LENGTH, len(key)))
 	}
@@ -126,8 +132,20 @@ func NewAESCtrDecoder(contentBackend DataSlice, headerBackend DataSlice, key []b
 		return &AESCtrDecoder{}, fmt.Errorf("failed to initialise the aes block cipher with error %v", err)
 	}
 
+	// Shift IV to offset
+	blockNum := uint64(offset / aes.BlockSize)
+	blockOffset := int(offset % aes.BlockSize)
+	shiftedIv := iv
+	shiftIvToBlock(shiftedIv, blockNum)
+
 	// Counter cipher object
-	ctr := cipher.NewCTR(block, iv)
+	ctr := cipher.NewCTR(block, shiftedIv)
+
+	// Seek to the correct section of the IV now that it's at the correct block
+	if blockOffset > 0 {
+		dummy := make([]byte, blockOffset)
+		ctr.XORKeyStream(dummy, dummy)
+	}
 
 	return &AESCtrDecoder{
 		contentBackend: contentBackend,
@@ -144,6 +162,7 @@ func (w *AESCtrDecoder) Read(buffer []byte) (int, error) {
 	if err != nil {
 		return count, err
 	}
+	w.cipherStream.XORKeyStream(buffer, buffer)
 	return count, nil
 }
 
@@ -281,7 +300,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 
 		cases (OFFSETS)
 		-ve - (read the end of the file)
-		-ve that is greater than whole file (read whole file). - weird case where you could end up reading the header as part of file.
+		-ve that is greater than whole file (read whole file).
 		+ve and larger than the whole file size (error out)
 
 	*/
@@ -300,131 +319,55 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		}
 		correctedStart = 0
 		correctedSize = contentBackingStream.Size - HEADER_BYTE_LENGTH
-		decoder, err = NewAESCtrDecoder(contentBackingStream, contentBackingStream, s.key)
+		decoder, err = NewAESCtrDecoder(contentBackingStream, contentBackingStream, s.key, uint64(fetchOptions.Offset))
 		if err != nil {
 			contentBackingStream.DataReader.Close()
 			return empty, err
 		}
 		// offset is negative
-	} else if originalOffset < 0 {
-		// Need to ensure the whole starting block of content is fetched and as offset is negative need to fetch
-		// (blocksize -1) additional bytes and then discard based on total bytes in file (available) once known.
-		fetchDiff := int64(aes.BlockSize - 1)
-		adjustedOffset := originalOffset - fetchDiff
-		newSize := fetchOptions.Size
-		// If size is less than 0 whole file is being fetched anyway.
-		if newSize > 0 {
-			newSize += fetchDiff
-		}
-
+	} else {
+		// Fetch the header to allow the collection of the IV and salt
 		headerBackingStream, err := s.Backend.Fetch(source, label, id+AES_CTR_FILE_EXT, WithOffsetAndSize(0, HEADER_BYTE_LENGTH))
 		if err != nil {
-			st.Logger.Error().Msg("Failed to fetch header during AES negative offset fetch")
+			contentBackingStream.DataReader.Close()
 			return empty, err
 		}
-		contentBackingStream, err = s.Backend.Fetch(source, label, id+AES_CTR_FILE_EXT, append(opts, WithOffsetAndSize(adjustedOffset, newSize))...)
-		if err != nil {
-			st.Logger.Error().Msgf("Failed to fetch content with a negative offset with error %v", err)
-			headerBackingStream.DataReader.Close()
-			return empty, err
-		}
-
-		// If the offset had been positive it would have been this value.
-		// NOTE that there is an edge case where the -ve offset lands inside the HEADER but not beyond it, and a case where the -ve offset was so large it reads the whole header.
-		// This complicates this section a lot, as you have to account for both of these possibilities.
-		positiveOriginalRequestedStart := contentBackingStream.Avail + originalOffset
-		bytesOffBlockSize := int64(0)
-
-		// Original request was inside the header so the offset is 0 and all header bytes should be discarded to start the stream.
-		if positiveOriginalRequestedStart < HEADER_BYTE_LENGTH {
-			discardHeaderLength := int64(HEADER_BYTE_LENGTH - contentBackingStream.Start)
-			discardedHeader := make([]byte, discardHeaderLength)
-			_, err = contentBackingStream.DataReader.Read(discardedHeader)
-			if err != nil {
-				st.Logger.Error().Msgf("Failed to discard header when reading with a negative offset with error %v", err)
-				headerBackingStream.DataReader.Close()
-				contentBackingStream.DataReader.Close()
-				return empty, err
+		// Calculate the actual offset using the size of the file (if offset is negative) and factor in the Header length
+		var rawFileOffset int64
+		var positiveOriginalOffset int64
+		// Need to adjust offset to ensure it skips the header in the underlying file.
+		if originalOffset < 0 {
+			rawFileOffset = headerBackingStream.Avail + originalOffset
+			positiveOriginalOffset = rawFileOffset - HEADER_BYTE_LENGTH
+			if positiveOriginalOffset < 0 {
+				rawFileOffset = HEADER_BYTE_LENGTH
+				positiveOriginalOffset = 0
 			}
-			correctedStart = 0
-			correctedSize = contentBackingStream.Size - discardHeaderLength
-			// Adjust the requested content to start at the nearest block.
-			// Ready for the un-needed content to be discarded into the decoder to ensure appropriate decoding.
 		} else {
-			correctedStart = positiveOriginalRequestedStart - HEADER_BYTE_LENGTH
-			correctedSize = contentBackingStream.Size - fetchDiff
-			// Bytes to discard into the decoder
-			bytesOffBlockSize = correctedStart % aes.BlockSize
-			// Bytes to discard that were never needed but were got just in case they would be part of bytesOffBlockSize.
-			overReadBytesToDiscard := fetchDiff - bytesOffBlockSize
-			if overReadBytesToDiscard > 0 {
-				discardedUnNeededBytes := make([]byte, overReadBytesToDiscard)
-				_, err = contentBackingStream.DataReader.Read(discardedUnNeededBytes[:])
-				if err != nil {
-					headerBackingStream.DataReader.Close()
-					contentBackingStream.DataReader.Close()
-					return empty, err
-				}
-			}
-
+			rawFileOffset = originalOffset + HEADER_BYTE_LENGTH
+			positiveOriginalOffset = int64(originalOffset)
 		}
 
-		decoder, err = NewAESCtrDecoder(contentBackingStream, headerBackingStream, s.key)
-		if err != nil {
-			return empty, fmt.Errorf("failed to create AES -ve decoder for file %s with error: %v", id, err)
-		}
-
-		// Read bytes that are needed in block cipher but aren't being requested.
-		if bytesOffBlockSize != 0 {
-			discardedBytes := make([]byte, bytesOffBlockSize)
-			_, err := decoder.Read(discardedBytes)
-			if err != nil {
-				decoder.Close()
-				return empty, fmt.Errorf("failed to discard un-needed byte from offset when reading file %s with error: %v", id, err)
-			}
-		}
-	} else {
-		// Need to adjust offset to ensure it's at the start of the nearest cipher block, and skips the header.
-		newOffset := originalOffset + HEADER_BYTE_LENGTH
-		bytesOffBlockSize := originalOffset % aes.BlockSize
-		newOffset = newOffset - bytesOffBlockSize
-		newSize := fetchOptions.Size
-		// Adds the additional block bytes that will need to be discarded to the size, unless the size is less than 0 and whole file is being read anyway.
-		if newSize > 0 {
-			newSize += bytesOffBlockSize
-		}
-
-		contentBackingStream, err = s.Backend.Fetch(source, label, id+AES_CTR_FILE_EXT, append(opts, WithOffsetAndSize(newOffset, newSize))...)
+		// Regardless or positive or negative original offset the offset is now positive and both behave the same.
+		contentBackingStream, err = s.Backend.Fetch(source, label, id+AES_CTR_FILE_EXT, append(opts, WithOffsetAndSize(rawFileOffset, fetchOptions.Size))...)
 		if err != nil {
 			return empty, err
 		}
-		if originalOffset+HEADER_BYTE_LENGTH >= contentBackingStream.Avail {
+
+		if rawFileOffset >= contentBackingStream.Avail {
 			contentBackingStream.DataReader.Close()
 			return empty, fmt.Errorf("%w", &OffsetAfterEnd{msg: fmt.Sprintf("offset after EOF: %d", contentBackingStream.Avail)})
 		}
-		headerBackingStream, err := s.Backend.Fetch(source, label, id+AES_CTR_FILE_EXT, WithOffsetAndSize(0, HEADER_BYTE_LENGTH))
-		if err != nil {
-			contentBackingStream.DataReader.Close()
-			return empty, err
-		}
-		decoder, err = NewAESCtrDecoder(contentBackingStream, headerBackingStream, s.key)
+
+		decoder, err = NewAESCtrDecoder(contentBackingStream, headerBackingStream, s.key, uint64(positiveOriginalOffset))
 		if err != nil {
 			contentBackingStream.DataReader.Close()
 			headerBackingStream.DataReader.Close()
 			return empty, fmt.Errorf("failed to create AES decoder for file %s with error: %v", id, err)
 		}
-		// Discard bytes that were read just to read to make the first block complete.
-		if bytesOffBlockSize != 0 {
-			discardedBytes := make([]byte, bytesOffBlockSize)
-			_, err := decoder.Read(discardedBytes)
-			if err != nil {
-				decoder.Close()
-				return empty, fmt.Errorf("failed to discard un-needed byte from offset when reading file %s with error: %v", id, err)
-			}
-		}
 		// Corrected values
-		correctedSize = contentBackingStream.Size - bytesOffBlockSize
-		correctedStart = contentBackingStream.Start - HEADER_BYTE_LENGTH + bytesOffBlockSize
+		correctedSize = contentBackingStream.Size
+		correctedStart = contentBackingStream.Start - HEADER_BYTE_LENGTH
 	}
 	outputStream := DataSlice{
 		// Total available should exclude the AES header.
