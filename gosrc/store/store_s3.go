@@ -422,6 +422,13 @@ func (s *StoreS3) List(ctx context.Context, prefix string, startAfter string) <-
 					return
 				}
 			}
+			if dataFromMinio.Err != nil {
+				st.Logger.Error().Err(dataFromMinio.Err).Msgf(
+					"s3 list failed for bucket %q prefix %q",
+					s.bucket, prefix,
+				)
+				return
+			}
 			// Forward data from the minio channel to the next channel.
 			// Split the key into source label and id.
 			source, label, id := splitIdPath(dataFromMinio.Key)
