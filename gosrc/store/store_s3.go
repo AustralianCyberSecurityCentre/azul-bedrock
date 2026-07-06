@@ -121,7 +121,13 @@ func NewS3Store(endpoint string, accessKey string, secretKey string, secure bool
 		return nil, err
 	}
 	if !b {
+		st.Logger.Warn().Msgf(
+			"bucket %q did NOT exist at endpoint %q (region %q) - creating an empty bucket",
+			bucket, endpoint, region,
+		)
 		err = client.MakeBucket(context.Background(), bucket, minio.MakeBucketOptions{})
+	} else {
+		st.Logger.Info().Msgf("bucket %q exists at endpoint %q (region %q)", bucket, endpoint, region)
 	}
 	if err != nil {
 		return nil, err
@@ -159,7 +165,13 @@ func NewS3StoreIAM(endpoint string, secure bool, bucket string, region string, p
 		return nil, err
 	}
 	if !b {
+		st.Logger.Warn().Msgf(
+			"bucket %q did NOT exist at endpoint %q (region %q) - creating an empty bucket",
+			bucket, endpoint, region,
+		)
 		err = client.MakeBucket(context.Background(), bucket, minio.MakeBucketOptions{})
+	} else {
+		st.Logger.Info().Msgf("bucket %q exists at endpoint %q (region %q)", bucket, endpoint, region)
 	}
 	if err != nil {
 		return nil, err
@@ -421,6 +433,13 @@ func (s *StoreS3) List(ctx context.Context, prefix string, startAfter string) <-
 				if !ok {
 					return
 				}
+			}
+			if dataFromMinio.Err != nil {
+				st.Logger.Error().Err(dataFromMinio.Err).Msgf(
+					"s3 list failed for bucket %q prefix %q",
+					s.bucket, prefix,
+				)
+				return
 			}
 			// Forward data from the minio channel to the next channel.
 			// Split the key into source label and id.
