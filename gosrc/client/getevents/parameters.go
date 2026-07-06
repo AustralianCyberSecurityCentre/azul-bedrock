@@ -36,4 +36,6 @@ const (
 	RequireStreams = "r-streams"
 	// Maximum security the requesting client can accept, reject anything higher.
 	MaxSecurity = "max-security"
+	Reset       = "reset" // reset offsets to reprocess events from the start of the queue, or only receive new events from now on if false
+	Debug       = "debug" // if true, add "D" to ConsumerGroup IDs to allow separate consumer groups for debugging purposes
 )
