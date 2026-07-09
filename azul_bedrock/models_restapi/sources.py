@@ -43,3 +43,22 @@ class References(BaseModelRepr):
     """Source references."""
 
     items: list[ReferenceSet]
+
+
+class ReferenceSetGrouped(BaseModelRepr):
+    """Summary of priority reference fields set for a source in metastore."""
+
+    track_source_references_grouped: str
+    timestamp: str  # most recent entity
+    num_entities: int
+    # If true it means num_entities is the minimum number of entities not necessarily the full count.
+    # This is triggered when num_entities is greater than the number of values Opensearch is queried for.
+    num_entities_min: bool
+
+    values: dict[str, str]
+
+
+class GroupedReferences(BaseModelRepr):
+    """Grouped source references."""
+
+    items: list[ReferenceSetGrouped]
