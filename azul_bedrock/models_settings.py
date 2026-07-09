@@ -75,6 +75,7 @@ class Source(BaseModel):
         required: bool
         description: str
         highlight: bool = False
+        priority: bool = True
 
     class SourceKafka(BaseModel):
         """Kafka source configuration."""
