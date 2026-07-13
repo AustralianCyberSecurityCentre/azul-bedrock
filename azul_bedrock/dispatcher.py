@@ -662,7 +662,7 @@ class DispatcherAPI:
                 f"{self._data_url}/api/v3/stream/{source}/{label}",
                 content=self.async_convert_to_async_iterable(data),
                 params=params_opt,
-                **extra_kwargs,
+                **extra_kwargs,  # type: ignore
             )
         except Exception as e:
             raise DispatcherApiException(
@@ -738,7 +738,7 @@ class DispatcherAPI:
                 f"{self._data_url}/api/v3/stream/{source}/{label}",
                 content=data,
                 params=params_opt,
-                **extra_kwargs,
+                **extra_kwargs,  # type: ignore
             )
         except Exception as e:
             raise DispatcherApiException(
