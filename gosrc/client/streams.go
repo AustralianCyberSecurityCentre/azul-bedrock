@@ -135,6 +135,8 @@ func (c *Client) DownloadBinary(source string, label events.DatastreamLabel, has
 	if err != nil {
 		return nil, err
 	}
+	// Flush writer (important to ensure bytes.Buffer gets populated.)
+	writer.Flush()
 	return bufio.NewReader(&b), nil
 }
 
