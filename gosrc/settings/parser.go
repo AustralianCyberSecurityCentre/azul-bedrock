@@ -93,7 +93,7 @@ func ParseSettings[GenericSettings any](defaults GenericSettings, settingPrefix 
 		}
 		val := fmt.Sprintf("%v", k2.Get(key))
 		// Hide secrets
-		if strings.Contains(strings.ToLower(key), "secret") || strings.Contains(strings.ToLower(key), "access_key") || strings.Contains(strings.ToLower(key), "password") {
+		if strings.Contains(strings.ToLower(key), "secret") || strings.Contains(strings.ToLower(key), "access_key") || strings.Contains(strings.ToLower(key), "key") || strings.Contains(strings.ToLower(key), "password") {
 			val = "****"
 		}
 		// long lines don't print
