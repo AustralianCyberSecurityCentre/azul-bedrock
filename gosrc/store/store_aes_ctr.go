@@ -162,6 +162,7 @@ func (w *AESCtrDecoder) Read(buffer []byte) (int, error) {
 	count, err := w.contentBackend.DataReader.Read(buffer)
 	// If EOF is reached the last chunk still needs to be encoded.
 	if err != nil && err != io.EOF {
+		panic(err) // TODO remove this
 		return count, err
 	}
 	// Note very important to only use :count worth of the buffer as over reading would could the AES buffer to progress on illegitimate content corrupting the data.
