@@ -160,12 +160,14 @@ func NewAESCtrDecoder(contentBackend DataSlice, headerBackend DataSlice, key []b
 
 func (w *AESCtrDecoder) Read(buffer []byte) (int, error) {
 	count, err := w.contentBackend.DataReader.Read(buffer)
-	if err != nil {
+	// If EOF is reached the last chunk still needs to be encoded.
+	if err != nil && err != io.EOF {
 		return count, err
 	}
 	// Note very important to only use :count worth of the buffer as over reading would could the AES buffer to progress on illegitimate content corrupting the data.
 	w.cipherStream.XORKeyStream(buffer[:count], buffer[:count])
-	return count, nil
+	// Error will either be EOF or nil and if it's EOF it needs to be returned to indicate reader is done.
+	return count, err
 }
 
 func (w *AESCtrDecoder) Close() error {

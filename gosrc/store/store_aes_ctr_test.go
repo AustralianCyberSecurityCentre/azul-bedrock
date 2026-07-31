@@ -195,6 +195,20 @@ func TestAesChoppyBuffer(t *testing.T) {
 
 	readBuffer := getDataSliceBytesInterfaceTest(t, testData)
 	assert.Equal(probMalware, readBuffer, "Bad encoding has occurred and AES encryption is corrupting files.")
+
+	// Second fetch to verify that choppy reads don't prevent the read by corrupting the file during read.
+	testData, err = aesCtrStore.Fetch("testsource", "testlabel", "aesctredfile", WithOffsetAndSize(0, -1))
+	require.NoError(t, err, "Error reading from AES_CTR store", err)
+
+	byteBufferLargerThanContent := make([]byte, len(probMalware)*4)
+	readBytes, err := testData.DataReader.Read(byteBufferLargerThanContent)
+	require.Equal(t, err, nil)
+	assert.Equal(probMalware, byteBufferLargerThanContent[:readBytes])
+
+	// confirm EOF with 0 bytes read is returned on subsequent reads.
+	readBytes, err = testData.DataReader.Read(byteBufferLargerThanContent)
+	require.Equal(t, err, io.EOF)
+	require.Equal(t, 0, readBytes)
 }
 
 func BenchmarkAESCtrReadStore(b *testing.B) {

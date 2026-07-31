@@ -3,8 +3,10 @@
 package store
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"testing"
 
 	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/models"
@@ -129,4 +131,64 @@ func TestAutoAgeOff(t *testing.T) {
 	assert.Equal(t, baseRuleCount, ruleCountAfterCleanup, "The number of rules before and after cleanup should be the same.")
 	assert.Greater(t, ruleCountAfterAutoCreation, baseRuleCount, "There should be at least a rule created by auto-creation")
 	assert.Equal(t, ruleCountAfterAutoCreation, baseRuleCount+NUMBER_OF_SOURCES, "The expected number of rules to be created is equal to the number of sources.")
+}
+
+func TestS3WithAesChoppyBuffer(t *testing.T) {
+	/* Verifies that reading and writing from a buffer that gives content in a random order works.
+
+	e.g the buffer may give the first 10 bytes then the next 12 etc.
+	This can occur in production in buffering and streaming situations where not all bytes can be immediately provided.
+
+	Regression test due to issue that occurred when reading from Piped Gzip content that was providing bytes in a choppy manner.
+	This caused AES corruption.
+
+	Note this is done with S3 and localstorage as their read behaviour is different.
+	*/
+	assert := assert.New(t)
+
+	s3Store, err := NewS3Store(
+		st.TestSettings.Streams.S3.Endpoint,
+		st.TestSettings.Streams.S3.AccessKey,
+		st.TestSettings.Streams.S3.SecretKey,
+		st.TestSettings.Streams.S3.Secure,
+		st.TestSettings.Streams.S3.Bucket,
+		st.TestSettings.Streams.S3.Region,
+		nil,
+		AutomaticAgeOffSettings{EnableAutomaticAgeOff: false, EnableCleanupAutoAgeOff: true},
+	)
+
+	aesCtrStore := NewAESCtrStore(s3Store, aesDummyKey, true)
+
+	var probMalware = []byte("Hello, this is malware! held in a choppy buffer that will come through at an odd pace.")
+	// Convert raw bytes to reader
+	reader := bytes.NewReader(probMalware)
+	// Choppy reader that provides bytes to a choppy fashion into AES.
+	choppyReader := CustomChoppyByteReader{
+		innerReader:    reader,
+		lastReadLength: 1,
+	}
+	readCloser := io.NopCloser(&choppyReader)
+
+	err = aesCtrStore.Put("testsource", "testlabel", "aesctredfile", readCloser, -1)
+	require.NoError(t, err, "Error writing to AES_CTR store", err)
+
+	testData, err := aesCtrStore.Fetch("testsource", "testlabel", "aesctredfile", WithOffsetAndSize(0, -1))
+	require.NoError(t, err, "Error reading from AES_CTR store", err)
+
+	readBuffer := getDataSliceBytesInterfaceTest(t, testData)
+	assert.Equal(probMalware, readBuffer, "Bad encoding has occurred and AES encryption is corrupting files.")
+
+	// Second fetch to verify that choppy reads don't prevent the read by corrupting the file during read.
+	testData, err = aesCtrStore.Fetch("testsource", "testlabel", "aesctredfile", WithOffsetAndSize(0, -1))
+	require.NoError(t, err, "Error reading from AES_CTR store", err)
+
+	byteBufferLargerThanContent := make([]byte, len(probMalware)*4)
+	readBytes, err := testData.DataReader.Read(byteBufferLargerThanContent)
+	require.Equal(t, err, io.EOF)
+	assert.Equal(probMalware, byteBufferLargerThanContent[:readBytes])
+
+	// confirm EOF with 0 bytes read is returned on subsequent reads.
+	readBytes, err = testData.DataReader.Read(byteBufferLargerThanContent)
+	require.Equal(t, err, io.EOF)
+	require.Equal(t, 0, readBytes)
 }
