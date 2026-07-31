@@ -87,7 +87,7 @@ func (w *AESCtrEncoder) Encode(buffer []byte) (int, error) {
 	if err != nil {
 		return count, err
 	}
-	w.cipherStream.XORKeyStream(buffer, buffer)
+	w.cipherStream.XORKeyStream(buffer[:count], buffer[:count])
 	return count, nil
 }
 
@@ -162,7 +162,7 @@ func (w *AESCtrDecoder) Read(buffer []byte) (int, error) {
 	if err != nil {
 		return count, err
 	}
-	w.cipherStream.XORKeyStream(buffer, buffer)
+	w.cipherStream.XORKeyStream(buffer[:count], buffer[:count])
 	return count, nil
 }
 
@@ -232,7 +232,6 @@ func (s *StoreAESCtr) Put(source, label, id string, data io.ReadCloser, fileSize
 	for {
 		// Encode data through the cipher
 		available, errMaybeEOF := cipher.Encode(buffer[:])
-		// available, errMaybeEOF := cipher.backend.Read(buffer[:])
 		if errMaybeEOF != nil && errMaybeEOF != io.EOF {
 			return fmt.Errorf("failed to read from source file: %s", errMaybeEOF)
 		}
