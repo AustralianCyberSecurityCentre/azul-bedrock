@@ -87,6 +87,7 @@ func (w *AESCtrEncoder) Encode(buffer []byte) (int, error) {
 	if err != nil {
 		return count, err
 	}
+	// Note very important to only use :count worth of the buffer as over reading would could the AES buffer to progress on illegitimate content corrupting the data.
 	w.cipherStream.XORKeyStream(buffer[:count], buffer[:count])
 	return count, nil
 }
@@ -162,6 +163,7 @@ func (w *AESCtrDecoder) Read(buffer []byte) (int, error) {
 	if err != nil {
 		return count, err
 	}
+	// Note very important to only use :count worth of the buffer as over reading would could the AES buffer to progress on illegitimate content corrupting the data.
 	w.cipherStream.XORKeyStream(buffer[:count], buffer[:count])
 	return count, nil
 }
