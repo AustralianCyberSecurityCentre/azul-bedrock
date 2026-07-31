@@ -3,6 +3,7 @@ package store
 import (
 	"bytes"
 	"io"
+	"math/rand"
 	"os"
 	"testing"
 
@@ -99,7 +100,7 @@ func TestPlainAfterAESCtr(t *testing.T) {
 	err = aesCtrStore.Put("testsource", "testlabel", "aesctredfile", readCloser, int64(len(probMalware)))
 	require.NoError(t, err, "Error writing to AES_CTR store", err)
 
-	// The filesystem store should not return the original string while AES_CTR was on
+	// The filesystem (non-encrypted) store should not return the original string and instead return the encrypted version
 	testData, err := store.Fetch("testsource", "testlabel", "aesctredfile"+AES_CTR_FILE_EXT, WithOffsetAndSize(0, -1))
 	require.NoError(t, err, "Error reading from local store", err)
 
@@ -128,6 +129,86 @@ func TestPlainAfterAESCtr(t *testing.T) {
 
 	readBuffer = getDataSliceBytesInterfaceTest(t, testData)
 	assert.Equal(probMalware, readBuffer)
+}
+
+type Reader interface {
+	Read(p []byte) (n int, err error)
+}
+
+/*
+	Reader that intentionally releases bytes in an odd order, to catch out potential issues with the buffering of AES encryption.
+
+As if you get a choppy buffer and are over reading (the buffer is longer than the content) it can cause AES to move along it's cipher on garbage.
+This results in the output being corrupted AES content.
+*/
+type CustomChoppyByteReader struct {
+	innerReader    io.Reader
+	lastReadLength int
+}
+
+func (c *CustomChoppyByteReader) Read(p []byte) (n int, err error) {
+	if c.lastReadLength <= 0 || c.lastReadLength > 50 {
+		c.lastReadLength = 1
+	}
+
+	resultCount, err := c.innerReader.Read(p[:c.lastReadLength])
+	// grow the buffer from 0-10
+	c.lastReadLength = c.lastReadLength + rand.Intn(10)
+	return resultCount, err
+}
+
+func TestAesChoppyBuffer(t *testing.T) {
+	/* Verifies that reading and writing from a buffer that gives content in a random order works.
+
+	e.g the buffer may give the first 10 bytes then the next 12 etc.
+	This can occur in production in buffering and streaming situations where not all bytes can be immediately provided.
+
+	Regression test due to issue that occurred when reading from Piped Gzip content that was providing bytes in a choppy manner.
+	This caused AES corruption.
+	*/
+	assert := assert.New(t)
+
+	dir, err := os.MkdirTemp("/tmp", "test-bedrock-store")
+	defer os.RemoveAll(dir)
+	require.NoError(t, err, "Error creating temp dir", err)
+
+	store, err := NewEmptyLocalStore(dir)
+	require.NoError(t, err, "Error creating local store", err)
+
+	aesCtrStore := NewAESCtrStore(store, aesDummyKey, true)
+
+	var probMalware = []byte("Hello, this is malware! held in a choppy buffer that will come through at an odd pace.")
+	// Convert raw bytes to reader
+	reader := bytes.NewReader(probMalware)
+	// Choppy reader that provides bytes to a choppy fashion into AES.
+	choppyReader := CustomChoppyByteReader{
+		innerReader:    reader,
+		lastReadLength: 1,
+	}
+	readCloser := io.NopCloser(&choppyReader)
+
+	err = aesCtrStore.Put("testsource", "testlabel", "aesctredfile", readCloser, -1)
+	require.NoError(t, err, "Error writing to AES_CTR store", err)
+
+	testData, err := aesCtrStore.Fetch("testsource", "testlabel", "aesctredfile", WithOffsetAndSize(0, -1))
+	require.NoError(t, err, "Error reading from AES_CTR store", err)
+
+	readBuffer := getDataSliceBytesInterfaceTest(t, testData)
+	assert.Equal(probMalware, readBuffer, "Bad encoding has occurred and AES encryption is corrupting files.")
+
+	// Second fetch to verify that choppy reads don't prevent the read by corrupting the file during read.
+	testData, err = aesCtrStore.Fetch("testsource", "testlabel", "aesctredfile", WithOffsetAndSize(0, -1))
+	require.NoError(t, err, "Error reading from AES_CTR store", err)
+
+	byteBufferLargerThanContent := make([]byte, len(probMalware)*4)
+	readBytes, err := testData.DataReader.Read(byteBufferLargerThanContent)
+	require.Equal(t, err, nil)
+	assert.Equal(probMalware, byteBufferLargerThanContent[:readBytes])
+
+	// confirm EOF with 0 bytes read is returned on subsequent reads.
+	readBytes, err = testData.DataReader.Read(byteBufferLargerThanContent)
+	require.Equal(t, err, io.EOF)
+	require.Equal(t, 0, readBytes)
 }
 
 func BenchmarkAESCtrReadStore(b *testing.B) {

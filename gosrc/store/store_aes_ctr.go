@@ -87,7 +87,8 @@ func (w *AESCtrEncoder) Encode(buffer []byte) (int, error) {
 	if err != nil {
 		return count, err
 	}
-	w.cipherStream.XORKeyStream(buffer, buffer)
+	// Note very important to only use :count worth of the buffer as over reading would could the AES buffer to progress on illegitimate content corrupting the data.
+	w.cipherStream.XORKeyStream(buffer[:count], buffer[:count])
 	return count, nil
 }
 
@@ -159,11 +160,14 @@ func NewAESCtrDecoder(contentBackend DataSlice, headerBackend DataSlice, key []b
 
 func (w *AESCtrDecoder) Read(buffer []byte) (int, error) {
 	count, err := w.contentBackend.DataReader.Read(buffer)
-	if err != nil {
+	// If EOF is reached the last chunk still needs to be encoded.
+	if err != nil && err != io.EOF {
 		return count, err
 	}
-	w.cipherStream.XORKeyStream(buffer, buffer)
-	return count, nil
+	// Note very important to only use :count worth of the buffer as over reading would could the AES buffer to progress on illegitimate content corrupting the data.
+	w.cipherStream.XORKeyStream(buffer[:count], buffer[:count])
+	// Error will either be EOF or nil and if it's EOF it needs to be returned to indicate reader is done.
+	return count, err
 }
 
 func (w *AESCtrDecoder) Close() error {
@@ -232,7 +236,6 @@ func (s *StoreAESCtr) Put(source, label, id string, data io.ReadCloser, fileSize
 	for {
 		// Encode data through the cipher
 		available, errMaybeEOF := cipher.Encode(buffer[:])
-		// available, errMaybeEOF := cipher.backend.Read(buffer[:])
 		if errMaybeEOF != nil && errMaybeEOF != io.EOF {
 			return fmt.Errorf("failed to read from source file: %s", errMaybeEOF)
 		}

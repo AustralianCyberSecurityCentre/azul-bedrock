@@ -23,7 +23,8 @@ type XORWrapper struct {
 
 func (w *XORWrapper) Read(buffer []byte) (int, error) {
 	count, err := w.backend.Read(buffer)
-	if err != nil {
+	// If EOF is reached the last chunk still needs to be encoded.
+	if err != nil && err != io.EOF {
 		return count, err
 	}
 
@@ -31,8 +32,8 @@ func (w *XORWrapper) Read(buffer []byte) (int, error) {
 		buffer[i] = buffer[i] ^ STORAGE_KEY[(w.offset%uint64(len(STORAGE_KEY)))]
 		w.offset += 1
 	}
-
-	return count, nil
+	// Error will either be EOF or nil and if it's EOF it needs to be returned to indicate reader is done.
+	return count, err
 }
 
 func (w XORWrapper) Close() error {
