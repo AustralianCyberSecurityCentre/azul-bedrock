@@ -156,6 +156,7 @@ func TestS3WithAesChoppyBuffer(t *testing.T) {
 		nil,
 		AutomaticAgeOffSettings{EnableAutomaticAgeOff: false, EnableCleanupAutoAgeOff: true},
 	)
+	require.Nil(t, err)
 
 	aesCtrStore := NewAESCtrStore(s3Store, aesDummyKey, true)
 
@@ -191,4 +192,51 @@ func TestS3WithAesChoppyBuffer(t *testing.T) {
 	readBytes, err = testData.DataReader.Read(byteBufferLargerThanContent)
 	require.Equal(t, err, io.EOF)
 	require.Equal(t, 0, readBytes)
+}
+
+func TestXORAtRestWithS3(t *testing.T) {
+	/*This is a test to read and write from the S3 store taken from the XOR suite.
+
+	This is done because S3 behaves differently in some cases.
+	One known case is on Reads it'll return EOF where other libraries won't with the last chunk.
+	If implemented incorrectly XOR could possible not decode the last chunk.
+	*/
+	/* Assert that data is actually encoded when stored */
+	assert := assert.New(t)
+
+	s3Store, err := NewS3Store(
+		st.TestSettings.Streams.S3.Endpoint,
+		st.TestSettings.Streams.S3.AccessKey,
+		st.TestSettings.Streams.S3.SecretKey,
+		st.TestSettings.Streams.S3.Secure,
+		st.TestSettings.Streams.S3.Bucket,
+		st.TestSettings.Streams.S3.Region,
+		nil,
+		AutomaticAgeOffSettings{EnableAutomaticAgeOff: false, EnableCleanupAutoAgeOff: true},
+	)
+	require.Nil(t, err)
+
+	xorStore := NewXORStore(s3Store, true)
+
+	var probMalware = []byte("Hello, this is malware!")
+	// Convert raw bytes to reader
+	reader := bytes.NewReader(probMalware)
+	readCloser := io.NopCloser(reader)
+
+	err = xorStore.Put("testsource", "testlabel", "testid", readCloser, int64(len(probMalware)))
+	require.NoError(t, err, "Error writing to XOR store", err)
+
+	// The XOR store should return the original text
+	testData, err := xorStore.Fetch("testsource", "testlabel", "testid", WithOffsetAndSize(0, -1))
+	require.NoError(t, err, "Error reading from XOR store", err)
+
+	readBuffer := getDataSliceBytesInterfaceTest(t, testData)
+	assert.Equal(probMalware, readBuffer)
+
+	// The filesystem store should not
+	testData, err = s3Store.Fetch("testsource", "testlabel", "testid"+XOR_FILE_EXT, WithOffsetAndSize(0, -1))
+	require.NoError(t, err, "Error reading from local store", err)
+
+	readBuffer = getDataSliceBytesInterfaceTest(t, testData)
+	assert.NotEqual(probMalware, readBuffer)
 }
