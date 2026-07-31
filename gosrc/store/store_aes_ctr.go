@@ -163,7 +163,7 @@ func (w *AESCtrDecoder) Read(buffer []byte) (int, error) {
 	// If EOF is reached the last chunk still needs to be encoded.
 	if err != nil && err != io.EOF {
 		panic(err) // TODO remove this
-		return count, err
+		// return count, err
 	}
 	// Note very important to only use :count worth of the buffer as over reading would could the AES buffer to progress on illegitimate content corrupting the data.
 	w.cipherStream.XORKeyStream(buffer[:count], buffer[:count])
