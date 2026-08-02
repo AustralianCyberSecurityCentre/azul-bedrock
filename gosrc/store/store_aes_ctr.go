@@ -282,6 +282,12 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 
 	if !aesCtrExists {
 		st.Logger.Warn().Msg("AES file doesn't exist let the underlying reader sort it out!")
+		nonAesCtrExists, err := s.Backend.Exists(source, label, id)
+		if err != nil {
+			return empty, err
+		}
+		st.Logger.Warn().Msgf("AES file exists: %v, nonAesExists %v, for src/lbl/id -> %s/%s/%s", aesCtrExists, nonAesCtrExists, source, label, id)
+
 		// No AES_CTR'd copy of this file, pass directly to the underlying reader
 		return s.Backend.Fetch(source, label, id, opts...)
 	}
