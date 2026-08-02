@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/settings"
 )
 
 // Extension (including version) of the aes encoding.
@@ -257,6 +259,7 @@ func (s *StoreAESCtr) Put(source, label, id string, data io.ReadCloser, fileSize
 func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOption) (DataSlice, error) {
 	empty := NewDataSlice()
 	var err error
+	st.Logger.Warn().Msgf("ENTERING FETCH WITH ENABLED SET TO %v", s.enabled)
 	if !s.enabled {
 		// Check for a non-AES_CTR'd file first as the user has disabled AES_CTR'ing
 		rawExists, err := s.Backend.Exists(source, label, id)
@@ -265,10 +268,12 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		}
 
 		if rawExists {
+			st.Logger.Warn().Msg("RETURNING RAW BACKEND!!!!!!!!!!!!!!!!!!!!!!!!!")
 			// Use the raw as we have spotted that
 			return s.Backend.Fetch(source, label, id, opts...)
 		}
 	}
+	st.Logger.Warn().Msg("Located AES backend")
 	// Test for .aesc first
 	aesCtrExists, err := s.Backend.Exists(source, label, id+AES_CTR_FILE_EXT)
 	if err != nil {
@@ -276,6 +281,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 	}
 
 	if !aesCtrExists {
+		st.Logger.Warn().Msg("AES file doesn't exist let the underlying reader sort it out!")
 		// No AES_CTR'd copy of this file, pass directly to the underlying reader
 		return s.Backend.Fetch(source, label, id, opts...)
 	}
@@ -300,7 +306,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		+ve and larger than the whole file size (error out)
 
 	*/
-
+	st.Logger.Warn().Msg("ENTERING MAIN AES")
 	// trivial case where the offset is at the start of the file
 	if originalOffset == 0 {
 		newSize := fetchOptions.Size
