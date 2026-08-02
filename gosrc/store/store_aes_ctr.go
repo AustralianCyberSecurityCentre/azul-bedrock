@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 )
 
 // Extension (including version) of the aes encoding.
@@ -260,10 +261,20 @@ func (s *StoreAESCtr) Put(source, label, id string, data io.ReadCloser, fileSize
 	return s.Backend.Put(source, label, id+AES_CTR_FILE_EXT, tmpFile, fileSize)
 }
 
+// Remove any AES suffixes if they are already present.
+func stripAesExtensionSuffix(id string) string {
+	if strings.HasSuffix(id, AES_CTR_FILE_EXT) {
+		return stripAesExtensionSuffix(strings.TrimSuffix(id, AES_CTR_FILE_EXT))
+	}
+	return id
+}
+
 // Fetch file from offset to size, if offset is 0 fetch from start, if size is -1 fetch to the end of the file.
 func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOption) (DataSlice, error) {
 	empty := NewDataSlice()
 	var err error
+
+	id = stripAesExtensionSuffix(id)
 	if !s.enabled {
 		// Check for a non-AES_CTR'd file first as the user has disabled AES_CTR'ing
 		rawExists, err := s.Backend.Exists(source, label, id)
@@ -276,7 +287,6 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 			return s.Backend.Fetch(source, label, id, opts...)
 		}
 	}
-	// Test for .aesc first
 	aesCtrExists, err := s.Backend.Exists(source, label, id+AES_CTR_FILE_EXT)
 	if err != nil {
 		return empty, err
@@ -384,6 +394,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 
 // Check a file exists in the filestore.
 func (s *StoreAESCtr) Exists(source, label, id string) (bool, error) {
+	id = stripAesExtensionSuffix(id)
 	var firstQuery string
 	var secondQuery string
 	if s.enabled {
@@ -408,6 +419,7 @@ func (s *StoreAESCtr) Exists(source, label, id string) (bool, error) {
 
 // Delete deletes the specified key if older than supplied unix timestamp in seconds.
 func (s *StoreAESCtr) Delete(source, label, id string, opts ...FileStorageDeleteOption) (bool, error) {
+	id = stripAesExtensionSuffix(id)
 	// Delete both the AES_CTR'd and raw versions if they exist
 	aesExists, err := s.Backend.Exists(source, label, id+AES_CTR_FILE_EXT)
 	if err != nil {
@@ -446,6 +458,9 @@ func (s *StoreAESCtr) Delete(source, label, id string, opts ...FileStorageDelete
 
 // Copy within the S3 store from old to new location
 func (s *StoreAESCtr) Copy(sourceOld, labelOld, idOld, sourceNew, labelNew, idNew string) error {
+	idOld = stripAesExtensionSuffix(idOld)
+	idNew = stripAesExtensionSuffix(idNew)
+
 	// Test if the source is AES_CTR'd
 	aesSourceExists, err := s.Backend.Exists(sourceOld, labelOld, idOld+AES_CTR_FILE_EXT)
 	if err != nil {

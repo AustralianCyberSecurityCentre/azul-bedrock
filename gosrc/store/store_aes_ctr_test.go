@@ -78,6 +78,63 @@ func TestAesCtrAtRest(t *testing.T) {
 	assert.NotEqual(probMalware, readBuffer)
 }
 
+func TestAesExtensionsStripped(t *testing.T) {
+	/* Verify that the AES extension is stripped off of various extensions. */
+	dir, err := os.MkdirTemp("/tmp", "test-bedrock-store")
+	defer os.RemoveAll(dir)
+	require.NoError(t, err, "Error creating temp dir", err)
+
+	store, err := NewEmptyLocalStore(dir)
+	require.NoError(t, err, "Error creating local store", err)
+
+	aesCtrStore := NewAESCtrStore(store, aesDummyKey, true)
+
+	var probMalware = []byte("Hello, this is malware!")
+	// Convert raw bytes to reader
+	reader := bytes.NewReader(probMalware)
+	readCloser := io.NopCloser(reader)
+
+	err = aesCtrStore.Put("testsource", "testlabel", "testid", readCloser, int64(len(probMalware)))
+	require.NoError(t, err, "Error writing to AES_CTR store", err)
+
+	data, err := aesCtrStore.Fetch("testsource", "testlabel", "testid")
+	require.Nil(t, err)
+	resultData, err := io.ReadAll(data.DataReader)
+	require.Nil(t, err)
+	require.Equal(t, resultData, probMalware)
+
+	// Add extension to request and it still works
+	data, err = aesCtrStore.Fetch("testsource", "testlabel", "testid"+AES_CTR_FILE_EXT)
+	require.Nil(t, err)
+	resultData, err = io.ReadAll(data.DataReader)
+	require.Nil(t, err)
+	require.Equal(t, resultData, probMalware)
+
+	// Even if you have accidental double extension.
+	data, err = aesCtrStore.Fetch("testsource", "testlabel", "testid"+AES_CTR_FILE_EXT+AES_CTR_FILE_EXT)
+	resultData, err = io.ReadAll(data.DataReader)
+	require.Nil(t, err)
+	require.Equal(t, resultData, probMalware)
+
+	// Even if you have accidental double extension on exists.
+	isExisting, err := aesCtrStore.Exists("testsource", "testlabel", "testid"+AES_CTR_FILE_EXT+AES_CTR_FILE_EXT)
+	require.Nil(t, err)
+	require.True(t, isExisting)
+
+	// Copy
+	copyErr := aesCtrStore.Copy("testsource", "testlabel", "testid"+AES_CTR_FILE_EXT+AES_CTR_FILE_EXT, "newSource", "NewLabel", "testid")
+	require.Nil(t, copyErr)
+	isExisting, err = aesCtrStore.Exists("newSource", "NewLabel", "testid"+AES_CTR_FILE_EXT)
+
+	require.Nil(t, err)
+	require.True(t, isExisting)
+
+	// Delete should work as well.
+	isDeleted, err := aesCtrStore.Delete("testsource", "testlabel", "testid"+AES_CTR_FILE_EXT+AES_CTR_FILE_EXT)
+	require.Nil(t, err)
+	require.True(t, isDeleted)
+}
+
 func TestPlainAfterAESCtr(t *testing.T) {
 	/* Asserts that a disabled AES_CTR wrapper correctly finds AES_CTR'd files & that files afterwards
 	   are stored without a AES_CTR */
