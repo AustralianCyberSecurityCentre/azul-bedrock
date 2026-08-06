@@ -48,6 +48,8 @@ type FileStorageObjectListInfo struct {
 	Label string
 	// Is section of the object.
 	Id string
+	// Error while listing objects if there were any.
+	Err error
 }
 
 // -------------------------- Fetch options --------------------------

@@ -142,7 +142,7 @@ func (s *StoreMem) List(ctx context.Context, prefix string, startAfter string) <
 			continue
 		}
 		source, label, id := splitIdPath(key)
-		out <- FileStorageObjectListInfo{Key: key, Source: source, Label: label, Id: id}
+		out <- FileStorageObjectListInfo{Key: key, Source: source, Label: label, Id: id, Err: nil}
 	}
 
 	close(out)

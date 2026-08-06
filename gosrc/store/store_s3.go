@@ -437,11 +437,23 @@ func (s *StoreS3) List(ctx context.Context, prefix string, startAfter string) <-
 				}
 			}
 			if dataFromMinio.Err != nil {
-				st.Logger.Error().Err(dataFromMinio.Err).Msgf(
-					"s3 list failed for bucket %q prefix %q",
+				st.Logger.Warn().Err(dataFromMinio.Err).Msgf(
+					"s3 list failed for bucket %q prefix %q sending error through channel",
 					s.bucket, prefix,
 				)
-				return
+				select {
+				case <-ctx.Done():
+					return
+				case storageObjects <- FileStorageObjectListInfo{
+					Key:    dataFromMinio.Key,
+					Source: "",
+					Label:  "",
+					Id:     "",
+					Err:    fmt.Errorf("s3 list failed for bucket %q prefix %q with error %s", s.bucket, prefix, dataFromMinio.Err),
+				}:
+					return
+
+				}
 			}
 			// Forward data from the minio channel to the next channel.
 			// Split the key into source label and id.
@@ -454,6 +466,7 @@ func (s *StoreS3) List(ctx context.Context, prefix string, startAfter string) <-
 				Source: source,
 				Label:  label,
 				Id:     id,
+				Err:    nil,
 			}:
 				continue
 			}

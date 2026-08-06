@@ -398,8 +398,19 @@ func (s *StoreAzure) List(ctx context.Context, prefix string, startAfter string)
 		for flatPager.More() {
 			resp, err := flatPager.NextPage(ctx)
 			if err != nil {
-				st.Logger.Error().Err(err).Msg("Error within azure flat pager during listing!")
-				panic("Error within flat pager!")
+				st.Logger.Warn().Err(err).Msg("Error within azure flat pager during listing.")
+				select {
+				case <-ctx.Done():
+					return
+				case storageObjects <- FileStorageObjectListInfo{
+					Key:    "",
+					Source: "",
+					Label:  "",
+					Id:     "",
+					Err:    fmt.Errorf("Error occurred during listing of azure blobs for container %s, and prefix: %s", s.containerName, prefix),
+				}:
+					return
+				}
 			}
 			for _, blob := range resp.Segment.BlobItems {
 				blobKey := *blob.Name
@@ -419,8 +430,9 @@ func (s *StoreAzure) List(ctx context.Context, prefix string, startAfter string)
 					Source: source,
 					Label:  label,
 					Id:     id,
+					Err:    nil,
 				}:
-					st.Logger.Info().Msgf("BLOB NAME IS: %s", blobKey)
+					continue
 				}
 			}
 		}
