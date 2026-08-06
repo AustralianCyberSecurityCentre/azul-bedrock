@@ -18,6 +18,17 @@ type StreamsAzure struct {
 	AccessKey      string `koanf:"access_key"`
 }
 
+type S3TransportSettings struct {
+	DialTimeoutSeconds           int  `koanf:"dial_timeout_seconds"`
+	DialKeepAliveSeconds         int  `koanf:"dial_keep_alive_seconds"`
+	MaxIdleConnections           int  `koanf:"max_idle_connections"`
+	MaxIdleConnectionsPerHost    int  `koanf:"max_idle_connections_per_host"`
+	IdleHeaderTimeoutSeconds     int  `koanf:"idle_header_timeout_seconds"`
+	IdleConnectionTimeoutSeconds int  `koanf:"idle_connection_timeout_seconds"`
+	TlsHandshakeTimeoutSeconds   int  `koanf:"tlsh_handshake_timeout_seconds"`
+	DisableCompression           bool `koanf:"disable_compression"`
+}
+
 type StreamsS3 struct {
 	// S3 server address or empty to use local storage instead
 	Endpoint string `koanf:"endpoint"`
@@ -47,6 +58,8 @@ type BedSettings struct {
 	LogLevel string `koanf:"log_level"`
 	// Render nice coloured log output (slower performance)
 	LogPretty bool `koanf:"log_pretty"`
+	// Advanced settings
+	S3TransportSettings S3TransportSettings `koanf:"transport"`
 }
 
 // Settings used purely for testing.
@@ -61,6 +74,16 @@ var Logger zerolog.Logger
 var defaults BedSettings = BedSettings{
 	LogLevel:  "INFO",
 	LogPretty: true,
+	S3TransportSettings: S3TransportSettings{
+		DialTimeoutSeconds:           30,
+		DialKeepAliveSeconds:         30,
+		MaxIdleConnections:           256,
+		MaxIdleConnectionsPerHost:    16,
+		IdleHeaderTimeoutSeconds:     60,
+		IdleConnectionTimeoutSeconds: 60,
+		TlsHandshakeTimeoutSeconds:   10,
+		DisableCompression:           true,
+	},
 }
 
 var testDefaults BedTestSettings = BedTestSettings{

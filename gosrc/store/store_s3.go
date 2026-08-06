@@ -35,19 +35,20 @@ type AutomaticAgeOffSettings struct {
 }
 
 func getS3DefaultTransport() *http.Transport {
+	ts := st.Settings.S3TransportSettings
 	// default transport with response header timeout set to a minute (which doesn't appear to be default?)
 	// from https://github.com/minio/minio-go/blob/master/transport.go
 	return &http.Transport{
 		Proxy: http.ProxyFromEnvironment,
 		DialContext: (&net.Dialer{
-			Timeout:   30 * time.Second,
-			KeepAlive: 30 * time.Second,
+			Timeout:   time.Duration(ts.DialTimeoutSeconds) * time.Second,
+			KeepAlive: time.Duration(ts.DialKeepAliveSeconds) * time.Second,
 		}).DialContext,
-		MaxIdleConns:          256,
-		MaxIdleConnsPerHost:   16,
-		ResponseHeaderTimeout: time.Minute,
-		IdleConnTimeout:       time.Minute,
-		TLSHandshakeTimeout:   10 * time.Second,
+		MaxIdleConns:          ts.MaxIdleConnections,
+		MaxIdleConnsPerHost:   ts.MaxIdleConnectionsPerHost,
+		ResponseHeaderTimeout: time.Duration(ts.IdleHeaderTimeoutSeconds) * time.Second,
+		IdleConnTimeout:       time.Duration(ts.IdleConnectionTimeoutSeconds) * time.Second,
+		TLSHandshakeTimeout:   time.Duration(ts.TlsHandshakeTimeoutSeconds) * time.Second,
 		ExpectContinueTimeout: 10 * time.Second,
 		// Set this value so that the underlying transport round-tripper
 		// doesn't try to auto decode the body of objects with
@@ -55,7 +56,7 @@ func getS3DefaultTransport() *http.Transport {
 		//
 		// Refer:
 		//    https://golang.org/src/net/http/transport.go?h=roundTrip#L1843
-		DisableCompression: true,
+		DisableCompression: ts.DisableCompression,
 	}
 }
 
@@ -413,13 +414,14 @@ func (s *StoreS3) Delete(source, label, id string, opts ...FileStorageDeleteOpti
 }
 
 func (s *StoreS3) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
-	minioOptions := minio.ListObjectsOptions{Prefix: prefix, Recursive: true, WithMetadata: false, WithVersions: false}
+	minioOptions := minio.ListObjectsOptions{Prefix: prefix, Recursive: true, WithMetadata: false, WithVersions: false, UseV1: false}
 	if startAfter != "" {
 		minioOptions.StartAfter = startAfter
 	}
 	storageObjects := make(chan FileStorageObjectListInfo)
 	go func() {
 		sourceChan := s.client.ListObjects(ctx, s.bucket, minioOptions)
+		s.client.ListObjects(ctx, s.bucket, minio.ListObjectsOptions{})
 		defer func() { close(storageObjects) }() // Close the channel when all files are processed
 
 		for {
