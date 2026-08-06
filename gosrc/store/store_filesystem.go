@@ -221,6 +221,7 @@ func (s *StoreFilesystem) List(ctx context.Context, prefix string, startAfter st
 					Source: source,
 					Label:  label,
 					Id:     id,
+					Err:    nil,
 				}:
 				}
 			}

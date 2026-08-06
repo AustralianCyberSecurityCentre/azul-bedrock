@@ -105,6 +105,7 @@ func TestS3MemProvider(t *testing.T) {
 	require.NotNil(t, ch)
 	listed := []string{}
 	for obj := range ch {
+		require.Nil(t, obj.Err)
 		listed = append(listed, createIdPath(obj.Source, obj.Label, obj.Id))
 	}
 	require.Equal(t, 21, len(listed))
@@ -114,6 +115,7 @@ func TestS3MemProvider(t *testing.T) {
 	require.NotNil(t, ch)
 	listed = []string{}
 	for obj := range ch {
+		require.Nil(t, obj.Err)
 		listed = append(listed, createIdPath(obj.Source, obj.Label, obj.Id))
 	}
 	require.Equal(t, 10, len(listed))
@@ -123,6 +125,7 @@ func TestS3MemProvider(t *testing.T) {
 	require.NotNil(t, ch)
 	listed = []string{}
 	for obj := range ch {
+		require.Nil(t, obj.Err)
 		listed = append(listed, createIdPath(obj.Source, obj.Label, obj.Id))
 	}
 	require.Equal(t, 10, len(listed))

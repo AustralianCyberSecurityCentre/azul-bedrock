@@ -225,6 +225,8 @@ func verifyChannelList(t *testing.T, objChannel <-chan FileStorageObjectListInfo
 	i := 0
 	thirdKey := ""
 	for obj := range objChannel {
+		// Ensure no listing errors.
+		require.Nil(t, obj.Err)
 		i += 1
 		if i == 3 {
 			thirdKey = obj.Key
