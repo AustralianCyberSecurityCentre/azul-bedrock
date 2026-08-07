@@ -29,6 +29,13 @@ type S3TransportSettings struct {
 	DisableCompression           bool `koanf:"disable_compression"`
 }
 
+type S3ListSettings struct {
+	// Use the v1Api
+	UseV1Api bool `koanf:"use_v1_api"`
+	// Max keys per batch of keys retrieved by the list API. (must be greater than 0 to have an effect)
+	MaxKeys int `koanf:"max_keys"`
+}
+
 type StreamsS3 struct {
 	// S3 server address or empty to use local storage instead
 	Endpoint string `koanf:"endpoint"`
@@ -60,6 +67,7 @@ type BedSettings struct {
 	LogPretty bool `koanf:"log_pretty"`
 	// Advanced settings
 	S3TransportSettings S3TransportSettings `koanf:"transport"`
+	S3ListSettings      S3ListSettings      `koanf:"s3_list"`
 }
 
 // Settings used purely for testing.
@@ -83,6 +91,10 @@ var defaults BedSettings = BedSettings{
 		IdleConnectionTimeoutSeconds: 60,
 		TlsHandshakeTimeoutSeconds:   10,
 		DisableCompression:           true,
+	},
+	S3ListSettings: S3ListSettings{
+		UseV1Api: false,
+		MaxKeys:  -1,
 	},
 }
 

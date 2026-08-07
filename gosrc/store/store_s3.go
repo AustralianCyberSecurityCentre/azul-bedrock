@@ -414,7 +414,17 @@ func (s *StoreS3) Delete(source, label, id string, opts ...FileStorageDeleteOpti
 }
 
 func (s *StoreS3) List(ctx context.Context, prefix string, startAfter string) <-chan FileStorageObjectListInfo {
-	minioOptions := minio.ListObjectsOptions{Prefix: prefix, Recursive: true, WithMetadata: false, WithVersions: false, UseV1: false}
+	lSet := st.Settings.S3ListSettings
+	minioOptions := minio.ListObjectsOptions{
+		Prefix:       prefix,
+		Recursive:    true,
+		WithMetadata: false,
+		WithVersions: false,
+		UseV1:        lSet.UseV1Api,
+	}
+	if lSet.MaxKeys > 0 {
+		minioOptions.MaxKeys = lSet.MaxKeys
+	}
 	if startAfter != "" {
 		minioOptions.StartAfter = startAfter
 	}
