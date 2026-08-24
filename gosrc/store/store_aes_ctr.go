@@ -269,6 +269,21 @@ func stripAesExtensionSuffix(id string) string {
 	return id
 }
 
+// Handle a failed fetch on an AES stream.
+// If the AES file exists return the error, if not attempt to return the non AES stream from the underlying datastore.
+func (s *StoreAESCtr) fetchIfAesMissing(aesErr error, source, label, id string, opts ...FileStorageFetchOption) (DataSlice, error) {
+	aesCtrExists, err := s.Backend.Exists(source, label, id+AES_CTR_FILE_EXT)
+	empty := NewDataSlice()
+	if err != nil {
+		return empty, err
+	}
+	if aesCtrExists {
+		return empty, aesErr
+	}
+	//
+	return s.Backend.Fetch(source, label, id, opts...)
+}
+
 // Fetch file from offset to size, if offset is 0 fetch from start, if size is -1 fetch to the end of the file.
 func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOption) (DataSlice, error) {
 	empty := NewDataSlice()
@@ -286,15 +301,6 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 			// Use the raw as we have spotted that
 			return s.Backend.Fetch(source, label, id, opts...)
 		}
-	}
-	aesCtrExists, err := s.Backend.Exists(source, label, id+AES_CTR_FILE_EXT)
-	if err != nil {
-		return empty, err
-	}
-
-	if !aesCtrExists {
-		// No AES_CTR'd copy of this file, pass directly to the underlying reader
-		return s.Backend.Fetch(source, label, id, opts...)
 	}
 
 	fetchOptions := NewFileStorageFetchOptions(opts...)
@@ -328,7 +334,7 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		// Fetch the AES_CTR'd stream
 		contentBackingStream, err = s.Backend.Fetch(source, label, id+AES_CTR_FILE_EXT, append(opts, WithOffsetAndSize(0, newSize))...)
 		if err != nil {
-			return empty, err
+			return s.fetchIfAesMissing(err, source, label, id, opts...)
 		}
 		correctedStart = 0
 		correctedSize = contentBackingStream.Size - HEADER_BYTE_LENGTH
@@ -342,8 +348,8 @@ func (s *StoreAESCtr) Fetch(source, label, id string, opts ...FileStorageFetchOp
 		// Fetch the header to allow the collection of the IV and salt
 		headerBackingStream, err := s.Backend.Fetch(source, label, id+AES_CTR_FILE_EXT, WithOffsetAndSize(0, HEADER_BYTE_LENGTH))
 		if err != nil {
-			contentBackingStream.DataReader.Close()
-			return empty, err
+			headerBackingStream.DataReader.Close()
+			return s.fetchIfAesMissing(err, source, label, id, opts...)
 		}
 		// Calculate the actual offset using the size of the file (if offset is negative) and factor in the Header length
 		var rawFileOffset int64
