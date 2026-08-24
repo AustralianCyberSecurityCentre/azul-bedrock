@@ -2,6 +2,9 @@ package store
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"errors"
+	"fmt"
 	"io"
 	"math/rand"
 	"os"
@@ -266,6 +269,54 @@ func TestAesChoppyBuffer(t *testing.T) {
 	readBytes, err = testData.DataReader.Read(byteBufferLargerThanContent)
 	require.Equal(t, err, io.EOF)
 	require.Equal(t, 0, readBytes)
+}
+
+// Verify that if the load order is Store -> AES -> cache, the cache stores the raw data in it.
+// This is used in dispatcher caching during Azul's normal operation.
+func TestCacheWithAES(t *testing.T) {
+	dir, err := os.MkdirTemp("/tmp", "test-bedrock-store")
+	require.NoError(t, err, "Error creating tmp")
+	defer os.RemoveAll(dir)
+	store, err := NewEmptyLocalStore(dir)
+	require.NoError(t, err, "Error creating LocalStore")
+
+	// Add AES encryption
+	aesStore := NewAESCtrStore(store, aesDummyKey, true)
+
+	// Ensure max file size stored is 2kb.
+	cacheStore, err := NewDataCache(4, 300, 256, aesStore, StoreCacheMetricCollectors{})
+	require.NoError(t, err, "Error creating LocalStore Cache")
+
+	content := []byte("This is a really boring sentence.")
+	source := "testing"
+	label := "content"
+	sha256 := fmt.Sprintf("%x", sha256.Sum256(content))
+	reader := bytes.NewReader(content)
+	readCloser := io.NopCloser(reader)
+
+	cacheStore.Put(source, label, sha256, readCloser, int64(len(content)))
+	// Load the file into the cache.
+	_, err = cacheStore.Fetch(source, label, sha256, WithOffsetAndSize(0, -1))
+	require.Nil(t, err, "Failed to fetch file from cache after storing it %v.", err)
+
+	// Delete from AES store directly so only cache can hold th file now.
+	aesStore.Delete(source, label, sha256)
+	_, err = aesStore.Fetch(source, label, sha256, WithOffsetAndSize(0, -1))
+	require.NotNil(t, err)
+
+	// Fetch directly from the cache bypassing AES and content should be in raw form.
+	dataSlice, err := cacheStore.Fetch(source, label, sha256, WithOffsetAndSize(0, -1))
+	var notFoundError *NotFoundError
+	if errors.As(err, &notFoundError) {
+		require.Nil(t, err, "Cache doesn't contain the raw file and should.")
+	}
+	require.Nil(t, err)
+
+	readData, err := io.ReadAll(dataSlice.DataReader)
+	require.Nil(t, err)
+
+	require.Equal(t, readData, content)
+
 }
 
 func BenchmarkAESCtrReadStore(b *testing.B) {
