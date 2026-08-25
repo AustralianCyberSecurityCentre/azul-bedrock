@@ -139,7 +139,7 @@ func (s *DirectorySplitterStore) List(ctx context.Context, prefix string, startA
 // Format the ID ready for storage by adding a directory to it.
 func formatId(id string) (string, error) {
 	if len(id) < NumberOfChars {
-		return id, fmt.Errorf("The id '%s' if not longer than the minimum number of characters for directory splitter %d", id, NumberOfChars)
+		return id, fmt.Errorf("the id '%s' if not longer than the minimum number of characters for directory splitter %d", id, NumberOfChars)
 	}
 	return fmt.Sprintf("%s%s%s", id[:NumberOfChars], Separator, id), nil
 }
