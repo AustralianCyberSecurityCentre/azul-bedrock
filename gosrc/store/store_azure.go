@@ -348,9 +348,8 @@ func (s *StoreAzure) Copy(sourceOld, labelOld, idOld, sourceNew, labelNew, idNew
 		// the object being copied does not exist at source/label/ as expected, copy from root
 		srcObj = createIdPath("", "", idOld)
 	} else {
-		// silently fail copy as we could not find the source file under root or source/label
-		st.Logger.Debug().Msgf("Object %s not found for copy operation", idOld)
-		return nil
+		st.Logger.Debug().Msgf("Object %s/%s/%s not found for copy operation", sourceOld, labelOld, idOld)
+		return &NotFoundError{}
 	}
 
 	idNew = createIdPath(sourceNew, labelNew, idNew)

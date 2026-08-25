@@ -156,7 +156,7 @@ func (s *StoreFilesystem) Copy(sourceOld, labelOld, idOld, sourceNew, labelNew, 
 	// check if the src object is under src/label/
 	if !existsUnderSource {
 		st.Logger.Warn().Msgf("Object %s/%s/%s not found for copy operation", sourceOld, labelOld, idOld)
-		return fmt.Errorf("could not locate source object %s/%s/%s and no copy could be performed", sourceOld, labelOld, idOld)
+		return &NotFoundError{}
 	}
 
 	// Get file size for consistency with other APIs.
