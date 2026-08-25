@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/settings"
 )
@@ -37,8 +38,19 @@ func (s *StoreFilesystem) GetRootPath() string {
 	return s.root
 }
 
+func getIdSectionOfPath(id string) (string, []string) {
+	splitStrings := strings.Split(id, "/")
+	if len(splitStrings) == 1 {
+		return id, []string{}
+	}
+	// Already directories in the path
+	return splitStrings[len(splitStrings)-1], splitStrings[:len(splitStrings)-1]
+}
+
 func (s *StoreFilesystem) Put(source, label, id string, data io.ReadCloser, fileSize int64) error {
-	dirname := filepath.Join(s.root, source, label, id[0:1], id[1:2])
+	id, idDirs := getIdSectionOfPath(id)
+	joinList := append([]string{s.root, source, label}, idDirs...)
+	dirname := filepath.Join(joinList...)
 	err := os.MkdirAll(dirname, 0755)
 	if err != nil {
 		// log error, if this is a critical error it will be caught and returned below
@@ -67,7 +79,10 @@ func (s *StoreFilesystem) Put(source, label, id string, data io.ReadCloser, file
 
 func (s *StoreFilesystem) Fetch(source, label, id string, opts ...FileStorageFetchOption) (DataSlice, error) {
 	empty := NewDataSlice()
-	path := filepath.Join(s.root, source, label, id[0:1], id[1:2], id)
+	id, idDirs := getIdSectionOfPath(id)
+	joinDir := append([]string{s.root, source, label}, idDirs...)
+	joinPath := append(joinDir, id)
+	path := filepath.Join(joinPath...)
 	f, err := os.Open(path)
 	if err != nil {
 		e := fmt.Errorf("%w", &AccessError{msg: fmt.Sprintf("%v", err)})
@@ -118,7 +133,10 @@ func (s *StoreFilesystem) Fetch(source, label, id string, opts ...FileStorageFet
 }
 
 func (s *StoreFilesystem) Exists(source, label, id string) (bool, error) {
-	path := filepath.Join(s.root, source, label, id[0:1], id[1:2], id)
+	id, idDirs := getIdSectionOfPath(id)
+	joinDir := append([]string{s.root, source, label}, idDirs...)
+	joinPath := append(joinDir, id)
+	path := filepath.Join(joinPath...)
 	if _, err := os.Stat(path); err == nil {
 		return true, nil
 	} else if os.IsNotExist(err) {
@@ -130,31 +148,26 @@ func (s *StoreFilesystem) Exists(source, label, id string) (bool, error) {
 
 func (s *StoreFilesystem) Copy(sourceOld, labelOld, idOld, sourceNew, labelNew, idNew string) error {
 	// default srcFilePath to just the object name/hash
-	srcFilePath := filepath.Join(s.root, sourceOld, labelOld, idOld[0:1], idOld[1:2], idOld)
 	existsUnderSource, err := s.Exists(sourceOld, labelOld, idOld)
 	if err != nil {
-		return fmt.Errorf("error locating source object %s", srcFilePath)
+		return fmt.Errorf("error locating source object %s/%s/%s", sourceOld, labelOld, idOld)
 	}
 
 	// check if the src object is under src/label/
 	if !existsUnderSource {
-		st.Logger.Warn().Msgf("Object %s not found for copy operation", srcFilePath)
-		return nil
+		st.Logger.Warn().Msgf("Object %s/%s/%s not found for copy operation", sourceOld, labelOld, idOld)
+		return fmt.Errorf("could not locate source object %s/%s/%s and no copy could be performed", sourceOld, labelOld, idOld)
 	}
 
 	// Get file size for consistency with other APIs.
-	file, err := os.Open(srcFilePath)
+	dataslice, err := s.Fetch(sourceOld, labelOld, idOld)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-	file_info, err := file.Stat()
-	if err != nil {
-		return err
-	}
+	defer dataslice.DataReader.Close()
 
 	// Copy using existing function
-	err = s.Put(sourceNew, labelNew, idNew, file, file_info.Size())
+	err = s.Put(sourceNew, labelNew, idNew, dataslice.DataReader, dataslice.Size)
 	if err != nil {
 		return err
 	}
@@ -167,7 +180,10 @@ func (s *StoreFilesystem) Delete(source, label, id string, opts ...FileStorageDe
 	if deleteOpt.IfOlderThan > 0 {
 		return false, errors.New("local filesystem does not support ifOlderThan deletion")
 	}
-	path := filepath.Join(s.root, source, label, id[0:1], id[1:2], id)
+	id, idDirs := getIdSectionOfPath(id)
+	joinDir := append([]string{s.root, source, label}, idDirs...)
+	joinPath := append(joinDir, id)
+	path := filepath.Join(joinPath...)
 	err := os.Remove(path)
 	if err != nil {
 		e := fmt.Errorf("%w", &AccessError{msg: fmt.Sprintf("%v", err)})
@@ -182,10 +198,12 @@ func (s *StoreFilesystem) Delete(source, label, id string, opts ...FileStorageDe
 // Split a file path into it's three parts.
 func splitPathToSourceLabelId(path string) (string, string, string) {
 	path, id := filepath.Split(path)
+	path = filepath.Clean(path)
 	if path == "" {
 		return "", "", id
 	}
 	path, label := filepath.Split(path)
+	path = filepath.Clean(path)
 	if path == "" {
 		return "", label, id
 	}

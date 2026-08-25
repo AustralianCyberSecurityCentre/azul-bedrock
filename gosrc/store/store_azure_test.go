@@ -28,3 +28,13 @@ func TestAzureStoreWithCache(t *testing.T) {
 	StoreImplementationBaseTests(t, cacheStore)
 	StoreImplementationListBaseTests(t, cacheStore)
 }
+
+func TestAzureStoreWithSplitter(t *testing.T) {
+	azureStore, err := NewAzureStore(st.TestSettings.Streams.Azure.Endpoint, st.TestSettings.Streams.Azure.Container, st.TestSettings.Streams.Azure.StorageAccount, st.TestSettings.Streams.Azure.AccessKey, nil)
+	require.NoError(t, err)
+
+	splitterStore := NewDirectorySplitterStore(azureStore)
+
+	StoreImplementationBaseTests(t, splitterStore)
+	StoreImplementationListBaseTests(t, splitterStore)
+}

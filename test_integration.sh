@@ -4,9 +4,9 @@
 
 BED__LOG_LEVEL=TRACE \
 BED__LOG_PRETTY=TRUE \
-DP__STREAMS__S3__ENDPOINT=localhost:9000 \
-DP__STREAMS__S3__ACCESS_KEY=minio-root-user \
-DP__STREAMS__S3__SECRET_KEY=minio-root-password \
+DP__STREAMS__S3__ENDPOINT=localhost:8333 \
+DP__STREAMS__S3__ACCESS_KEY=seaweedfs-admin \
+DP__STREAMS__S3__SECRET_KEY=seaweedfs-secretkey \
 DP__STREAMS__S3__SECURE="false" \
 DP__STREAMS__API_ALLOW_DELETE=TRUE \
 go test ./... -count=1 -tags=integration -run=$1 -p 1 -failfast

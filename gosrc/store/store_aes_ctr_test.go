@@ -316,7 +316,23 @@ func TestCacheWithAES(t *testing.T) {
 	require.Nil(t, err)
 
 	require.Equal(t, readData, content)
+}
 
+func TestAESWithSplitter(t *testing.T) {
+	dir, err := os.MkdirTemp("/tmp", "test-bedrock-store")
+	require.NoError(t, err, "Error creating tmp")
+	defer os.RemoveAll(dir)
+	store, err := NewEmptyLocalStore(dir)
+	require.NoError(t, err, "Error creating LocalStore")
+
+	// Splitter before AES
+	splitterStore := NewDirectorySplitterStore(store)
+
+	// Add AES encryption
+	aesStore := NewAESCtrStore(splitterStore, aesDummyKey, true)
+
+	StoreImplementationBaseTests(t, aesStore)
+	// StoreImplementationListBaseTests(t, aesStore)
 }
 
 func BenchmarkAESCtrReadStore(b *testing.B) {
