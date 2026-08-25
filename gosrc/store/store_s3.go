@@ -351,8 +351,7 @@ func (s *StoreS3) Copy(sourceOld, labelOld, idOld, sourceNew, labelNew, idNew st
 		srcObj = createIdPath("", "", idOld)
 	} else {
 		// silently fail copy as we could not find the source file under root or source/label
-		st.Logger.Debug().Msgf("Object %s not found for copy operation", idOld)
-		return nil
+		return fmt.Errorf("error locating source object for copy %s", srcObj)
 	}
 
 	idNew = createIdPath(sourceNew, labelNew, idNew)

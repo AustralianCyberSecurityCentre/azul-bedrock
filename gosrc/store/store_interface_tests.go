@@ -18,6 +18,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+type StoredObjectPath struct {
+	Source string
+	Label  string
+	Sha256 string
+}
+
 func getDataSliceBytesInterfaceTest(t *testing.T, ds DataSlice) []byte {
 	// ReadAll is used because the restAPI will attempt to read everything that dataReader provides it.
 	// This can cause issues when requesting partial content (range headers) and the dataReader isn't limiting the number of bytes.
@@ -106,6 +112,11 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 			dstFile := inBinSha512
 			err = fs.Copy("source", events.DataLabelContent.Str(), inBinSha256, "source2", "content2", dstFile)
 			assert.NoError(err, "Got error when copying file")
+			// Ensure copied file is deleted at end of test.
+			defer func() {
+				_, err = fs.Delete("source2", "content2", dstFile)
+				require.Nil(t, err)
+			}()
 			// Check new file exists
 			exists, err = fs.Exists("source2", "content2", inBinSha512)
 			assert.NoError(err, "Got error when checking if copied file exists")
@@ -216,7 +227,6 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 		})
 	}
 	require.True(t, largeFileTestDoneOnce, "Large file test did not run ensure at least one of the test files is large enough.")
-	t.Logf("aaa %v", largeFileTestDoneOnce)
 }
 
 // Iterate over channel result and get all keys
@@ -256,6 +266,7 @@ func StoreImplementationListBaseTests(t *testing.T, fs FileStorage) {
 		{"sourceListTest3", "label3"},
 	}
 	totalFilesInserted := 0
+	insertedFiles := []StoredObjectPath{}
 	// run the tests over each "file"
 	for _, test := range tests {
 		for i := range 5 {
@@ -272,8 +283,17 @@ func StoreImplementationListBaseTests(t *testing.T, fs FileStorage) {
 
 			err = fs.Put(test.source, test.labelSuffix, inBinSha256, readCloser, int64(inBinSize))
 			require.Nil(t, err)
+			insertedFiles = append(insertedFiles, StoredObjectPath{Source: test.source, Label: test.labelSuffix, Sha256: inBinSha256})
 		}
 	}
+	// Delete all created files at the end.
+	defer func(iFiles []StoredObjectPath) {
+		for _, curFile := range iFiles {
+			_, err := fs.Delete(curFile.Source, curFile.Label, curFile.Sha256)
+			require.Nil(t, err)
+		}
+	}(insertedFiles)
+
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	defer cancelFunc()
 	// At least 20 files should have been inserted into the file store.
@@ -283,6 +303,10 @@ func StoreImplementationListBaseTests(t *testing.T, fs FileStorage) {
 	resultantKeys := []string{}
 	for obj := range objChannel {
 		resultantKeys = append(resultantKeys, obj.Key)
+	}
+	// This is useful for verifying the backing stores are actually populating the source value.
+	for obj := range fs.List(ctx, "sourceListTest5/", "") {
+		require.Equal(t, obj.Source, "sourceListTest5")
 	}
 	// At least all the files inserted should be listed and maybe more depending on storage setup
 	assert.GreaterOrEqual(t, len(resultantKeys), totalFilesInserted)

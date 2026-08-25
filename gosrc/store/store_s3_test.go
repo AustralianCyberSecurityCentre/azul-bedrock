@@ -34,6 +34,25 @@ func TestStoreS3(t *testing.T) {
 	StoreImplementationListBaseTests(t, s3Store)
 }
 
+func TestStoreS3WithSplitter(t *testing.T) {
+	s3Store, err := NewS3Store(
+		st.TestSettings.Streams.S3.Endpoint,
+		st.TestSettings.Streams.S3.AccessKey,
+		st.TestSettings.Streams.S3.SecretKey,
+		st.TestSettings.Streams.S3.Secure,
+		st.TestSettings.Streams.S3.Bucket,
+		st.TestSettings.Streams.S3.Region,
+		nil,
+		AutomaticAgeOffSettings{EnableAutomaticAgeOff: false},
+	)
+	require.NoError(t, err)
+
+	splitterStore := NewDirectorySplitterStore(s3Store)
+
+	StoreImplementationBaseTests(t, splitterStore)
+	StoreImplementationListBaseTests(t, splitterStore)
+}
+
 func TestStoreS3WithCache(t *testing.T) {
 	s3Store, err := NewS3Store(
 		st.TestSettings.Streams.S3.Endpoint,
@@ -172,6 +191,9 @@ func TestS3WithAesChoppyBuffer(t *testing.T) {
 
 	err = aesCtrStore.Put("testsource", "testlabel", "aesctredfile", readCloser, -1)
 	require.NoError(t, err, "Error writing to AES_CTR store", err)
+	defer func() {
+		aesCtrStore.Delete("testsource", "testlabel", "aesctredfile")
+	}()
 
 	testData, err := aesCtrStore.Fetch("testsource", "testlabel", "aesctredfile", WithOffsetAndSize(0, -1))
 	require.NoError(t, err, "Error reading from AES_CTR store", err)
@@ -225,6 +247,9 @@ func TestXORAtRestWithS3(t *testing.T) {
 
 	err = xorStore.Put("testsource", "testlabel", "testid", readCloser, int64(len(probMalware)))
 	require.NoError(t, err, "Error writing to XOR store", err)
+	defer func() {
+		xorStore.Delete("testsource", "testlabel", "testid")
+	}()
 
 	// The XOR store should return the original text
 	testData, err := xorStore.Fetch("testsource", "testlabel", "testid", WithOffsetAndSize(0, -1))

@@ -3,5 +3,10 @@
   "extends": [
     "config:best-practices"
   ],
-  "automerge": true
+  "automerge": true,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "schedule": ["before 4am on sunday"]
+  }
 }
