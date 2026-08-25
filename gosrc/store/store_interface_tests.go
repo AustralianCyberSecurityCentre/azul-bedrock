@@ -114,7 +114,8 @@ func StoreImplementationBaseTests(t *testing.T, fs FileStorage) {
 			assert.NoError(err, "Got error when copying file")
 			// Ensure copied file is deleted at end of test.
 			defer func() {
-				fs.Delete("source2", "content2", dstFile)
+				_, err = fs.Delete("source2", "content2", dstFile)
+				require.Nil(t, err)
 			}()
 			// Check new file exists
 			exists, err = fs.Exists("source2", "content2", inBinSha512)
@@ -288,7 +289,8 @@ func StoreImplementationListBaseTests(t *testing.T, fs FileStorage) {
 	// Delete all created files at the end.
 	defer func(iFiles []StoredObjectPath) {
 		for _, curFile := range iFiles {
-			fs.Delete(curFile.Source, curFile.Label, curFile.Sha256)
+			_, err := fs.Delete(curFile.Source, curFile.Label, curFile.Sha256)
+			require.Nil(t, err)
 		}
 	}(insertedFiles)
 

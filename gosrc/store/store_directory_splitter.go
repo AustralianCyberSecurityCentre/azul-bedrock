@@ -78,7 +78,7 @@ func (s *DirectorySplitterStore) Delete(source, label, id string, opts ...FileSt
 	}
 	deleted, err := s.inner.Delete(source, label, newId, opts...)
 	// FUTURE: expect to remove in Azul 15 this allows migration from the old format to the new format.
-	if err != nil || deleted != true {
+	if err != nil || !deleted {
 		return s.inner.Delete(source, label, id, opts...)
 	}
 	return deleted, err
