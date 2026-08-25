@@ -302,9 +302,11 @@ func StoreImplementationListBaseTests(t *testing.T, fs FileStorage) {
 	objChannel := fs.List(ctx, "", "")
 	resultantKeys := []string{}
 	for obj := range objChannel {
-		// Ensure source is set correctly to a valid value.
-		require.Contains(t, []string{"sourceListTest1", "sourceListTest2", "sourceListTest3", "sourceListTest5", "testing"}, obj.Source)
 		resultantKeys = append(resultantKeys, obj.Key)
+	}
+	// This is useful for verifying the backing stores are actually populating the source value.
+	for obj := range fs.List(ctx, "sourceListTest5/", "") {
+		require.Equal(t, obj.Source, "sourceListTest5")
 	}
 	// At least all the files inserted should be listed and maybe more depending on storage setup
 	assert.GreaterOrEqual(t, len(resultantKeys), totalFilesInserted)
