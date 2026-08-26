@@ -5,12 +5,25 @@ from typing import Annotated
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, PlainSerializer, StringConstraints
 
+from azul_bedrock.models_auth import ApiAccessEnum
+
+
+def can_user_access_api(user_api_accesses: list[ApiAccessEnum], api_enum: ApiAccessEnum) -> bool:
+    """Check if a user can access an API endpoint and raise an Unauthorized as appropriate.
+
+    If a user has all they'll have access, or if they have the API permission in their list.
+    """
+    return ApiAccessEnum.All in user_api_accesses or api_enum in user_api_accesses
+
 
 class PATRequest(BaseModel):
     """Request for a PAT."""
 
+    model_config = ConfigDict(use_enum_values=True)
+
     name: Annotated[str, StringConstraints(min_length=4, max_length=100)]
     description: Annotated[str, StringConstraints(min_length=0, max_length=500)] = ""
+    api_access: list[ApiAccessEnum]
     roles: list[str]
 
 
@@ -18,12 +31,13 @@ class PATView(BaseModel):
     """The PAT view without the PAT itself."""
 
     # Extra is ignored to ensure the PAT is dropped if a dict with the PAT were validated against this model.
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", use_enum_values=True)
 
     id: str
     pat_name: str
     description: str = ""
     owner_username: str
+    api_access: list[ApiAccessEnum]
     roles: list[str]
     creation_date: Annotated[AwareDatetime, PlainSerializer(lambda v: v.isoformat(), return_type=str)]
     last_used_date: Annotated[AwareDatetime, PlainSerializer(lambda v: v.isoformat(), return_type=str)]

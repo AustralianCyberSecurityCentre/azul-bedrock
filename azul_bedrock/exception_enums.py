@@ -80,6 +80,7 @@ class ExceptionCodeEnum(StrEnum):
     # context
     MetastoreContextBadSecurity = "MetastoreContextBadSecurity"
     MetastoreContextInsufficientPermissionsForWrite = "MetastoreContextInsufficientPermissionsForWrite"
+    MetastoreApiAccessForbidden = "MetastoreApiAccessForbidden"
     # entry
     MetastoreEntryBadInputParameters = "MetastoreEntryBadInputParameters"
     # ingestor
