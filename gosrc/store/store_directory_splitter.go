@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-const NumberOfChars = 3
+const NumberOfChars = 2
 const Separator = "/"
 
 /*
