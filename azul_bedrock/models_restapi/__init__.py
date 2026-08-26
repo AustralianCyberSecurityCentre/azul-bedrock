@@ -1,3 +1,4 @@
+from azul_bedrock.models_auth import ApiAccessEnum
 from azul_bedrock.models_restapi.basic import (
     Author,
     Meta,
@@ -70,6 +71,15 @@ from azul_bedrock.models_restapi.features import (
     ValueCountRet,
     ValuePartCountItem,
     ValuePartCountRet,
+)
+from azul_bedrock.models_restapi.pat import (
+    ListOfPAT,
+    PATDeleteEnum,
+    PATDeleteResponse,
+    PATIssue,
+    PATRequest,
+    PATView,
+    can_user_access_api,
 )
 from azul_bedrock.models_restapi.plugins import (
     LatestPluginWithVersions,
@@ -185,4 +195,13 @@ __all__ = [
     # Statistics
     "StatisticSummary",
     "StatisticContainer",
+    # PAT
+    "ApiAccessEnum",
+    "ListOfPAT",
+    "PATDeleteEnum",
+    "PATDeleteResponse",
+    "PATIssue",
+    "PATRequest",
+    "PATView",
+    "can_user_access_api",
 ]

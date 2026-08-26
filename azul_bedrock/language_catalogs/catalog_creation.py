@@ -102,6 +102,7 @@ def _get_english_catalog() -> BabCatalog:
         # context
         ExceptionCodeEnum.MetastoreContextBadSecurity.value: "security was not valid ({security})",
         ExceptionCodeEnum.MetastoreContextInsufficientPermissionsForWrite.value: "Could not initialise metastore templates",
+        ExceptionCodeEnum.MetastoreApiAccessForbidden.value: "Insufficient Api Access for endpoint need {api_endpoint_enum}",
         # entry
         ExceptionCodeEnum.MetastoreEntryBadInputParameters.value: "When using --no-input, both METASTORE_OPENSEARCH_ADMIN_USERNAME and METASTORE_OPENSEARCH_ADMIN_PASSWORD must be set.",
         # ingestor
