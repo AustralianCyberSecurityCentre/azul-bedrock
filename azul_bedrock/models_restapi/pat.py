@@ -19,6 +19,8 @@ def can_user_access_api(user_api_accesses: list[ApiAccessEnum], api_enum: ApiAcc
 class PATRequest(BaseModel):
     """Request for a PAT."""
 
+    model_config = ConfigDict(use_enum_values=True)
+
     name: Annotated[str, StringConstraints(min_length=4, max_length=100)]
     description: Annotated[str, StringConstraints(min_length=0, max_length=500)] = ""
     api_access: list[ApiAccessEnum]
@@ -29,7 +31,7 @@ class PATView(BaseModel):
     """The PAT view without the PAT itself."""
 
     # Extra is ignored to ensure the PAT is dropped if a dict with the PAT were validated against this model.
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", use_enum_values=True)
 
     id: str
     pat_name: str

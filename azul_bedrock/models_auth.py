@@ -61,6 +61,8 @@ class Credentials(BaseModel):
 class UserInfo(BaseModel):
     """A user of the system."""
 
+    model_config = ConfigDict(use_enum_values=True)
+
     username: str = "unknown"
     org: str = "unknown"
     roles: list[str] = []
