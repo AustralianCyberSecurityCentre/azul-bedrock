@@ -61,7 +61,7 @@ func TestDirectoryStructure(t *testing.T) {
 	require.NotNil(t, err)
 
 	// Adding Id prefix manually should find the file
-	testData, err = store.Fetch("testsource", "testlabel", "tes/testid", WithOffsetAndSize(0, -1))
+	testData, err = store.Fetch("testsource", "testlabel", "testid"[:NumberOfChars]+"/testid", WithOffsetAndSize(0, -1))
 	require.Nil(t, err)
 
 	readBuffer = getDataSliceBytesInterfaceTest(t, testData)
@@ -156,7 +156,7 @@ func TestDirectoryInMemory(t *testing.T) {
 	require.NotNil(t, err)
 
 	// Adding Id prefix manually should find the file
-	testData, err = store.Fetch("testsource", "testlabel", "tes/testid", WithOffsetAndSize(0, -1))
+	testData, err = store.Fetch("testsource", "testlabel", "testid"[:NumberOfChars]+"/testid", WithOffsetAndSize(0, -1))
 	require.Nil(t, err)
 
 	readBuffer = getDataSliceBytesInterfaceTest(t, testData)
