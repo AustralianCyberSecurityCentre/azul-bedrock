@@ -3,7 +3,7 @@
 from enum import StrEnum
 from typing import Annotated
 
-from pydantic import AwareDatetime, BaseModel, ConfigDict, PlainSerializer, StringConstraints
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, PlainSerializer, StringConstraints
 
 from azul_bedrock.models_auth import ApiAccessEnum
 
@@ -23,7 +23,10 @@ class PATRequest(BaseModel):
 
     name: Annotated[str, StringConstraints(min_length=4, max_length=100)]
     description: Annotated[str, StringConstraints(min_length=0, max_length=500)] = ""
-    api_access: list[ApiAccessEnum]
+    api_access: list[ApiAccessEnum] = Field(
+        ...,
+        description=f"Access level for the PAT, note if you choose all that gives the maximum access and discards all others: [{[access.value for access in ApiAccessEnum]}]",
+    )
     roles: list[str]
 
 
