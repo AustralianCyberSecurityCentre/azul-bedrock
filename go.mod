@@ -1,4 +1,4 @@
-module github.com/AustralianCyberSecurityCentre/azul-bedrock/v12
+module github.com/AustralianCyberSecurityCentre/azul-bedrock/v13
 
 go 1.26.0
 

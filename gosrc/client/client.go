@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/events"
 )
 
 // Maximum retries for http requests.
