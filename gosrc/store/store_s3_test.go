@@ -9,9 +9,9 @@ import (
 	"io"
 	"testing"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/models"
-	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/settings"
-	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/testdata"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/models"
+	st "github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/settings"
+	testdata "github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/testdata"
 	"github.com/minio/minio-go/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

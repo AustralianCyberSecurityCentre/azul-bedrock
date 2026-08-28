@@ -1,6 +1,6 @@
 package models
 
-import "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/events"
+import "github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/events"
 
 type ErrorStringEnum string
 

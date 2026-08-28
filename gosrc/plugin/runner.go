@@ -16,10 +16,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/cart"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/client"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/events"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/testutils"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/cart"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/client"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/testutils"
 	"github.com/rs/zerolog"
 )
 

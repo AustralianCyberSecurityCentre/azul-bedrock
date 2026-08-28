@@ -12,9 +12,9 @@ import (
 
 	"github.com/goccy/go-json"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/client/poststreams"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/events"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/models"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/client/poststreams"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/models"
 )
 
 type PostStreamStruct struct {

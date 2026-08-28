@@ -16,10 +16,10 @@ import (
 
 	"github.com/goccy/go-json"
 
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/client/getevents"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/client/postevents"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/events"
-	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/models"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/client/getevents"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/client/postevents"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/events"
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/models"
 )
 
 type FetchEventsStruct struct {

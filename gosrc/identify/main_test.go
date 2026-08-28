@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	testutils "github.com/AustralianCyberSecurityCentre/azul-bedrock/v12/gosrc/testutils"
+	testutils "github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/testutils"
 )
 
 var cfg *Identify
