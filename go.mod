@@ -21,7 +21,7 @@ require (
 	github.com/rakyll/magicmime v0.1.0
 	github.com/rs/zerolog v1.35.1
 	github.com/sanity-io/litter v1.5.8
-	github.com/stretchr/testify v1.12.0
+	github.com/stretchr/testify v1.12.1
 	golang.org/x/exp v0.0.0-20260727155853-b88d891fe743
 	gopkg.in/yaml.v3 v3.0.1
 )
