@@ -251,6 +251,7 @@ class ExceptionCodeEnum(StrEnum):
     MetastoreInvalidPurgeExceptionApi = "MetastoreInvalidPurgeExceptionApi"
     # quick
     MetastoreUserUnauthorized = "MetastoreUserUnauthorized"
+    MetastoreUserNoSubctxCredentials = "MetastoreUserNoSubctxCredentials"
     MetastoreSetSecurityHeaderUnexpected = "MetastoreSetSecurityHeaderUnexpected"
     MetastoreUserInfoNotAvailable = "MetastoreUserInfoNotAvailable"
     # sources

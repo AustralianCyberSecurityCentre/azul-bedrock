@@ -272,6 +272,7 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.MetastoreInvalidPurgeExceptionApi.value: "{inner_exception}",
         # quick
         ExceptionCodeEnum.MetastoreUserUnauthorized.value: "{inner_exception}",
+        ExceptionCodeEnum.MetastoreUserNoSubctxCredentials.value: "The user '{username}' does not have any credentials.",
         ExceptionCodeEnum.MetastoreSetSecurityHeaderUnexpected.value: "Logic error - should be setting response and/or exception!",
         ExceptionCodeEnum.MetastoreUserInfoNotAvailable.value: "user_info is not available on request.state",
         # sources
