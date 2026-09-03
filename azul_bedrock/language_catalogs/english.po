@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Azul 10\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-26 03:45+0000\n"
+"POT-Creation-Date: 2026-09-02 23:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -659,6 +659,9 @@ msgstr "{inner_exception}"
 
 msgid "MetastoreUserUnauthorized"
 msgstr "{inner_exception}"
+
+msgid "MetastoreUserNoSubctxCredentials"
+msgstr "The user '{username}' does not have any credentials."
 
 msgid "MetastoreSetSecurityHeaderUnexpected"
 msgstr "Logic error - should be setting response and/or exception!"
