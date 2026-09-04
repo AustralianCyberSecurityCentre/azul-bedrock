@@ -8,7 +8,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.1
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.14.1
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.8.0
-	github.com/VirusTotal/yara-x/go v1.19.0
+	github.com/VirusTotal/yara-x/go v1.20.0
 	github.com/allegro/bigcache/v3 v3.2.0
 	github.com/fatih/structs v1.1.0
 	github.com/go-viper/mapstructure/v2 v2.5.0

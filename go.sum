@@ -14,8 +14,8 @@ github.com/AzureAD/microsoft-authentication-extensions-for-go/cache v0.1.1 h1:WJ
 github.com/AzureAD/microsoft-authentication-extensions-for-go/cache v0.1.1/go.mod h1:tCcJZ0uHAmvjsVYzEFivsRTN00oz5BEsRgQHu5JZ9WE=
 github.com/AzureAD/microsoft-authentication-library-for-go v1.8.0 h1:Nljr4q1GRA/5vCrMONS+g4u4LRHNgOXVSh3O43J2CnI=
 github.com/AzureAD/microsoft-authentication-library-for-go v1.8.0/go.mod h1:Y33QHnf0FfdVewFFISOGe20mkZbxX4H839o955/PoeI=
-github.com/VirusTotal/yara-x/go v1.19.0 h1:Jdqa4J7X0f3Sjyc0Tt3S8/Ge6GyilxIFbe8iMl37/Tg=
-github.com/VirusTotal/yara-x/go v1.19.0/go.mod h1:KRt+q3iJ3vbPTaD91JIDzEBqvDEwzyvjaz9+9cajkls=
+github.com/VirusTotal/yara-x/go v1.20.0 h1:pfemcgfP1cF9IN9w9jODZSGhzpndZjAxLsYp0WDZucA=
+github.com/VirusTotal/yara-x/go v1.20.0/go.mod h1:VAytYJjaDJ6MTSty/n+uXT2W/QejPHRQECB0rgDGJN4=
 github.com/allegro/bigcache/v3 v3.2.0 h1:B45F9x3iaoBlhzIA+0jqxlThTUoyg+mOk7HUKSbJOL8=
 github.com/allegro/bigcache/v3 v3.2.0/go.mod h1:qvxNn6cSKfWRmfDuPJbZcfxsQXEtoskUqPzT0kuHG5s=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
