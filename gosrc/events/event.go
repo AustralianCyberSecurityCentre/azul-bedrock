@@ -9,6 +9,19 @@ import (
 
 const CurrentModelVersion uint32 = 6
 
+// Known settings keys for EventSource (corresponds to enum located in models_network.py)
+// Flag used by dispatcher to remove all settings at the specified depth, e.g only use settings up to depth level 1,2,3... expected value is a number(stringified)
+const SETTINGS_DEPTH_REMOVAL_KEY = "remove_at_depth"
+
+// Passwords flags used by unbox to load passwords in provided by user, these passwords should be new line separated.
+const SETTINGS_PASSWORDS_KEY = "passwords"
+
+// Used to set what plugin should run the given event, should only be used with an expedite event.
+// If used generically it would cause a file to only run on the provided plugin.
+const SETTINGS_EXPEDITE_PLUGIN_KEY = "expedite_plugin"
+
+// END - Known settings keys for EventSource
+
 // collection of all types of events
 type EventStructs interface {
 	BinaryEvent | DeleteEvent | InsertEvent | PluginEvent | StatusEvent | DownloadEvent | RetrohuntEvent
