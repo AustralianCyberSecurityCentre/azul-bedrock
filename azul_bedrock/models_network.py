@@ -371,6 +371,24 @@ class PathNode(BaseModelStrict):
     language: str | None = None
 
 
+# Corresponds to strings located in gosrc/events/event.go
+class SourceSettingsKeys(StrEnum):
+    """Enum of known values for Source Settings.
+
+    The value of this is expected to be used, to help with serialization the type on Source settings ignores this enum.
+    """
+
+    # Flag used by dispatcher to remove all settings at the specified depth, e.g only use settings up to depth level 1,2,3... expected value is a number(stringified)
+    SETTINGS_DEPTH_REMOVAL_KEY = "remove_at_depth"
+
+    # Passwords flags used by unbox to load passwords in provided by user, these passwords should be new line separated.
+    SETTINGS_PASSWORDS_KEY = "passwords"
+
+    # Used to set what plugin should run the given event, should only be used with an expedite event.
+    # If used generically it would cause a file to only run on the provided plugin.
+    SETTINGS_EXPEDITE_PLUGIN_KEY = "expedite_plugin"
+
+
 class Source(BaseModelStrict):
     """Source struct."""
 
