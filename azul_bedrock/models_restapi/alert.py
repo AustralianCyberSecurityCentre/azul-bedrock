@@ -16,6 +16,20 @@ ALERTER_ALERT_KEY = "alerts"
 ALERTER_DB_ID = 4
 
 
+class AlertRulePatch(BaseModel):
+    """Alert rule."""
+
+    model_config = ConfigDict(use_enum_values=True)
+
+    endpoint: str | None = None
+    event_type: BinaryAction | None = None
+    plugin_name: str | None = None
+    plugin_version: str | None = None
+    source_name: str | None = None
+    source_reference_key_values: dict[str, str] | None = None
+    feature_name_values: dict[str, str] | None = None
+
+
 class AlertRule(BaseModel):
     """Alert rule."""
 
