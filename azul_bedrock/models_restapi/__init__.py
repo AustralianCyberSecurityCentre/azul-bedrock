@@ -1,4 +1,5 @@
 from azul_bedrock.models_auth import ApiAccessEnum
+from azul_bedrock.models_restapi.alert import AlertHit, AlertRule, LoadedRules
 from azul_bedrock.models_restapi.basic import (
     Author,
     Meta,
@@ -102,7 +103,6 @@ from azul_bedrock.restapi_security import (
     UserAccess,
     UserSecurity,
 )
-from azul_bedrock.models_restapi.alert import AlertRule, LoadedRules, AlertHit
 
 __all__ = [
     # Alerter models
