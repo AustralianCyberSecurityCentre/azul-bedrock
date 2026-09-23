@@ -102,8 +102,13 @@ from azul_bedrock.restapi_security import (
     UserAccess,
     UserSecurity,
 )
+from azul_bedrock.models_restapi.alert import AlertRule, LoadedRules, AlertHit
 
 __all__ = [
+    # Alerter models
+    "AlertRule",
+    "LoadedRules",
+    "AlertHit",
     # Basic
     "QueryInfo",
     "Meta",
