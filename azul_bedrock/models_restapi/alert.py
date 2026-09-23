@@ -21,8 +21,8 @@ class AlertRule(BaseModel):
 
     model_config = ConfigDict(use_enum_values=True)
 
-    alert_id: str
-    alert_endpoint: str
+    id: str
+    endpoint: str
     event_type: BinaryAction
     plugin_name: str
     plugin_version: str
