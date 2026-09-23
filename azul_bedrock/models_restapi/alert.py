@@ -1,8 +1,8 @@
 """Models for alert endpoints and redis storage."""
 
-import datetime
+from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import AwareDatetime, BaseModel, ConfigDict, PlainSerializer
 
 from azul_bedrock.models_network import BinaryAction
 
@@ -55,7 +55,9 @@ class LoadedRules(BaseModel):
     """Loaded rules that are stored in redis."""
 
     rules: list[AlertRule]
-    rules_compile_time: datetime.datetime
+    rules_compile_time: Annotated[
+        AwareDatetime | None, PlainSerializer(lambda v: v.isoformat() if v else None, return_type=str)
+    ]
 
 
 class AlertHit(BaseModel):
