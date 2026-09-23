@@ -31,12 +31,11 @@ class AlertRulePatch(BaseModel):
     feature_name_values: dict[str, str] | None = None
 
 
-class AlertRule(BaseModel):
-    """Alert rule."""
+class AlertRuleCreate(BaseModel):
+    """Alert rule creation."""
 
     model_config = ConfigDict(use_enum_values=True)
 
-    id: str
     endpoint: str
     event_type: BinaryAction
     plugin_name: str
@@ -44,6 +43,12 @@ class AlertRule(BaseModel):
     source_name: str
     source_reference_key_values: dict[str, str]
     feature_name_values: dict[str, str]
+
+
+class AlertRule(AlertRuleCreate):
+    """Alert rule."""
+
+    id: str
 
 
 class LoadedRules(BaseModel):
