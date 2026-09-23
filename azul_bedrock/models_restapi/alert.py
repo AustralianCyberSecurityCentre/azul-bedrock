@@ -21,6 +21,7 @@ class AlertRulePatch(BaseModel):
 
     model_config = ConfigDict(use_enum_values=True)
 
+    id: str
     endpoint: str | None = None
     event_type: BinaryAction | None = None
     plugin_name: str | None = None
