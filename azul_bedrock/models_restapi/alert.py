@@ -1,5 +1,6 @@
 """Models for alert endpoints and redis storage."""
 
+from enum import StrEnum
 from typing import Annotated
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, PlainSerializer
@@ -22,7 +23,8 @@ class AlertRulePatch(BaseModel):
     model_config = ConfigDict(use_enum_values=True)
 
     id: str
-    endpoint: str | None = None
+    webhook_id: str | None = None
+    alert_message: str | None = None
     event_type: BinaryAction | None = None
     plugin_name: str | None = None
     plugin_version: str | None = None
@@ -32,17 +34,30 @@ class AlertRulePatch(BaseModel):
 
 
 class AlertRuleCreate(BaseModel):
-    """Alert rule creation."""
+    """Alert rule creation.
+
+    NOTE that most fields are optional but if they aren't set the alert will trigger on everything.
+    The trigger conditions work  like an AND filter, so all conditions must be met for the alert to fire.
+    """
 
     model_config = ConfigDict(use_enum_values=True)
 
-    endpoint: str
-    event_type: BinaryAction
-    plugin_name: str
-    plugin_version: str
-    source_name: str
-    source_reference_key_values: dict[str, str]
-    feature_name_values: dict[str, str]
+    # Id of the webhook to send the alert message to
+    webhook_id: str
+    # Message that should be displayed as part of the alert message when the alert is triggered.
+    alert_message: str
+    # Type of event to alert on.
+    event_type: BinaryAction | None = None
+    # Case sensitive plugin name to alert on.
+    plugin_name: str | None = None
+    # Case sensitive version of the plugin to alert on.
+    plugin_version: str | None = None
+    # Name of the source that the alert should trigger on.
+    source_name: str | None = None
+    # Source reference key/values that the alert should trigger on.
+    source_reference_key_values: dict[str, str] | None = None
+    # Feature name/value pairs that the alert should trigger on.
+    feature_name_values: dict[str, str] | None = None
 
 
 class AlertRule(AlertRuleCreate):
@@ -56,7 +71,8 @@ class LoadedRules(BaseModel):
 
     rules: list[AlertRule]
     rules_compile_time: Annotated[
-        AwareDatetime | None, PlainSerializer(lambda v: v.isoformat() if v else None, return_type=str)
+        AwareDatetime | None,
+        PlainSerializer(lambda v: v.isoformat() if v else None, return_type=str),
     ]
 
 
@@ -65,3 +81,26 @@ class AlertHit(BaseModel):
 
     rule: AlertRule
     sha256: str
+
+
+class SupportedWebhookType(StrEnum):
+    """Enums that can be used and are supported by alerter."""
+
+    MSTeams = "msteams"
+    Mattermost = "mattermost"
+
+
+class WebhookMappingApi(BaseModel):
+    """Mapping for wheat webhook should be used when sending out alerts, for displaying in the restapi."""
+
+    id: str
+    description: str
+    webhook_type: SupportedWebhookType
+    # Field used when posting a message to the webhook.
+    message_field: str = "text"
+
+
+class WebhookMapping(WebhookMappingApi):
+    """Mapping for wheat webhook should be used when sending out alerts."""
+
+    url: str

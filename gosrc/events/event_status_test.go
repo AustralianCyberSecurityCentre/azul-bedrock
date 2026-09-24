@@ -15,7 +15,7 @@ func TestEventStatus1(t *testing.T) {
 	err := json.Unmarshal(data, &ev)
 	require.Nil(t, err)
 	require.Equal(t, ev.Entity.Input.Dequeued, "xabzz")
-	require.Equal(t, ev.Entity.Status, "done")
+	require.Equal(t, ev.Entity.Status, StatusTypeCompleted)
 	require.Equal(t, ev.Entity.Error, "a bad thing happened, oh dear!")
 	require.Nil(t, ev.CheckValid())
 }

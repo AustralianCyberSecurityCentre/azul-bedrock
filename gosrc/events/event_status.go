@@ -9,7 +9,7 @@ import (
 // Entity field for status event (can only trigger from and produce binary events)
 type StatusEntity struct {
 	Input   BinaryEvent   `json:"input" avro:"input"`
-	Status  string        `json:"status" avro:"status"`
+	Status  StatusType    `json:"status" avro:"status"`
 	RunTime float64       `json:"runtime,omitempty" avro:"runtime"`
 	Error   string        `json:"error,omitempty" avro:"error"`
 	Message string        `json:"message,omitempty" avro:"message"`

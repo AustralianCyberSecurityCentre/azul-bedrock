@@ -8,7 +8,7 @@
         "category": "plugin"
       },
       "entity": {
-        "status": "done",
+        "status": "completed",
         "error": "a bad thing happened, oh dear!",
         "input": {
           "model_version": 6,
@@ -123,7 +123,7 @@
         "category": "plugin"
       },
       "entity": {
-        "status": "done",
+        "status": "completed",
         "error": "a bad thing happened, oh dear!",
         "input": {
           "model_version": 6,

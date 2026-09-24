@@ -1,38 +1,40 @@
 package events
 
+type StatusType string
+
 const (
 	// Successfully completed
-	StatusTypeCompleted string = "completed"
+	StatusTypeCompleted StatusType = "completed"
 	// Successfully completed but no features or augmented streams were produced
-	StatusTypeCompletedEmpty = "completed-empty"
+	StatusTypeCompletedEmpty StatusType = "completed-empty"
 	// Successfully completed but errors occurred which means the plugin might not have gotten all data.
-	StatusTypeCompletedWithErrors string = "completed-with-errors"
+	StatusTypeCompletedWithErrors StatusType = "completed-with-errors"
 	// Entity not suitable for this plugin (eg wrong size, type, ...)
-	StatusTypeOptOut string = "opt-out"
+	StatusTypeOptOut StatusType = "opt-out"
 	// Plugin heartbeat
-	StatusTypeHeartbeat string = "heartbeat"
+	StatusTypeHeartbeat StatusType = "heartbeat"
 	// Event has been dequeued from kafka by dispatcher - not for use by plugins!
-	StatusTypeDequeued string = "dequeued"
+	StatusTypeDequeued StatusType = "dequeued"
 	// Download has been requested by a user or plugin.
-	StatusTypeDownloadRequested string = "download-requested"
+	StatusTypeDownloadRequested StatusType = "download-requested"
 	// Plugin-specific code raised an unhandled exception
-	StatusTypeErrorException string = "error-exception"
+	StatusTypeErrorException StatusType = "error-exception"
 	// Plugin could not communicate with some required service
-	StatusTypeErrorNetwork string = "error-network"
+	StatusTypeErrorNetwork StatusType = "error-network"
 	// Generic error in plugin harness
-	StatusTypeErrorRunner string = "error-runner"
+	StatusTypeErrorRunner StatusType = "error-runner"
 	// Error processing input entity (eg incorrect format, corrupted) - legacy "entity error"
-	StatusTypeErrorInput string = "error-input"
+	StatusTypeErrorInput StatusType = "error-input"
 	// Plugin returned something that couldn't be understood by the runner
-	StatusTypeErrorOutput string = "error-output"
+	StatusTypeErrorOutput StatusType = "error-output"
 	// Plugin exceeded its maximum execution time on a sample
-	StatusTypeErrorTimeout string = "error-timeout"
+	StatusTypeErrorTimeout StatusType = "error-timeout"
 	// Plugin execution was cancelled due to being out of memory
-	StatusTypeErrorOOM string = "error-out-of-memory"
+	StatusTypeErrorOOM StatusType = "error-out-of-memory"
 )
 
 /*Check if the provided status is a completed type and if it is return true.*/
-func IsStatusTypeCompleted(status string) bool {
+func IsStatusTypeCompleted(status StatusType) bool {
 	switch status {
 	case StatusTypeCompleted:
 		fallthrough
@@ -46,7 +48,7 @@ func IsStatusTypeCompleted(status string) bool {
 }
 
 /*Check if the provided status is a error type and if it is return true.*/
-func IsStatusTypeError(status string) bool {
+func IsStatusTypeError(status StatusType) bool {
 	switch status {
 	case StatusTypeErrorException:
 		fallthrough
@@ -68,7 +70,7 @@ func IsStatusTypeError(status string) bool {
 }
 
 /*Check if the provided status is a progress type and if it is return true.*/
-func IsStatusTypeProcess(status string) bool {
+func IsStatusTypeProcess(status StatusType) bool {
 	switch status {
 	case StatusTypeHeartbeat:
 		fallthrough

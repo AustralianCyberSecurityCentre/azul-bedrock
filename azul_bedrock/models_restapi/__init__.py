@@ -1,5 +1,14 @@
 from azul_bedrock.models_auth import ApiAccessEnum
-from azul_bedrock.models_restapi.alert import AlertHit, AlertRule, AlertRuleCreate, AlertRulePatch, LoadedRules
+from azul_bedrock.models_restapi.alert import (
+    AlertHit,
+    AlertRule,
+    AlertRuleCreate,
+    AlertRulePatch,
+    LoadedRules,
+    SupportedWebhookType,
+    WebhookMapping,
+    WebhookMappingApi,
+)
 from azul_bedrock.models_restapi.basic import (
     Author,
     Meta,
@@ -111,6 +120,9 @@ __all__ = [
     "AlertRulePatch",
     "LoadedRules",
     "AlertHit",
+    "SupportedWebhookType",
+    "WebhookMappingApi",
+    "WebhookMapping",
     # Basic
     "QueryInfo",
     "Meta",

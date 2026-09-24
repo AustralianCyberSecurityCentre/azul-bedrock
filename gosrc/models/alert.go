@@ -20,7 +20,7 @@ const ALERTER_DB_ID = 4
 // Alert rule used to match against events, if a match is achieved an alert is raised.
 type AlertRule struct {
 	Id                       string              `json:"id"`
-	Endpoint                 string              `json:"endpoint"`
+	WebhookId                string              `json:"webhook_id"`
 	EventType                events.BinaryAction `json:"event_type"`
 	PluginName               string              `json:"plugin_name"`
 	PluginVersion            string              `json:"plugin_version"`
