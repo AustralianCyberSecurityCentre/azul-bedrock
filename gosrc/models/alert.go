@@ -21,6 +21,7 @@ const ALERTER_DB_ID = 4
 type AlertRule struct {
 	Id                       string              `json:"id"`
 	WebhookId                string              `json:"webhook_id"`
+	Status                   events.StatusType   `json:"status"`
 	EventType                events.BinaryAction `json:"event_type"`
 	PluginName               string              `json:"plugin_name"`
 	PluginVersion            string              `json:"plugin_version"`

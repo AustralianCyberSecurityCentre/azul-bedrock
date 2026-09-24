@@ -5,7 +5,7 @@ from typing import Annotated
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, PlainSerializer
 
-from azul_bedrock.models_network import BinaryAction
+from azul_bedrock.models_network import BinaryAction, StatusEnum
 
 # All models here have to map to gosrc/models/alert.go
 
@@ -17,35 +17,13 @@ ALERTER_ALERT_KEY = "alerts"
 ALERTER_DB_ID = 4
 
 
-class AlertRulePatch(BaseModel):
-    """Alert rule."""
+class AlertRuleBase(BaseModel):
+    """Base alert Rule."""
 
-    model_config = ConfigDict(use_enum_values=True)
-
-    id: str
-    webhook_id: str | None = None
-    alert_message: str | None = None
-    event_type: BinaryAction | None = None
-    plugin_name: str | None = None
-    plugin_version: str | None = None
-    source_name: str | None = None
-    source_reference_key_values: dict[str, str] | None = None
-    feature_name_values: dict[str, str] | None = None
-
-
-class AlertRuleCreate(BaseModel):
-    """Alert rule creation.
-
-    NOTE that most fields are optional but if they aren't set the alert will trigger on everything.
-    The trigger conditions work  like an AND filter, so all conditions must be met for the alert to fire.
-    """
-
-    model_config = ConfigDict(use_enum_values=True)
-
-    # Id of the webhook to send the alert message to
-    webhook_id: str
     # Message that should be displayed as part of the alert message when the alert is triggered.
-    alert_message: str
+    alert_message: str = ""
+    # Status of the status event to match on.
+    status: StatusEnum | None = None
     # Type of event to alert on.
     event_type: BinaryAction | None = None
     # Case sensitive plugin name to alert on.
@@ -58,6 +36,28 @@ class AlertRuleCreate(BaseModel):
     source_reference_key_values: dict[str, str] | None = None
     # Feature name/value pairs that the alert should trigger on.
     feature_name_values: dict[str, str] | None = None
+
+
+class AlertRulePatch(AlertRuleBase):
+    """Alert rule."""
+
+    model_config = ConfigDict(use_enum_values=True)
+
+    id: str
+    webhook_id: str | None = None
+
+
+class AlertRuleCreate(AlertRuleBase):
+    """Alert rule creation.
+
+    NOTE that most fields are optional but if they aren't set the alert will trigger on everything.
+    The trigger conditions work  like an AND filter, so all conditions must be met for the alert to fire.
+    """
+
+    model_config = ConfigDict(use_enum_values=True)
+
+    # Id of the webhook to send the alert message to
+    webhook_id: str
 
 
 class AlertRule(AlertRuleCreate):
