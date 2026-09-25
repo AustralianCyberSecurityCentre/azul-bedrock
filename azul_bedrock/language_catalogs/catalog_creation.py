@@ -337,6 +337,10 @@ def _get_english_catalog() -> BabCatalog:
         ExceptionCodeEnum.ErrorStringEnumUnset.value: "no translation for the encountered dispatcher error",
         ExceptionCodeEnum.ErrorStringEnumAllEventsAgedOffImmediately.value: "All events to be published were filtered out: failed to produce any of the provided events as they were all filtered out by the following filters [{filters}], with {total_failures} response failures which are: {response_failures}",
         ExceptionCodeEnum.ErrorStringEnumAllEventsFiltered.value: "All events to be published were filtered out: all submitted events aged off immediately, is the submission time older than ageoff?",
+        ### Alerter
+        ExceptionCodeEnum.FailedToCreateRuleAsInvalidWebhook.value: "Rule cannot be created because the webhook_id:'{webhook_id}' is not configured.",
+        ExceptionCodeEnum.FailedToUpdateRuleAsInvalidWebhook.value: "Rule cannot be updated because the webhook_id:'{webhook_id}' is not configured.",
+        ExceptionCodeEnum.UnexpectedAlertTypeList.value: "When popping a redis alert got back a list type when a bytes or string was expected.",
     }
     return _create_catalog(translation_values)
 

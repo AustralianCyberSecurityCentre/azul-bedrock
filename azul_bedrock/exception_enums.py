@@ -322,3 +322,8 @@ class ExceptionCodeEnum(StrEnum):
     ErrorStringEnumUnset = "ErrorStringEnumUnset"
     ErrorStringEnumAllEventsAgedOffImmediately = "ErrorStringEnumAllEventsAgedOffImmediately"
     ErrorStringEnumAllEventsFiltered = "ErrorStringEnumAllEventsFiltered"
+
+    ### Alerter
+    FailedToCreateRuleAsInvalidWebhook = "FailedToCreateRuleAsInvalidWebhook"
+    FailedToUpdateRuleAsInvalidWebhook = "FailedToUpdateRuleAsInvalidWebhook"
+    UnexpectedAlertTypeList = "UnexpectedAlertTypeList"

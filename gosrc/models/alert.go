@@ -21,13 +21,13 @@ const ALERTER_DB_ID = 4
 type AlertRule struct {
 	Id                       string              `json:"id"`
 	WebhookId                string              `json:"webhook_id"`
-	Status                   events.StatusType   `json:"status"`
-	EventType                events.BinaryAction `json:"event_type"`
-	PluginName               string              `json:"plugin_name"`
-	PluginVersion            string              `json:"plugin_version"`
-	SourceName               string              `json:"source_name"`
-	SourceReferenceKeyValues map[string]string   `json:"source_reference_key_values"`
-	FeatureNameValues        map[string]string   `json:"feature_name_values"`
+	Status                   events.StatusType   `json:"status,omitempty"`
+	EventType                events.BinaryAction `json:"event_type,omitempty"`
+	PluginName               string              `json:"plugin_name,omitempty"`
+	PluginVersion            string              `json:"plugin_version,omitempty"`
+	SourceName               string              `json:"source_name,omitempty"`
+	SourceReferenceKeyValues map[string]string   `json:"source_reference_key_values,omitempty"`
+	FeatureNameValues        map[string]string   `json:"feature_name_values,omitempty"`
 }
 
 // All loaded alert rules stored in Redis with the compile time so endpoints can check if there are any new rules.
@@ -38,6 +38,7 @@ type LoadedRules struct {
 
 // Format for an alert hit that should be stored in redis when an alert hit is made.
 type AlertHit struct {
-	Rule   AlertRule `json:"rule"`
-	Sha256 string    `json:"sha256"`
+	Rule         AlertRule `json:"rule"`
+	AlertAttempt int       `json:"alert_attempt,omitempty"`
+	Sha256       string    `json:"sha256"`
 }

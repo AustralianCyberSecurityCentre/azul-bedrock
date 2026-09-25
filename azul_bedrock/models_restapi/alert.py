@@ -71,8 +71,8 @@ class LoadedRules(BaseModel):
 
     rules: list[AlertRule]
     rules_compile_time: Annotated[
-        AwareDatetime | None,
-        PlainSerializer(lambda v: v.isoformat() if v else None, return_type=str),
+        AwareDatetime,
+        PlainSerializer(lambda v: v.isoformat() if v else "", return_type=str),
     ]
 
 
@@ -80,6 +80,7 @@ class AlertHit(BaseModel):
     """Alert hit that can be stored in redis."""
 
     rule: AlertRule
+    alert_attempt: int = 0
     sha256: str
 
 
@@ -92,6 +93,8 @@ class SupportedWebhookType(StrEnum):
 
 class WebhookMappingApi(BaseModel):
     """Mapping for wheat webhook should be used when sending out alerts, for displaying in the restapi."""
+
+    model_config = ConfigDict(use_enum_values=True)
 
     id: str
     description: str
