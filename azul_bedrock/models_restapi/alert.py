@@ -79,7 +79,9 @@ class LoadedRules(BaseModel):
 class AlertHit(BaseModel):
     """Alert hit that can be stored in redis."""
 
-    rule: AlertRule
+    rule_id: str
+    webhook_id: str
+    alert_message: str = ""
     alert_attempt: int = 0
     sha256: str
 
@@ -97,8 +99,8 @@ class WebhookMappingApi(BaseModel):
     model_config = ConfigDict(use_enum_values=True)
 
     id: str
-    description: str
-    webhook_type: SupportedWebhookType
+    description: str = ""
+    webhook_type: SupportedWebhookType = SupportedWebhookType.Mattermost
     # Field used when posting a message to the webhook.
     message_field: str = "text"
 
