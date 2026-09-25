@@ -23,7 +23,7 @@ func TestEmptyPlugin(t *testing.T) {
 	pr := NewPluginRunner(NewDummyPlugin(nil))
 	result := pr.RunTest(t, defaultRunTestOption(), "Benign text file.")
 	result.AssertJobResultEqual(t, &TestJobResult{
-		Status: "completed-empty",
+		Status: events.StatusTypeCompletedEmpty,
 		Events: []TestJobEvent{
 			{},
 		},

@@ -332,7 +332,7 @@ func (jobRef *Job) generateHeartbeat(settings *PluginSettings) *events.BulkStatu
 }
 
 /*Get the current successful result stats.*/
-func (jobRef *Job) getEventResultStatus(pluginError *PluginError) string {
+func (jobRef *Job) getEventResultStatus(pluginError *PluginError) events.StatusType {
 	if pluginError != nil {
 		switch pluginError.innerError {
 		case OptOutError:

@@ -132,9 +132,9 @@ func NewTestJobEvent(jobEvent *JobEvent, testJobResultOptions *TestJobResultOpti
 }
 
 type TestJobResult struct {
-	Status  string         `json:"status"`
-	Message string         `json:"message"`
-	Events  []TestJobEvent `json:"events,omitempty,omitzero"`
+	Status  events.StatusType `json:"status"`
+	Message string            `json:"message"`
+	Events  []TestJobEvent    `json:"events,omitempty,omitzero"`
 }
 
 type TestJobResultOptions struct {
