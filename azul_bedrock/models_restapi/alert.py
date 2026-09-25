@@ -80,6 +80,7 @@ class AlertHit(BaseModel):
     """Alert hit that can be stored in redis."""
 
     rule_id: str
+    webhook_id: str
     alert_message: str = ""
     alert_attempt: int = 0
     sha256: str

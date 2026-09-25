@@ -40,6 +40,7 @@ type LoadedRules struct {
 // Format for an alert hit that should be stored in redis when an alert hit is made.
 type AlertHit struct {
 	RuleId       string `json:"rule_id"`
+	WebhookId    string `json:"webhook_id"`
 	AlertMessage string `json:"alert_message"`
 	AlertAttempt int    `json:"alert_attempt,omitempty"`
 	Sha256       string `json:"sha256"`
