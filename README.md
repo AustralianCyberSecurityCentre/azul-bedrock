@@ -31,7 +31,7 @@ contains a number of bugs for office and archive file types
 
 ```bash
 sudo apt install autoconf automake autotools-dev gcc libtool make zlib1g-dev
-git clone --depth 1 --branch FILE5_47 https://github.com/file/file
+git clone --depth 1 --branch FILE5_48 https://github.com/file/file
 cd file/
 autoreconf -f -i
 ./configure --disable-silent-rules
