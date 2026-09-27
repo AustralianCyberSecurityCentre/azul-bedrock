@@ -204,6 +204,7 @@ func (cfg *Identify) applyIndicators(id string, bufferedContent []byte) string {
 	best_id := ""
 	for _, indicator := range cfg.Indicators {
 		tally := 0
+		//nolint:govet // ignore limitations of linter
 		if !slices.Contains(indicator.Trigger_On, id) {
 			// if not a candidate, do not inspect
 			continue
