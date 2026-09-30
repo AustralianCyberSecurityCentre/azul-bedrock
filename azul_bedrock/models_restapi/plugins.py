@@ -77,11 +77,17 @@ class PluginSummary(BaseModelRepr):
     """Info for plugin summary page."""
 
     name: str
-    version: str | None = None
-    security: str | None = None
-    description: str | None = None
-    features: int | None = None
-    last_completion: str | None = None
-    completion_count: int | None = None
-    error_count: int | None = None
-    completion_percent: float | None = None
+    version: str
+    security: str
+    description: str
+    feature_count: int
+
+
+class PluginSummaryStats(PluginSummary):
+    """PluginSummary with added stats"""
+
+    last_completion: str | None
+    completion_count: int
+    error_count: int
+    completion_percent: float
+
