@@ -84,10 +84,9 @@ class PluginSummary(BaseModelRepr):
 
 
 class PluginSummaryStats(PluginSummary):
-    """PluginSummary with added stats"""
+    """PluginSummary with added stats."""
 
     last_completion: str | None
     completion_count: int
     error_count: int
     completion_percent: float
-
