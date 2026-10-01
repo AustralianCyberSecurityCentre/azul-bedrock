@@ -71,3 +71,22 @@ class PluginInfo(BaseModelRepr):
     num_entities: int
     plugin: PluginEntity
     status: list[StatusGroup]
+
+
+class PluginSummary(BaseModelRepr):
+    """Info for plugin summary page."""
+
+    name: str
+    version: str
+    security: str
+    description: str
+    feature_count: int
+
+
+class PluginSummaryStats(PluginSummary):
+    """PluginSummary with added stats."""
+
+    last_completion: str | None
+    completion_count: int
+    error_count: int
+    completion_percent: float
