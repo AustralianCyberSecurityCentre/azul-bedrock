@@ -300,8 +300,7 @@ class DispatcherAPI:
             params["include_ok"] = include_ok
         if pause_plugins:
             params["pause_plugins"] = pause_plugins
-
-        encoded_events = [x.model_dump_json(exclude_defaults=True, exclude_unset=True).encode() for x in events]
+        encoded_events = [x.model_dump_json(exclude_defaults=True).encode() for x in events]
         for event in encoded_events:
             if len(event) > MAX_MESSAGE_SIZE:
                 raise NetworkDataException(
@@ -357,7 +356,7 @@ class DispatcherAPI:
 
     def simulate_consumers_on_event(self, event: azm.BaseEvent, params: dict | None = None) -> azapi.EventSimulate:
         """Returns information about which consumers would process the provided event."""
-        data = event.model_dump_json(exclude_defaults=True, exclude_unset=True).encode()
+        data = event.model_dump_json(exclude_defaults=True).encode()
         try:
             rsp = self._client.post(
                 f"{self._events_url}/api/v2/event/simulate",
