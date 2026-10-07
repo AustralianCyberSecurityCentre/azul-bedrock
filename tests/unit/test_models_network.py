@@ -9,7 +9,7 @@ from azul_bedrock import models_network as azm
 
 
 def jsondict(d: BaseModel):
-    return json.loads(d.model_dump_json(exclude_defaults=True, exclude_unset=True))
+    return json.loads(d.model_dump_json(exclude_defaults=True))
 
 
 atime = datetime.datetime(year=2012, month=1, day=1, tzinfo=datetime.timezone.utc)

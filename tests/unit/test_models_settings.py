@@ -20,7 +20,7 @@ def read_data(path: str) -> bytes:
 
 
 def jsondict(d: BaseModel):
-    return json.loads(d.model_dump_json(exclude_defaults=True, exclude_unset=True))
+    return json.loads(d.model_dump_json(exclude_defaults=True))
 
 
 class TestBasic(unittest.TestCase):

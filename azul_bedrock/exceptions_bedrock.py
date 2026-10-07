@@ -109,7 +109,7 @@ class ApiException(HTTPException):
             parameters=parameters,
             external_override=external_override,
             internal=internal,
-        ).model_dump(exclude_unset=True)
+        ).model_dump()
         super().__init__(status_code=status_code, detail=detail, headers=None)
 
     def __repr__(self) -> str:
