@@ -734,6 +734,8 @@ class RetrohuntEvent(BaseEvent):
         security: str | None = None
         # Status of the retrohunt query.
         status: HuntState = HuntState.SUBMITTED
+        # Number of retries after the initial processing attempt.
+        retries: NonNegativeInt = 0
         # User who submitted the query
         submitter: str = "unknown"
         # Time the retrohunt query was submitted.
