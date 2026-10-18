@@ -174,8 +174,8 @@ class PathNode(azm.PathNode):
 
     _DEFAULT_IMPORT: str = "models_restapi"
 
-    timestamp: str
-    relationship: dict | None = None
+    timestamp: str  # ty: ignore[invalid-attribute-override]
+    relationship: dict | None = None  # ty: ignore[invalid-attribute-override]
     # optional tracking info needed to delete a parent-child relationship
     # depending on context, this node may either the 'parent' or 'child' in the tracked link
     track_link: str | None = None
@@ -199,7 +199,7 @@ class DatastreamInstances(azm.Datastream):
     _DEFAULT_IMPORT = "models_restapi"
 
     instances: list[str]
-    label: list[azm.DataLabel]
+    label: list[azm.DataLabel]  # ty: ignore[invalid-attribute-override]
 
 
 class FeatureValuePart(BaseModelRepr):
@@ -243,7 +243,7 @@ class BinaryFeatureValue(azm.FeatureValue):
     _DEFAULT_IMPORT = "models_restapi"
 
     # there can be multiple labels for a feature
-    label: list[str] = []
+    label: list[str] = []  # ty: ignore[invalid-attribute-override]
     # feature value may be divided into pieces
     parts: FeatureValuePart | None = None
 

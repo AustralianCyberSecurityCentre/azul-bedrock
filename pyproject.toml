@@ -186,3 +186,7 @@ docstring-code-line-length = "dynamic"
 
 [tool.ty.rules]
 unused-ignore-comment = "ignore"
+
+[tool.ty.src]
+exclude = ["tests"]
+
