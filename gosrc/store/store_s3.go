@@ -212,7 +212,7 @@ func (s *StoreS3) Put(source, label, id string, data io.ReadCloser, fileSize int
 		bufRead = bufio.NewReaderSize(data, MAX_BUFFERED_READER_BYTES)
 	}
 
-	options := minio.PutObjectOptions{ContentType: "binary/octet-stream", AutoChecksum: minio.ChecksumSHA256, SendContentMd5: true}
+	options := minio.PutObjectOptions{ContentType: "binary/octet-stream", AutoChecksum: minio.ChecksumSHA256, Checksum: minio.ChecksumSHA256}
 	// If file is large enough use concurrency.
 	if fileSize > MAX_FILE_BYTES_BEFORE_CONCURRENT_UPLOAD {
 		options.NumThreads = uint(NUM_CONCURRENT_UPLOAD_THREADS)
