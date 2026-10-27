@@ -107,10 +107,11 @@ func NewS3Store(endpoint string, accessKey string, secretKey string, secure bool
 	}
 
 	opts := minio.Options{
-		Secure:    secure,
-		Region:    region,
-		Creds:     creds,
-		Transport: getS3DefaultTransport(),
+		Secure:          secure,
+		Region:          region,
+		Creds:           creds,
+		Transport:       getS3DefaultTransport(),
+		TrailingHeaders: true,
 	}
 	// accessKey, secretKey
 	client, err = minio.New(endpoint, &opts)
@@ -151,10 +152,11 @@ func NewS3StoreIAM(endpoint string, secure bool, bucket string, region string, p
 	var client *minio.Client
 	var err error
 	opts := minio.Options{
-		Secure:    secure,
-		Region:    region,
-		Creds:     credentials.NewIAM(""),
-		Transport: getS3DefaultTransport(),
+		Secure:          secure,
+		Region:          region,
+		Creds:           credentials.NewIAM(""),
+		Transport:       getS3DefaultTransport(),
+		TrailingHeaders: true,
 	}
 
 	client, err = minio.New(endpoint, &opts)
@@ -212,7 +214,7 @@ func (s *StoreS3) Put(source, label, id string, data io.ReadCloser, fileSize int
 		bufRead = bufio.NewReaderSize(data, MAX_BUFFERED_READER_BYTES)
 	}
 
-	options := minio.PutObjectOptions{ContentType: "binary/octet-stream", AutoChecksum: minio.ChecksumSHA256}
+	options := minio.PutObjectOptions{ContentType: "binary/octet-stream", AutoChecksum: minio.ChecksumSHA256, Checksum: minio.ChecksumSHA256}
 	// If file is large enough use concurrency.
 	if fileSize > MAX_FILE_BYTES_BEFORE_CONCURRENT_UPLOAD {
 		options.NumThreads = uint(NUM_CONCURRENT_UPLOAD_THREADS)
