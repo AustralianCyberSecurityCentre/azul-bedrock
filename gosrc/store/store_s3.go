@@ -107,10 +107,11 @@ func NewS3Store(endpoint string, accessKey string, secretKey string, secure bool
 	}
 
 	opts := minio.Options{
-		Secure:    secure,
-		Region:    region,
-		Creds:     creds,
-		Transport: getS3DefaultTransport(),
+		Secure:          secure,
+		Region:          region,
+		Creds:           creds,
+		Transport:       getS3DefaultTransport(),
+		TrailingHeaders: true,
 	}
 	// accessKey, secretKey
 	client, err = minio.New(endpoint, &opts)
@@ -151,10 +152,11 @@ func NewS3StoreIAM(endpoint string, secure bool, bucket string, region string, p
 	var client *minio.Client
 	var err error
 	opts := minio.Options{
-		Secure:    secure,
-		Region:    region,
-		Creds:     credentials.NewIAM(""),
-		Transport: getS3DefaultTransport(),
+		Secure:          secure,
+		Region:          region,
+		Creds:           credentials.NewIAM(""),
+		Transport:       getS3DefaultTransport(),
+		TrailingHeaders: true,
 	}
 
 	client, err = minio.New(endpoint, &opts)
