@@ -254,7 +254,7 @@ class DataLabel(StrEnum):
 
 
 class FileInfo(BaseModelStrict):
-    """Common file info used between FileInfo, BinaryEvent.Entity and in azul_runner events."""
+    """Common file info used between FileInfo, BinaryEntity and in azul_runner events."""
 
     # file hard hashes
     sha256: str | None = None
@@ -275,9 +275,9 @@ class FileInfo(BaseModelStrict):
     mime: str | None = None
     magic: str | None = None
 
-    def to_input_entity(self) -> "BinaryEvent.Entity":
+    def to_input_entity(self) -> "BinaryEntity":
         """Convert to an input event entity."""
-        ret = BinaryEvent.Entity(
+        ret = BinaryEntity(
             sha256=self.sha256,
             sha512=self.sha512,
             sha1=self.sha1,
@@ -312,19 +312,19 @@ class Datastream(FileInfo):
     identify_version: NonNegativeInt = 0
 
     # content vs pcap vs anything
-    # Note - Not in the Base class because BaseClass needs to support BinaryEvent.Entity
+    # Note - Not in the Base class because BaseClass needs to support BinaryEntity
     # which can accept data-less submissions
     label: DataLabel
 
     # if text, the programming language
     language: str | None = None
 
-    def to_input_entity(self) -> "BinaryEvent.Entity":
+    def to_input_entity(self) -> "BinaryEntity":
         """Convert to an input event entity.
 
         This only makes sense for content files.
         Additional functionality added because the base class needs to support
-        azul-runner's BaseEvent type and BinaryEvent.Entity's data-less submissions.
+        azul-runner's BaseEvent type and BinaryEventEntity's data-less submissions.
         """
         if self.label != DataLabel.CONTENT:
             raise AzulValueError(
@@ -368,7 +368,6 @@ class PathNode(BaseModelStrict):
     file_format: str | None = None
     size: NonNegativeInt | None = None
     filename: str | None = None
-    language: str | None = None
 
 
 # Corresponds to strings located in gosrc/events/event.go
@@ -401,8 +400,6 @@ class Source(BaseModelStrict):
     # original source-event source references
     # e.g. 'incident number', 'user', 'description'
     references: dict[str, str] = {}
-    # source path that describes relationship hierarchy to the original source-event
-    path: list[PathNode]
     settings: dict[str, str] = dict()
 
 
@@ -424,8 +421,6 @@ class BaseEvent(BaseModelStrict):
     timestamp: Annotated[AwareDatetime, PlainSerializer(lambda v: v.isoformat(), return_type=str)]
     # the plugin/user that produced this event
     author: Author
-    # in the base event, the structure of entity is unknown
-    entity: Any = None
 
 
 class BinaryFlags(BaseModelStrict):
@@ -439,28 +434,30 @@ class BinaryFlags(BaseModelStrict):
     retry: bool = False
 
 
-class BinaryEvent(BaseEvent):
-    """Binary event message from plugin execution or data source."""
+class BinaryEntity(FileInfo):
+    """Entity section of the binary event needed for various conversions."""
 
-    class Entity(FileInfo):
-        """Details for binary after being processed by a plugin or data source."""
+    # key value pairs + metadata
+    features: list[FeatureValue] = []
+    # information about streams, including 'content' stream
+    datastreams: list[Datastream] = []
+    # dictionary with non specific key definitions
+    info: dict = {}
 
-        # key value pairs + metadata
-        features: list[FeatureValue] = []
-        # information about streams, including 'content' stream
-        datastreams: list[Datastream] = []
-        # dictionary with non specific key definitions
-        info: dict = {}
+    def to_file_info(self) -> FileInfo:
+        """Convert a BinaryEvent into a FileInfo object."""
+        file_info_fields = set(FileInfo.model_fields.keys())
+        return FileInfo(**self.model_dump(include=file_info_fields))
 
-        def to_file_info(self) -> FileInfo:
-            """Convert a BinaryEvent.Entity into a FileInfo object."""
-            file_info_dict = self.model_dump()
-            del file_info_dict["features"]
-            del file_info_dict["datastreams"]
-            del file_info_dict["info"]
-            return FileInfo(**file_info_dict)
 
-    entity: Entity
+class BinaryEventLeaf(BaseEvent, BinaryEntity):
+    """Binary event message from plugin execution or data source.
+
+    Leaf variant are valid when for Augmented and Enriched events
+    """
+
+    # TODO - enforce this being used for augmented/enriched binaryAction
+
     # describes some kind of model variant
     action: BinaryAction
     # information about where the event came from
@@ -475,6 +472,18 @@ class BinaryEvent(BaseEvent):
     # tracking set by dispatcher after PostEvent
     # track source references
     track_source_references: str = ""
+
+
+class BinaryEvent(BinaryEventLeaf):
+    """Binary event message from plugin execution or data source.
+
+    Full binary event used for Sourced, extracted and mapped events.
+    """
+
+    # TODO - enforce this being used for sourced/extracted/mapped action
+
+    # path that describes relationship hierarchy to the original sourced event
+    path: list[PathNode]
     # track parent-child links
     track_links: list[str] = []
     # track authors in source path
@@ -533,56 +542,46 @@ StatusEnumInProgress: set[StatusEnum] = {StatusEnum.HEARTBEAT, StatusEnum.DEQUEU
 class StatusEvent(BaseEvent):
     """Status event."""
 
-    class Entity(BaseModelStrict):
-        """Status message."""
-
-        # input event that was analysed
-        input: BinaryEvent
-        # description of state of the analysis of the input with the plugin
-        status: StatusEnum
-        # seconds the plugin has taken to execute
-        runtime: float | None = None
-        # short error description
-        error: str | None = None
-        # long error description?
-        message: str | None = None
-        # embedded results of job (extracted by dispatcher when received)
-        results: list[BinaryEvent] = []
-
-    entity: Entity
+    # input event that was analysed
+    input: BinaryEvent
+    # description of state of the analysis of the input with the plugin
+    status: StatusEnum
+    # seconds the plugin has taken to execute
+    runtime: float | None = None
+    # short error description
+    error: str | None = None
+    # long error description?
+    message: str | None = None
+    # embedded results of job (extracted by dispatcher when received)
+    results: list[BinaryEvent] = []
 
 
-class PluginEvent(BaseEvent):
+class PluginEvent(BaseEvent, Author):
     """Author event."""
 
-    class Entity(Author):
-        """Entity."""
+    class Feature(BaseModelStrict):
+        """An output feature for a plugin."""
 
-        class Feature(BaseModelStrict):
-            """An output feature for a plugin."""
+        # name of the feature
+        name: str
+        # friendly description of the feature
+        desc: str
+        # type that feature values will have to match
+        type: FeatureType
 
-            # name of the feature
-            name: str
-            # friendly description of the feature
-            desc: str
-            # type that feature values will have to match
-            type: FeatureType
+    def summary(self):
+        """Returns self as a simple Author."""
+        return Author(name=self.name, category=self.category, version=self.version, security=self.security)
 
-        def summary(self):
-            """Returns self as a simple Author."""
-            return Author(name=self.name, category=self.category, version=self.version, security=self.security)
-
-        # description of what this plugin is/does
-        description: str | None = None
-        # who is the point-of-contact for the plugin
-        contact: str | None = None
-        # list of features that the plugin can produce
-        features: list[Feature] = []
-        # plugin specific configuration
-        # values should be json encoded strings
-        config: dict[str, str] = {}
-
-    entity: Entity
+    # description of what this plugin is/does
+    description: str | None = None
+    # who is the point-of-contact for the plugin
+    contact: str | None = None
+    # list of features that the plugin can produce
+    features: list[Feature] = []
+    # plugin specific configuration
+    # values should be json encoded strings
+    config: dict[str, str] = {}
 
 
 class InsertEvent(BaseEvent):
@@ -595,15 +594,10 @@ class InsertEvent(BaseEvent):
     to generate extracted events.
     """
 
-    class Entity(BaseModelStrict):
-        """Entity."""
-
-        original_source: str
-        parent_sha256: str
-        child: BinaryEvent.Entity
-        child_history: PathNode
-
-    entity: Entity
+    original_source: str
+    parent_sha256: str
+    child: BinaryEntity
+    child_history: PathNode
     # tracking set by dispatcher after PostEvent
     # track link between parent and child
     track_link: str = ""
@@ -628,21 +622,17 @@ class DownloadAction(StrEnum):
 class DownloadEvent(BaseEvent):
     """Download event used by virustotal to download binary events."""
 
-    class Entity(BaseModelStrict):
-        """Entity for download event."""
+    hash: str
+    direct_url: str | None = None
+    direct_expiry: Annotated[AwareDatetime, PlainSerializer(lambda v: v.isoformat(), return_type=str)] | None = None
+    pcap: bool = False
+    category: str | None = None
+    category_quota: NonNegativeInt | None = None
+    metadata: dict = {}
 
-        hash: str
-        direct_url: str | None = None
-        direct_expiry: Annotated[AwareDatetime, PlainSerializer(lambda v: v.isoformat(), return_type=str)] | None = (
-            None
-        )
-        pcap: bool = False
-        category: str | None = None
-        category_quota: NonNegativeInt | None = None
-        metadata: dict = {}
-
-    entity: Entity
     source: Source
+    # path that describes relationship hierarchy to the original sourced event
+    path: list[PathNode]
     action: DownloadAction
 
 
@@ -661,38 +651,34 @@ class DeleteAction(StrEnum):
 class DeleteEvent(BaseEvent):
     """Deletion event posted to dispatcher to track Kafka events that have been deleted."""
 
-    class DeleteEntity(BaseModelStrict):
-        """Deletion of kafka events."""
+    class DeleteSubmission(BaseModelStrict):
+        """Delete a whole submission."""
 
-        class DeleteSubmission(BaseModelStrict):
-            """Delete a whole submission."""
+        track_source_references: str
+        timestamp: str | None = None
 
-            track_source_references: str
-            timestamp: str | None = None
+    class DeleteLink(BaseModelStrict):
+        """Delete a link between binaries."""
 
-        class DeleteLink(BaseModelStrict):
-            """Delete a link between binaries."""
+        track_link: str
 
-            track_link: str
+    class DeleteAuthor(BaseModelStrict):
+        """Delete all events from an author."""
 
-        class DeleteAuthor(BaseModelStrict):
-            """Delete all events from an author."""
+        track_author: str
+        timestamp: str
 
-            track_author: str
-            timestamp: str
+    class DeleteIDs(BaseModelStrict):
+        """Delete all events with matching ids."""
 
-        class DeleteIDs(BaseModelStrict):
-            """Delete all events with matching ids."""
+        ids: list[str]
 
-            ids: list[str]
+    reason: str
+    delete_submission: DeleteSubmission | None = None
+    delete_link: DeleteLink | None = None
+    delete_author: DeleteAuthor | None = None
+    ids: DeleteIDs | None = None
 
-        reason: str
-        submission: DeleteSubmission | None = None
-        link: DeleteLink | None = None
-        author: DeleteAuthor | None = None
-        ids: DeleteIDs | None = None
-
-    entity: DeleteEntity
     action: DeleteAction
 
 

@@ -26,7 +26,7 @@ an_event = azm.BinaryEvent(
     flags=azm.BinaryFlags(),
     timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
     author=azm.Author(name="some ingest process", category="automatic_input"),
-    entity=azm.BinaryEvent.Entity(sha256="12345"),
+    sha256="12345",
     source=azm.Source(
         name="",
         path=[],
@@ -232,7 +232,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
                         security=None,
                     ),
                     timestamp=pendulum.now(pendulum.UTC),
-                    entity=azm.DeleteEvent.DeleteEntity(reason="thingo"),
+                    reason="thingo",
                     action=azm.DeleteAction.author,
                 ).model_dump()
             ]
@@ -261,7 +261,9 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
                         security=None,
                     ),
                     timestamp=pendulum.now(pendulum.UTC),
-                    entity=azm.StatusEvent.Entity(status=azm.StatusEnum.HEARTBEAT, runtime=10, input=an_event),
+                    status=azm.StatusEnum.HEARTBEAT,
+                    runtime=10,
+                    input=an_event,
                 ).model_dump()
             ]
         }
@@ -289,22 +291,20 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
                         security=None,
                     ),
                     timestamp=pendulum.now(pendulum.UTC),
-                    entity=azm.PluginEvent.Entity(
-                        category="plugin",
-                        name="generic_plugin",
-                        version="2021-01-01T12:00:00+00:00",
-                        contact="generic_contact",
-                        description="generic_description",
-                        features=[
-                            azm.PluginEvent.Entity.Feature(
-                                name="generic_feature",
-                                desc="generic_description",
-                                type=azm.FeatureType.String,
-                            )
-                        ],
-                        security="LOW TLP:CLEAR",
-                        config={},
-                    ),
+                    category="plugin",
+                    name="generic_plugin",
+                    version="2021-01-01T12:00:00+00:00",
+                    contact="generic_contact",
+                    description="generic_description",
+                    features=[
+                        azm.PluginEvent.Feature(
+                            name="generic_feature",
+                            desc="generic_description",
+                            type=azm.FeatureType.String,
+                        )
+                    ],
+                    security="LOW TLP:CLEAR",
+                    config={},
                 ).model_dump()
             ]
         }
@@ -367,7 +367,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             flags=azm.BinaryFlags(),
             timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
             author=azm.Author(name="some ingest process", category="automatic_input"),
-            entity=azm.BinaryEvent.Entity(sha256="12345"),
+            sha256="12345",
             source=azm.Source(
                 name="",
                 path=[],
@@ -398,7 +398,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             flags=azm.BinaryFlags(),
             timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
             author=azm.Author(name="some ingest process", category="automatic_input"),
-            entity=azm.BinaryEvent.Entity(sha256="12345"),
+            sha256="12345",
             source=azm.Source(
                 name="",
                 path=[],
@@ -413,7 +413,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             flags=azm.BinaryFlags(),
             timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
             author=azm.Author(name="some ingest process", category="automatic_input"),
-            entity=azm.BinaryEvent.Entity(sha256="12345"),
+            sha256="12345",
             source=azm.Source(
                 name="",
                 path=[],
@@ -467,7 +467,7 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
             flags=azm.BinaryFlags(),
             timestamp=datetime.datetime(year=2014, month=9, day=21, tzinfo=datetime.timezone.utc),
             author=azm.Author(name="some ingest process", category="automatic_input"),
-            entity=azm.BinaryEvent.Entity(sha256="12345"),
+            sha256="12345",
             source=azm.Source(
                 name="",
                 path=[],
