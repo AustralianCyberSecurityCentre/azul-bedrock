@@ -5,7 +5,7 @@ from __future__ import annotations
 import base64
 import datetime
 from enum import StrEnum
-from typing import Annotated, Any
+from typing import Annotated
 
 from pydantic import (
     AwareDatetime,
