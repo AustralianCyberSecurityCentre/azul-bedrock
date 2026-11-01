@@ -152,9 +152,12 @@ async def delete_binary(request: Request, response: Response) -> dict:
 
 
 @router.head("/api/v3/stream/{source}/{label}/{data_hash}")
-async def has_binary(request: Request, response: Response) -> dict:
+async def has_binary(data_hash: str, request: Request, response: Response) -> dict | None:
     """Mocked endpoint."""
     await state.update_last(request)
     if ret := state.get_default_resp(response):
         return json.loads(ret)
+    if data_hash not in state._posted_files:
+        response.status_code = 404
+        return
     return {}
