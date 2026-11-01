@@ -526,6 +526,12 @@ class TestDispatcherApi(unittest.IsolatedAsyncioTestCase):
         self.editor.set_response(206, {})
         self.dp.has_binary("source", azm.DataLabel.TEST, "not-real-sha256")
 
+        # By default, should return 404
+        self.editor.set_stream("not-real-sha256", 200, b"abcdef")
+        with self.assertRaises(DispatcherApiException) as ex:
+            self.dp.has_binary("source", azm.DataLabel.TEST, "different-not-real-sha256")
+        self.assertEqual(ex.exception.status_code, 404)
+
         def check_exception(expected_status):
             self.editor.set_response(expected_status, {})
             with self.assertRaises(DispatcherApiException) as ex:
