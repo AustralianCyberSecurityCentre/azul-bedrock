@@ -212,7 +212,7 @@ class TestBasic(unittest.TestCase):
             timestamp=atime,
             source=azm.Source(name="id", path=[], timestamp=atime),
             author=azm.Author(name="name"),
-            entity=azm.BinaryEvent.Entity(sha256="id"),
+            sha256="id",
         )
         self.assertEqual(tmp.entity.info, {})
         self.assertEqual(tmp.entity.features, [])
@@ -238,21 +238,21 @@ class TestBasic(unittest.TestCase):
             timestamp=atime,
             source=azm.Source(name="id", path=[], timestamp=atime),
             author=azm.Author(name="name"),
-            entity=azm.BinaryEvent.Entity(sha256="id"),
+            sha256="id",
         )
-        self.assertEqual(tmp.entity.info, {})
-        self.assertEqual(tmp.entity.features, [])
-        self.assertEqual(tmp.entity.datastreams, [])
+        self.assertEqual(tmp.info, {})
+        self.assertEqual(tmp.features, [])
+        self.assertEqual(tmp.datastreams, [])
         self.assertJsonDict(
             tmp,
             {
+                "sha256": "id",
                 "model_version": 6,
                 "kafka_key": "id",
-                "action": "sourced",
                 "timestamp": "2012-01-01T00:00:00+00:00",
-                "source": {"name": "id", "path": [], "timestamp": "2012-01-01T00:00:00+00:00"},
                 "author": {"name": "name"},
-                "entity": {"sha256": "id"},
+                "action": "sourced",
+                "source": {"name": "id", "timestamp": "2012-01-01T00:00:00+00:00", "path": []},
             },
         )
 
@@ -262,20 +262,18 @@ class TestBasic(unittest.TestCase):
             kafka_key="id",
             timestamp=atime,
             author=azm.Author(name="name"),
-            entity=azm.StatusEvent.Entity(
-                input=azm.BinaryEvent(
-                    model_version=azm.CURRENT_MODEL_VERSION,
-                    kafka_key="id",
-                    action=azm.BinaryAction.Sourced,
-                    timestamp=atime,
-                    source=azm.Source(name="id", path=[], timestamp=atime),
-                    author=azm.Author(name="name"),
-                    entity=azm.BinaryEvent.Entity(sha256="id"),
-                ),
-                status=azm.StatusEnum.ERROR_EXCEPTION,
+            input=azm.BinaryEvent(
+                model_version=azm.CURRENT_MODEL_VERSION,
+                kafka_key="id",
+                action=azm.BinaryAction.Sourced,
+                timestamp=atime,
+                source=azm.Source(name="id", path=[], timestamp=atime),
+                author=azm.Author(name="name"),
+                sha256="id",
             ),
+            status=azm.StatusEnum.ERROR_EXCEPTION,
         )
-        self.assertEqual(tmp.entity.results, [])
+        self.assertEqual(tmp.results, [])
         self.assertJsonDict(
             tmp,
             {
@@ -283,18 +281,16 @@ class TestBasic(unittest.TestCase):
                 "kafka_key": "id",
                 "timestamp": "2012-01-01T00:00:00+00:00",
                 "author": {"name": "name"},
-                "entity": {
-                    "input": {
-                        "model_version": 6,
-                        "kafka_key": "id",
-                        "action": "sourced",
-                        "timestamp": "2012-01-01T00:00:00+00:00",
-                        "source": {"name": "id", "path": [], "timestamp": "2012-01-01T00:00:00+00:00"},
-                        "author": {"name": "name"},
-                        "entity": {"sha256": "id"},
-                    },
-                    "status": "error-exception",
+                "input": {
+                    "sha256": "id",
+                    "model_version": 6,
+                    "kafka_key": "id",
+                    "timestamp": "2012-01-01T00:00:00+00:00",
+                    "author": {"name": "name"},
+                    "action": "sourced",
+                    "source": {"name": "id", "timestamp": "2012-01-01T00:00:00+00:00", "path": []},
                 },
+                "status": "error-exception",
             },
         )
 
@@ -304,17 +300,17 @@ class TestBasic(unittest.TestCase):
             kafka_key="id",
             timestamp=atime,
             author=azm.Author(name="name"),
-            entity=azm.PluginEvent.Entity(name="name"),
+            name="name",
         )
-        self.assertEqual(tmp.entity.features, [])
+        self.assertEqual(tmp.features, [])
         self.assertJsonDict(
             tmp,
             {
+                "name": "name",
                 "model_version": 6,
                 "kafka_key": "id",
                 "timestamp": "2012-01-01T00:00:00+00:00",
                 "author": {"name": "name"},
-                "entity": {"name": "name"},
             },
         )
 
@@ -324,17 +320,15 @@ class TestBasic(unittest.TestCase):
             kafka_key="id",
             timestamp=atime,
             author=azm.Author(name="name"),
-            entity=azm.InsertEvent.Entity(
-                original_source="tasking",
-                parent_sha256="parent_sha256",
-                child=azm.BinaryEvent.Entity(sha256="id"),
-                child_history=azm.PathNode(
-                    author=azm.Author(name="name"),
-                    action=azm.BinaryAction.Sourced,
-                    sha256="sha256",
-                    relationship={},
-                    timestamp=atime,
-                ),
+            original_source="tasking",
+            parent_sha256="parent_sha256",
+            child=azm.BinaryEntity(sha256="id"),
+            child_history=azm.PathNode(
+                author=azm.Author(name="name"),
+                action=azm.BinaryAction.Sourced,
+                sha256="sha256",
+                relationship={},
+                timestamp=atime,
             ),
         )
         self.assertJsonDict(
@@ -344,16 +338,14 @@ class TestBasic(unittest.TestCase):
                 "kafka_key": "id",
                 "timestamp": "2012-01-01T00:00:00+00:00",
                 "author": {"name": "name"},
-                "entity": {
-                    "original_source": "tasking",
-                    "parent_sha256": "parent_sha256",
-                    "child": {"sha256": "id"},
-                    "child_history": {
-                        "action": "sourced",
-                        "timestamp": "2012-01-01T00:00:00+00:00",
-                        "author": {"name": "name"},
-                        "sha256": "sha256",
-                    },
+                "original_source": "tasking",
+                "parent_sha256": "parent_sha256",
+                "child": {"sha256": "id"},
+                "child_history": {
+                    "sha256": "sha256",
+                    "action": "sourced",
+                    "timestamp": "2012-01-01T00:00:00+00:00",
+                    "author": {"name": "name"},
                 },
             },
         )
