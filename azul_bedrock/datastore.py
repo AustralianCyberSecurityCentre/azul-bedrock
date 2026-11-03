@@ -55,7 +55,9 @@ def credentials_to_es(c: Credentials) -> opensearchpy.OpenSearch:
     access["timeout"] = 120
 
     # enable transport compression
-    return opensearchpy.OpenSearch(hosts=s.opensearch_url, http_compress=True, **access)
+    return opensearchpy.OpenSearch(
+        hosts=s.opensearch_url, pool_maxsize=s.opensearch_connection_pool_maxsize, http_compress=True, **access
+    )
 
 
 def get_user_account(user_auth: dict) -> dict:
