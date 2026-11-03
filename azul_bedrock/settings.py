@@ -59,6 +59,9 @@ class OpensearchSettings(BaseSettings):
     opensearch_azul_security_password: str = ""  # noqa: S105
     opensearch_azul_security_index: str = "security_azul"
 
+    # max connections
+    opensearch_connection_pool_maxsize: int = 100
+
     # admin credentials to create roles and rolemappings (must be used in conjunction with no-input flag)
     opensearch_admin_username: str = "azul_admin"
     opensearch_admin_password: str = ""  # noqa: S105
