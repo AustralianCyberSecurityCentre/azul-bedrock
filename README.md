@@ -53,7 +53,7 @@ Library required for identify to work, must be manually installed for golang not
 # easy rust install
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 cargo install cargo-c
-git clone -b v1.20.0 https://github.com/VirusTotal/yara-x.git
+git clone -b v1.22.0 https://github.com/VirusTotal/yara-x.git
 cd yara-x
 cargo cinstall -p yara-x-capi --release --prefix /tmp/yara-build --libdir /tmp/yara-build/lib
 sudo cp -r /tmp/yara-build/lib/* /usr/local/lib

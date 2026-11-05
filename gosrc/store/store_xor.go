@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/settings"
 )
 
 /* Wraps Azul files in a multibyte XOR to avoid AV detections */
@@ -61,7 +63,7 @@ func (s *StoreXOR) Put(source, label, id string, data io.ReadCloser, fileSize in
 	}
 
 	// We need to buffer the XOR'd data to pass it to our wrapped FileStorage provider
-	tmpFile, err := os.CreateTemp("", "azul-xor")
+	tmpFile, err := os.CreateTemp(settings.Settings.S3CacheDir, "azul-xor")
 	if err != nil {
 		return fmt.Errorf("failed to create temp file: %s", err)
 	}

@@ -68,6 +68,8 @@ type BedSettings struct {
 	// Advanced settings
 	S3TransportSettings S3TransportSettings `koanf:"transport"`
 	S3ListSettings      S3ListSettings      `koanf:"s3_list"`
+	// Path to directory used for caching S3 files for things like XOR and AES
+	S3CacheDir string `koanf:"s3_cache_directory"`
 }
 
 // Settings used purely for testing.
@@ -96,6 +98,7 @@ var defaults BedSettings = BedSettings{
 		UseV1Api: false,
 		MaxKeys:  -1,
 	},
+	S3CacheDir: os.TempDir(),
 }
 
 var testDefaults BedTestSettings = BedTestSettings{
