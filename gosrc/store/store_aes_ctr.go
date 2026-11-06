@@ -9,6 +9,8 @@ import (
 	"io"
 	"os"
 	"strings"
+
+	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/settings"
 )
 
 // Extension (including version) of the aes encoding.
@@ -205,7 +207,7 @@ func (s *StoreAESCtr) Put(source, label, id string, data io.ReadCloser, fileSize
 	}
 
 	// We need to buffer the AES_CTR'd data to pass it to our wrapped FileStorage provider
-	tmpFile, err := os.CreateTemp("", "azul-aes")
+	tmpFile, err := os.CreateTemp(settings.Settings.S3CacheDir, "azul-aes")
 	if err != nil {
 		return fmt.Errorf("failed to create temp file: %s", err)
 	}
