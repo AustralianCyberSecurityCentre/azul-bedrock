@@ -18,6 +18,7 @@ import (
 	"strings"
 	"syscall"
 
+	bedSet "github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/settings"
 	"github.com/AustralianCyberSecurityCentre/azul-bedrock/v13/gosrc/store"
 )
 
@@ -147,7 +148,13 @@ func (m Manager) Fetch(id, output string) error {
 	if err := syscall.Flock(int(lock.Fd()), syscall.LOCK_EX); err != nil {
 		return err
 	}
-	defer syscall.Flock(int(lock.Fd()), syscall.LOCK_UN)
+	defer func() {
+		if err := syscall.Flock(int(lock.Fd()), syscall.LOCK_UN); err != nil {
+			bedSet.Logger.Error().
+				Err(err).
+				Msgf("failed to release lock file %s", output+".lock")
+		}
+	}()
 
 	// Validate the cached copy before making network requests. This costs one
 	// sequential disk scan, but avoids trusting a corrupt or truncated cache.
