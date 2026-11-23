@@ -362,6 +362,9 @@ id_mappings:
   - id: metadata/sysmon
     legacy: Sysmon
     extension: ""
+  - id: metadata/sysmon/evt
+    legacy: Sysmon
+    extension: ""
   - id: network/tcpdump
     legacy: Network capture
     extension: pcap
